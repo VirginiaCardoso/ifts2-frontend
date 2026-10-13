@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --color-petrol-950: #0d2229;
+  --color-petrol-900: #143340;
+  --color-petrol-800: #1a3f4e;
+  --color-petrol-700: #235459;
+  --color-petrol-600: #518C8C;
+  --color-mint-300: #C2F2E9;
+  --color-mint-400: #8BD9CA;
+  --color-mint-500: #5fc4b0;
+
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'Outfit', system-ui, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: #ffffff;
+  color: #1a2e35;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f4; }
+::-webkit-scrollbar-thumb { background: #518C8C; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #235459; }
+
+/* Mobile menu toggle */
+#mobile-menu { display: none; }
+#mobile-menu.open { display: flex; }
