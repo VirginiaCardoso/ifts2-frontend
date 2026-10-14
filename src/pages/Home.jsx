@@ -1,15 +1,19 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
+import AccesosRapidos from '../components/AccesosRapidos';
 
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Ensamblamos la barra superior y la portada */}
-      <Navbar onLoginClick={() => alert('Próximamente: Login del CMS')} />
+      {/* Barra */}
+      <Navbar />
       <main>
+        {/* Portada ppal */}
         <HeroSection />
-        {/* Aquí luego agregaremos las Cards de Novedades, Trámites, etc. */}
+
+        {/* Accesos Rapdidos */}
+        <AccesosRapidos />
       </main>
     </div>
   );
