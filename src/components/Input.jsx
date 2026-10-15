@@ -6,6 +6,8 @@ import React from 'react';
 // - value y onChange: Para controlar el valor desde el formulario.
 // - error: Un texto de error que, si existe, pone el borde rojo y muestra el mensaje.
 // - required: Muestra el asterisco (*) si es obligatorio.
+// - placeholder: Texto de ayuda dentro del campo.
+// - className: Clases adicionales de Tailwind.
 
 export default function Input({
   label,
@@ -19,51 +21,46 @@ export default function Input({
 }) {
   return (
     <div className={`flex flex-col mb-4 ${className}`}>
+      
       {/* Etiqueta (Label) */}
       {label && (
-        <label 
-          style={{ 
-            color: '#235459', 
-            fontSize: '0.72rem', 
-            fontWeight: 700, 
-            letterSpacing: '0.08em', 
-            textTransform: 'uppercase', 
-            marginBottom: '0.4rem' 
-          }}
-        >
-          {label} {required && <span className="text-[#8BD9CA]">*</span>}
+        <label className="mb-1.5 text-[0.72rem] font-bold uppercase tracking-wide text-petrol-700">
+          {label} {required && <span className="text-mint-400">*</span>}
         </label>
       )}
 
-      {/* Campo de texto */}
-      <input
-        type={type}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        required={required}
-        style={{ 
-          width: '100%', 
-          // Si hay error, el borde se pone rojo, si no, usa el color base
-          border: `1.5px solid ${error ? '#e05c5c' : '#dceee9'}`, 
-          borderRadius: '8px', 
-          padding: '0.6rem 0.85rem', 
-          fontSize: '0.875rem', 
-          color: '#143340', 
-          outline: 'none', 
-          backgroundColor: '#f8fcfb', 
-          transition: 'border-color 0.2s' 
-        }}
-        // Pseudo-clase de Tailwind para el efecto "focus" (cuando haces clic adentro)
-        className="focus:border-[#8BD9CA]"
-      />
+      {/* Contenedor del campo y el ícono de error (si lo hay) */}
+      <div className="relative">
+        <input
+          type={type}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          required={required}
+          className={`w-full rounded-lg border-[1.5px] bg-petrol-50 px-3.5 py-2.5 text-sm text-petrol-900 outline-none transition-colors duration-200 focus:border-mint-400
+            ${error ? 'border-red-500 pr-10' : 'border-petrol-100 pr-3.5'}
+          `}
+        />
+        
+        {/* Advertencia que aparece solo si hay error */}
+        {error && (
+          <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-red-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+        )}
+      </div>
 
-      {/* Mensaje de Error (Validación QA) */}
+      {/* Mensaje de Error */}
       {error && (
-        <span style={{ color: '#e05c5c', fontSize: '0.75rem', marginTop: '0.4rem', fontWeight: 500 }}>
+        <span className="mt-1.5 text-xs font-medium text-red-500">
           {error}
         </span>
       )}
+      
     </div>
   );
 }

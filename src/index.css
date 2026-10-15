@@ -2,6 +2,9 @@
 @import 'tailwindcss';
 
 @theme {
+  --color-petrol-50: #f4faf8; /* Fondo claro general */
+  --color-petrol-100: #dceee9; /* Bordes sutiles */
+  --color-petrol-200: #C2F2E9; /* Fondo de íconos o badges */
   --color-petrol-950: #0d2229;
   --color-petrol-900: #143340;
   --color-petrol-800: #1a3f4e;

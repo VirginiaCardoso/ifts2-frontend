@@ -67,7 +67,7 @@ export default function AccesosRapidos() {
                 transition: 'all 0.2s', 
                 textDecoration: 'none' 
               }}
-              // Efectos hover usando Tailwind
+              // Efectos hover
               className="hover:border-[#8BD9CA] hover:shadow-md hover:-translate-y-0.5 group"
             >
               {/* Contenedor del Ícono */}
@@ -79,7 +79,7 @@ export default function AccesosRapidos() {
               <div>
                 <p style={{ color: '#143340', fontWeight: 700, fontSize: '0.83rem', lineHeight: 1.25 }}>
                   {item.title} 
-                  {/* Flechita sutil si es un enlace externo */}
+                  {/* flecha si es enlace externo */}
                   {item.external && <span className="inline-block ml-1 opacity-50 group-hover:text-[#518C8C] transition-colors" style={{ fontSize: '0.65rem' }}>↗</span>}
                 </p>
                 <p style={{ color: '#518C8C', fontSize: '0.68rem', marginTop: '0.2rem', lineHeight: 1.3 }}>

@@ -49,7 +49,7 @@ export default function Navbar({ onLoginClick }) {
   return (
     <>
       {/* ── TOPBAR  ── */}
-      <div style={{ backgroundColor: '#0d2229' }} className="hidden md:flex items-center justify-between gap-4 px-8 py-1.5 text-xs">
+      <div className="hidden md:flex items-center justify-between gap-4 px-8 py-1.5 text-xs bg-petrol-950">
         <span style={{ color: 'rgba(255,255,255,0.45)', letterSpacing: '0.06em' }}>
           IFTS N° 2 · Instituto de Formación Técnica Superior · Ministerio de Educación · GCBA
         </span>
@@ -61,7 +61,7 @@ export default function Navbar({ onLoginClick }) {
       </div>
 
       {/* ── HEADER PRINCIPAL ── */}
-      <header style={{ backgroundColor: '#143340' }} className="sticky top-0 z-50 shadow-lg">
+      <header className="bg-petrol-900 sticky top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 md:h-20">
 
           {/* Logo y Nombre */}

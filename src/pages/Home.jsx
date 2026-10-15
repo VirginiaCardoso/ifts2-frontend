@@ -2,6 +2,8 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
 import AccesosRapidos from '../components/AccesosRapidos';
+import Novedades from '../components/Novedades';
+import PlantelDocente from '../components/PlantelDocente';
 
 export default function Home() {
   return (
@@ -14,6 +16,16 @@ export default function Home() {
 
         {/* Accesos Rapdidos */}
         <AccesosRapidos />
+
+        {/* Novedades */}
+        <Novedades />
+
+        {/* Info Carrera */}
+        
+
+        {/* Plantel docente */}
+        <PlantelDocente />
+
       </main>
     </div>
   );
