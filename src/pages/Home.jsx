@@ -4,6 +4,7 @@ import HeroSection from '../components/HeroSection';
 import AccesosRapidos from '../components/AccesosRapidos';
 import Novedades from '../components/Novedades';
 import PlantelDocente from '../components/PlantelDocente';
+import Footer from '../components/Footer';
 
 export default function Home() {
   return (
@@ -27,6 +28,7 @@ export default function Home() {
         <PlantelDocente />
 
       </main>
+      <Footer/>
     </div>
   );
 }
