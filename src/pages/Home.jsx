@@ -4,6 +4,7 @@ import HeroSection from '../components/HeroSection';
 import AccesosRapidos from '../components/AccesosRapidos';
 import Novedades from '../components/Novedades';
 import PlantelDocente from '../components/PlantelDocente';
+import Contacto from '../components/Contacto';
 
 export default function Home() {
   return (
@@ -25,7 +26,7 @@ export default function Home() {
 
         {/* Plantel docente */}
         <PlantelDocente />
-
+        <Contacto />
       </main>
     </div>
   );
