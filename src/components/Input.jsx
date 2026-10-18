@@ -20,7 +20,7 @@ export default function Input({
   className = ''
 }) {
   return (
-    <div className={`flex flex-col mb-4 ${className}`}>
+    <div className={`flex flex-col ${className}`}>
       
       {/* Etiqueta (Label) */}
       {label && (
