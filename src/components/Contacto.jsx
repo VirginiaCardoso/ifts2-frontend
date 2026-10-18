@@ -59,14 +59,13 @@ export default function Contacto(){
                 <div className="lg:col-span-7 w-full max-w-xl mx-auto">
                     <form 
                         onSubmit={handleSubmit} 
-                        className=" bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-petrol-100/60 flex flex-col gap-4 text-left"
+                        className="w-full bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-petrol-100/60 flex flex-col gap-4 text-left"
                     >
                         {/* Input Nombre */}
                         <Input 
                             placeholder="Nombre y apellido"
                             value={formData.nombre}
                             onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-                            className="mb-0"
                         />
 
                         {/* Input Correo */}
@@ -75,7 +74,6 @@ export default function Contacto(){
                             placeholder="Correo electrónico"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="mb-0"
                         />
                         {/* Select Asunto */}
                         <div className="relative">
