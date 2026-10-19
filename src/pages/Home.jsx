@@ -4,6 +4,7 @@ import HeroSection from '../components/HeroSection';
 import AccesosRapidos from '../components/AccesosRapidos';
 import Novedades from '../components/Novedades';
 import PlantelDocente from '../components/PlantelDocente';
+import Tramites from '../components/Tramites';
 import Contacto from '../components/Contacto';
 import Footer from '../components/Footer';
 
@@ -27,6 +28,7 @@ export default function Home() {
 
         {/* Plantel docente */}
         <PlantelDocente />
+        <Tramites />
         <Contacto />
       </main>
       <Footer/>

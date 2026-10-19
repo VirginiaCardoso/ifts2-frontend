@@ -23,7 +23,7 @@ export default function Contacto(){
     };
     
     return (
-        <section id="contacto" className="bg-petrol-50 py-16 px-6 md:px-12 font-sans">
+        <section id="contacto" className="bg-petrol-50 pt-3 pb-14 px-6 md:px-12 font-sans">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                 {/* Columna Izquierda: Información */}
                 <div className="lg:col-span-5 flex flex-col items-start text-left gap-4 pt-4">
