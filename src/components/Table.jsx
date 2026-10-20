@@ -29,13 +29,12 @@ export function Tbody({ children, className = '' }) {
 }
 
 export function Tr({ children, className = '', isSpecial = false }) {
-  const baseClasses = "transition-colors group/row";
+  const baseClasses = "transition-colors";
   
-  // Usamos amber-50 de Tailwind para los recreos y petrol-50 para el hover general
+  // Usamos amber-50 para filas especiales y un hover ultra sutil (petrol-50/40) o lo vaciamos si no lo querés
   const specialBg = isSpecial ? 'bg-amber-50' : '';
-  const defaultHover = !isSpecial ? 'hover:bg-petrol-50' : '';
+  const defaultHover = '';//!isSpecial ? 'hover:bg-petrol-50/40' : ''; //efcto del hover
   
-  // Usamos slate-50 para que el diseño zebra sea sutil
   const zebraClasses = !isSpecial ? '[.table-variant-zebra_&]:even:bg-slate-50' : '';
 
   return (

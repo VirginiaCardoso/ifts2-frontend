@@ -1,7 +1,7 @@
 import React from 'react';
 import ProfileCard from './ProfileCard';
 
-// Datos
+// Datos oficiales actualizados
 const AUTORIDADES = [
   { cargo: 'RECTORA', nombre: 'Prof. Alicia E. Ruidiaz' },
   { cargo: 'SECRETARIO ACADÉMICO', nombre: 'Lic. Leonardo Bermudez' },
@@ -13,7 +13,27 @@ const AUTORIDADES = [
 const DOCENTES = [
   { nombre: 'Prof. Miguel Colloca', materias: 'Seguridad e Higiene en la Gastronomía' },
   { nombre: 'Prof. Daniel Buczel', materias: 'Elementos de Química' },
-  { nombre: 'Prof. Evangelina Calderón', materias: 'Taller de Primeros Auxilios' }
+  { nombre: 'Prof. Evangelina Calderón', materias: 'Taller de Primeros Auxilios' },
+  { nombre: 'Prof. Grisel de Landeta', materias: 'Introducción al Idioma Inglés · Inglés técnico' },
+  { nombre: 'Prof. Iris Leyte', materias: 'Panadería básica · Pastelería · Repostería' },
+  { nombre: 'Prof. Julia Sboro', materias: 'Laboratorio de Tecnología de los alimentos' },
+  { nombre: 'Prof. Walter Albarracin', materias: 'Seminario de actualización y profundización I y II' },
+  { nombre: 'Prof. Evangelina Aguilar Corcuera', materias: 'Nutrición' },
+  { nombre: 'Prof. Camila Sabalsagaray Montera', materias: 'Introducción a la gastronomía · Industria de la hospitalidad' },
+  { nombre: 'Prof. Axel Trebino', materias: 'Organización de eventos gastronómicos' },
+  { nombre: 'Prof. Viviana Ferraro', materias: 'Taller de Francés técnico' }
+];
+
+const AYUDANTES = [
+  'Prof. Gladis Casalegno',
+  'Prof. Camila Sabalsagaray',
+  'Prof. Julia Sboro'
+];
+
+const BEDELES = [
+  { year: 'PRIMER AÑO', nombre: 'Sra. Andrea Barrios' },
+  { year: 'SEGUNDO AÑO', nombre: 'Sra. Verónica Alarcón' },
+  { year: 'TERCER AÑO', nombre: 'Sr. Esteban Suárez' }
 ];
 
 export default function PlantelDocente() {
@@ -49,7 +69,7 @@ export default function PlantelDocente() {
         </div>
 
         {/* --- DOCENTES --- */}
-        <div>
+        <div className="mb-12">
           <h3 className="font-display text-petrol-900 text-[1.4rem] mb-6">
             Docentes
           </h3>
@@ -62,6 +82,45 @@ export default function PlantelDocente() {
               />
             ))}
           </div>
+        </div>
+
+        {/* --- AYUDANTES Y BEDELES (NUEVO BLOQUE) --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10 pt-10 border-t border-petrol-100">
+          
+          {/* Profesores Ayudantes de Trabajos */}
+          <div>
+            <h3 className="font-display text-petrol-900 text-[1.25rem] mb-4">
+              Profesores Ayudantes de Trabajos
+            </h3>
+            <div className="flex flex-col gap-2.5">
+              {AYUDANTES.map((nombreAyudante, idx) => (
+                <div key={idx} className="bg-white border border-petrol-100 rounded-xl p-3.5 flex items-center gap-3 shadow-sm">
+                  <span className="w-2 h-2 rounded-full bg-mint-400 shrink-0" />
+                  <span className="text-petrol-900 text-sm font-semibold">{nombreAyudante}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Bedeles */}
+          <div>
+            <h3 className="font-display text-petrol-900 text-[1.25rem] mb-4">
+              Bedeles
+            </h3>
+            <div className="flex flex-col gap-2.5">
+              {BEDELES.map((bedel, idx) => (
+                <div key={idx} className="bg-white border border-petrol-100 rounded-xl p-3.5 flex items-center justify-between shadow-sm">
+                  <span className="text-petrol-600 text-xs font-bold tracking-wider uppercase">
+                    {bedel.year}
+                  </span>
+                  <span className="text-petrol-900 text-sm font-bold">
+                    {bedel.nombre}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
 
       </div>

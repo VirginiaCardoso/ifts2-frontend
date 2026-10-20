@@ -23,7 +23,7 @@ export default function Button({
     primary: "bg-mint-400 text-petrol-900 hover:bg-mint-500 shadow-sm",
     secondary: "bg-petrol-600 text-white hover:bg-petrol-700 shadow-sm",
     danger: "bg-red-50 text-red-700 hover:bg-red-100", // Mantenemos los colores estándar de Tailwind para advertencias
-    outline: "bg-transparent border border-petrol-100 text-petrol-700 hover:bg-petrol-50 hover:border-mint-400"
+    outline: "bg-transparent border border-mint-400/40 text-mint-300 hover:bg-white/10 hover:text-white hover:border-mint-400"
   };
 
   const selectedVariant = variants[variant] || variants.primary;
