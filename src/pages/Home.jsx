@@ -11,6 +11,7 @@ import Footer from '../components/Footer';
 import PlanEstudiosSection from '../components/PlanEstudiosSection';
 import PromocionablesSection from '../components/PromocionablesSection';
 import CorrelatividadesSection from '../components/Correlatividaes';
+import HorariosMateriasSection from '../components/HorariosMateriasSection';
 
 export default function Home() {
   return (
@@ -20,24 +21,29 @@ export default function Home() {
       <main>
         {/* Portada ppal */}
         <HeroSection />
-
         {/* Accesos Rapdidos */}
         <AccesosRapidos />
-
         {/* Novedades */}
         <Novedades />
-
         {/* Info Carrera */}
         <CarreraSection />
-
         {/* Plantel docente */}
         <PlantelDocente />
-
+        {/* Plan */}
         <PlanEstudiosSection />
+        {/* Materias promocionables */}
         <PromocionablesSection />
+        {/* Correlatividades */}
         <CorrelatividadesSection />
+        {/* Mesas finales */}
 
+        {/* Fechas importantes ingresantes */}
+
+        {/* Horarios */}
+        <HorariosMateriasSection/>
+        {/* Tramites */}
         <Tramites />
+        {/* Contacto bedelia */}
         <Contacto />
       </main>
       <Footer/>
