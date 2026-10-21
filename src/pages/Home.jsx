@@ -11,6 +11,7 @@ import Footer from '../components/Footer';
 import PlanEstudiosSection from '../components/PlanEstudiosSection';
 import PromocionablesSection from '../components/PromocionablesSection';
 import CorrelatividadesSection from '../components/Correlatividaes';
+import MesaExamenSection from '../components/MesaExamenSection';
 import HorariosMateriasSection from '../components/HorariosMateriasSection';
 
 export default function Home() {
@@ -36,7 +37,7 @@ export default function Home() {
         {/* Correlatividades */}
         <CorrelatividadesSection />
         {/* Mesas finales */}
-
+        <MesaExamenSection />
         {/* Fechas importantes ingresantes */}
 
         {/* Horarios */}
