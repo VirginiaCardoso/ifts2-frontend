@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Demo from './pages/Demo';
 import AdminPanel from './pages/AdminPanel';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -13,7 +14,15 @@ function App() {
         {/* Demo componentes */}
         <Route path="/demo" element={<Demo />} />
 
-        <Route path="/admin" element={<AdminPanel />} />
+        {/* Panel administración: solo accesible si inició sesión */}
+        <Route 
+          path="/admin" 
+          element={
+            <ProtectedRoute>
+              <AdminPanel />
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
     </BrowserRouter>
   );

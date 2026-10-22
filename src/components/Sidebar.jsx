@@ -70,7 +70,7 @@ const NAV_ITEMS = [
   },
 ];
 
-export default function Sidebar({ activeTab, onSelectTab, onLogout, onChangePassword }) {
+export default function Sidebar({ activeTab, onSelectTab, onLogout, onChangePassword, user }) {
   return (
     <aside className="fixed top-0 left-0 bottom-0 w-[280px] bg-[#0d2229] flex flex-col z-20 border-r border-white/5 select-none">
       
@@ -161,8 +161,12 @@ export default function Sidebar({ activeTab, onSelectTab, onLogout, onChangePass
             </svg>
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-white text-xs font-semibold leading-tight truncate">Administrador</p>
-            <p className="text-[0.7rem] text-[#518C8C] truncate mt-0.5">IFTS Nº 2</p>
+            <p className="text-white text-xs font-semibold leading-tight truncate">
+              {user?.nombre || 'Administrador'}
+            </p>
+            <p className="text-[0.7rem] text-[#518C8C] truncate mt-0.5">
+              {user?.rol_institucional || 'IFTS Nº 2'}
+            </p>
           </div>
         </div>
 

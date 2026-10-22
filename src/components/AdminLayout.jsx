@@ -33,7 +33,7 @@ const TAB_METADATA = {
   },
 };
 
-export default function AdminLayout({ onLogout, children, activeTab, onSelectTab }) {
+export default function AdminLayout({ onLogout, children, activeTab, onSelectTab, user }) {
   const currentMeta = TAB_METADATA[activeTab] || {
     title: 'Panel de administración',
     subtitle: 'IFTS N° 2',
@@ -46,6 +46,7 @@ export default function AdminLayout({ onLogout, children, activeTab, onSelectTab
         activeTab={activeTab}
         onSelectTab={onSelectTab}
         onLogout={onLogout}
+        user={user}
         onChangePassword={() => alert('Abrir modal de cambiar contraseña')}
       />
 
