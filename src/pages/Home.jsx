@@ -13,6 +13,7 @@ import PromocionablesSection from '../components/PromocionablesSection';
 import CorrelatividadesSection from '../components/Correlatividaes';
 import MesaExamenSection from '../components/MesaExamenSection';
 import HorariosMateriasSection from '../components/HorariosMateriasSection';
+import LoginModal from '../components/LoginModal';
 
 export default function Home() {
   return (
@@ -47,7 +48,13 @@ export default function Home() {
         {/* Contacto bedelia */}
         <Contacto />
       </main>
-      <Footer/>
+      <Footer onLoginClick={() => setIsLoginOpen(true)} />
+            {/* Modal de Login flotante */}
+            <LoginModal
+              isOpen={isLoginOpen}
+              onClose={() => setIsLoginOpen(false)}
+              onLoginSuccess={handleLoginSuccess}
+            />
     </div>
   );
 }

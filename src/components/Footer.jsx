@@ -1,7 +1,7 @@
 import React from "react";
 import LogoIFTS2 from './LogoIFTS2';
 
-export default function Footer(){
+export default function Footer({ onLoginClick = () => {} }) {
     return(
         <footer className="bg-petrol-950 text-gray-300 pt-16 pb-8 px-6 md:px-12 font-sans border-t border-petrol-900">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 pb-12">
@@ -159,7 +159,18 @@ export default function Footer(){
                         <li><a href="#carrera" className="hover:text-mint-300 transition-colors">Carrera</a></li>
                         <li><a href="#tramites" className="hover:text-mint-300 transition-colors">Trámites</a></li>
                         <li><a href="#contacto" className="hover:text-mint-300 transition-colors">Contacto</a></li>
-                        <li><a href="#intranet" className="hover:text-mint-300 transition-colors">Intranet</a></li>
+                        <li>
+                            <a
+    href="#intranet"
+    onClick={(e) => {
+      e.preventDefault();
+      onLoginClick();
+    }}
+    className="hover:text-mint-300 transition-colors cursor-pointer"
+  >
+    Intranet
+  </a>
+                        </li>
                     </ul>
                 </div>
                 {/* Columna 3: Plataformas Externas */}
