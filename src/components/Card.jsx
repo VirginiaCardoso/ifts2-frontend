@@ -2,12 +2,21 @@ import React from 'react';
 import BaseCard from './BaseCard';
 import Badge from './Badge';
 
-export default function Card({ tag, date, title, excerpt, img }) {
-  const getBadgeVariant = (tagName) => {
-    const lowerTag = tagName.toLowerCase();
-    if (lowerTag === 'evento') return 'evento';
-    if (lowerTag === 'académico') return 'academico';
-    return 'novedades';
+// Imagen institucional de respaldo por defecto
+const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1577219492769-b63a779fac28?w=600&h=400&fit=crop&auto=format';
+
+export default function Card({ tag = 'Novedades', 
+  date = '', 
+  title = '', 
+  excerpt = '', 
+  img = ''}) {
+
+  const getBadgeVariant = (tagName = '') => {
+
+    const lowerTag = (tagName|| '').toLowerCase();
+    if (lowerTag === 'evento') return 'primary';
+    if (lowerTag === 'acad') return 'warning';
+    return 'mint';
   };
 
   return (
@@ -19,8 +28,13 @@ export default function Card({ tag, date, title, excerpt, img }) {
       {/* Contenedor imagen */}
       <div className="h-48 w-full bg-petrol-200 shrink-0">
         <img 
-          src={img} 
-          alt={title} 
+          src={img || DEFAULT_IMAGE} 
+          alt={title || 'Novedad IFTS N° 2'} 
+          onError={(e) => {
+            // Si la URL falla al cargar (error 404 o link caído), coloca la de respaldo
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = DEFAULT_IMAGE;
+          }}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
         />
       </div>

@@ -1,7 +1,9 @@
-import React from 'react';
-import Card from './Card'; 
+import React, { useState, useEffect } from 'react';
+import Card from './Card';
+import { getNovedades } from '../services/novedadesService';
 
 // Datos de prueba 
+/*
 const NEWS_DATA = [
   {
     tag: 'Novedades',
@@ -31,9 +33,41 @@ const NEWS_DATA = [
     excerpt: 'El IFTS N°2 firmó un acuerdo con uno de los complejos hoteleros más prestigiosos del país para ofrecer pasantías remuneradas a estudiantes avanzados.',
     img: 'https://images.unsplash.com/photo-1572715376701-98568319fd0b?w=600&h=400&fit=crop&auto=format',
   },
-];
+];*/
 
 export default function Novedades() {
+  const [newsList, setNewsList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    async function fetchPublicNovedades() {
+      try {
+        setLoading(true);
+        const data = await getNovedades();
+        if (Array.isArray(data)) {
+          setNewsList(data);
+        }
+      } catch (err) {
+        console.error('Error al cargar las novedades públicas:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchPublicNovedades();
+  }, []);
+
+  // Función para formatear fechas de MySQL (YYYY-MM-DD) a "10 sep 2026"
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    return date.toLocaleDateString('es-AR', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+  };
+
   return (
     <section id="novedades" className="py-16 md:py-24 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
@@ -62,21 +96,21 @@ export default function Novedades() {
 
         {/* Grilla de Tarjetas Dinámica y Centrada con Flex */}
         <div className="flex flex-wrap justify-center gap-6">
-          {NEWS_DATA.map((item, index) => (
-            <div 
-              key={index} 
-              className="w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1.5rem)] max-w-[420px]"
-            >
-              <Card 
-                tag={item.tag}
-                date={item.date}
-                title={item.title}
-                excerpt={item.excerpt}
-                img={item.img}
-              />
-            </div>
-          ))}
-        </div>
+  {newsList.map((item) => (
+    <div 
+      key={item.id} 
+      className="w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-1.5rem)] max-w-[420px]"
+    >
+      <Card 
+        tag={item.etiqueta || item.categoria || 'Novedades'}
+        date={formatDate(item.fecha_publicacion || item.fecha)}
+        title={item.titulo}
+        excerpt={item.descripcion_breve || item.descripcion || item.contenido || ''}
+        img={item.imagen_portada_url || item.imagen_url}
+      />
+    </div>
+  ))}
+</div>
 
       </div>
     </section>

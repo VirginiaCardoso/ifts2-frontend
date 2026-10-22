@@ -21,10 +21,7 @@ export default function AdminPanel({ onLogout }) {
   return (
     <AdminLayout activeTab={activeTab} onSelectTab={setActiveTab} onLogout={handleLogout} user={currentUser}>
       {activeTab === 'novedades' && (
-        <AdminNovedades 
-          totalNews={3} 
-          onOpenForm={() => console.log('Abrir formulario')} 
-        />
+        <AdminNovedades/>
       )}
       {activeTab === 'plantel' && <div>Componente Plantel Docente</div>}
       {/* Resto de módulos */}
