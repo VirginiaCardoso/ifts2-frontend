@@ -11,8 +11,11 @@ function getAuthHeaders() {
 }
 
 // Obtener todas las noticias publicadas
-export async function getNovedades() {
-  const response = await fetch(API_URL);
+export async function getNovedades(admin = false) {
+  const url = admin ? `${API_URL}?admin=true` : API_URL;
+  const response = await fetch(url, {
+    headers: admin ? getAuthHeaders() : {}
+  });
   if (!response.ok) {
     throw new Error('Error al obtener el listado de novedades');
   }

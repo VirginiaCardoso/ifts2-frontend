@@ -13,28 +13,30 @@ export default function AdminNovedades() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Estados de interfaz y búsqueda
+  // Estados del modal y formularios
   const [searchTerm, setSearchTerm] = useState('');
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
-  // Formulario
+  // Estado inicial del formulario con descripcion_breve y estado
   const initialForm = {
     titulo: '',
     etiqueta: 'Novedades',
-    fecha: new Date().toISOString().split('T')[0],
-    imagen_url: ''
+    fecha_publicacion: new Date().toISOString().split('T')[0],
+    imagen_portada_url: '',
+    descripcion_breve: '',
+    estado: 'Publicado'
   };
   const [formData, setFormData] = useState(initialForm);
 
-  // Carga inicial desde la API
+  // Carga de novedades desde la API
   const cargarNoticias = async () => {
     try {
       setLoading(true);
       setError('');
-      const data = await getNovedades();
+      const data = await getNovedades(true);//le paso true asi busca todas las novedades, no importa la fecha de publicación ni el estado
       setNoticias(Array.isArray(data) ? data : []);
     } catch (err) {
       setError(err.message || 'No se pudo conectar con el servidor');
@@ -47,22 +49,20 @@ export default function AdminNovedades() {
     cargarNoticias();
   }, []);
 
-  // Métricas calculadas dinámicamente
+  // Métricas dinámicas superiores
   const metrics = useMemo(() => {
-    const total = noticias.length;
-    const currentMonth = new Date().getMonth();
-    const currentYear = new Date().getFullYear();
+  const total = noticias.length;
+  const publicadas = noticias.filter(
+    (item) => (item.estado || 'Publicado') === 'Publicado'
+  ).length;
+  const borradores = noticias.filter(
+    (item) => item.estado === 'Borrador'
+  ).length;
 
-    const esteMes = noticias.filter((item) => {
-      const fecha = new Date(item.fecha);
-      return fecha.getMonth() === currentMonth && fecha.getFullYear() === currentYear;
-    }).length;
+  return { total, publicadas, borradores };
+}, [noticias]);
 
-    const tags = new Set(noticias.map((item) => item.etiqueta || item.categoria));
-    return { total, esteMes, etiquetas: tags.size };
-  }, [noticias]);
-
-  // Filtrado de búsqueda
+  // Filtro de búsqueda
   const filteredNoticias = useMemo(() => {
     return noticias.filter((n) => {
       const q = searchTerm.toLowerCase();
@@ -72,33 +72,57 @@ export default function AdminNovedades() {
     });
   }, [noticias, searchTerm]);
 
-  // Manejadores de acciones
+  // Apertura de modal de creación
   const handleOpenCreate = () => {
     setEditingId(null);
     setFormData(initialForm);
     setIsFormOpen(true);
   };
 
+  // Apertura de modal de edición con mapeo completo
   const handleOpenEdit = (noticia) => {
     setEditingId(noticia.id);
+
+    const rawDate = noticia.fecha_publicacion || noticia.fecha || noticia.created_at || '';
+    const cleanDate = rawDate ? String(rawDate).split('T')[0] : new Date().toISOString().split('T')[0];
+
     setFormData({
       titulo: noticia.titulo || '',
       etiqueta: noticia.etiqueta || noticia.categoria || 'Novedades',
-      fecha: noticia.fecha ? noticia.fecha.split('T')[0] : '',
-      imagen_url: noticia.imagen_url || ''
+      fecha_publicacion: cleanDate,
+      imagen_portada_url: noticia.imagen_portada_url || noticia.imagen_url || '',
+      descripcion_breve: noticia.descripcion_breve || noticia.descripcion || noticia.contenido || '',
+      estado: noticia.estado || 'Publicado'
     });
+
     setIsFormOpen(true);
   };
 
+  // Envío del formulario (Creación o Edición)
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setSubmitting(true);
+
+      const payload = {
+        titulo: formData.titulo,
+        etiqueta: formData.etiqueta,
+        categoria: formData.etiqueta,
+        fecha_publicacion: formData.fecha_publicacion,
+        fecha: formData.fecha_publicacion,
+        imagen_portada_url: formData.imagen_portada_url,
+        imagen_url: formData.imagen_portada_url,
+        descripcion_breve: formData.descripcion_breve,
+        descripcion: formData.descripcion_breve,
+        estado: formData.estado
+      };
+
       if (editingId) {
-        await updateNovedad(editingId, formData);
+        await updateNovedad(editingId, payload);
       } else {
-        await createNovedad(formData);
+        await createNovedad(payload);
       }
+
       setIsFormOpen(false);
       setEditingId(null);
       setFormData(initialForm);
@@ -110,6 +134,7 @@ export default function AdminNovedades() {
     }
   };
 
+  // Confirmar eliminación
   const handleConfirmDelete = async () => {
     if (!deletingId) return;
     try {
@@ -133,7 +158,7 @@ export default function AdminNovedades() {
             Novedades institucionales
           </h1>
           <p className="text-petrol-600 text-sm font-medium mt-1">
-            {metrics.total} {metrics.total === 1 ? 'noticia publicada' : 'noticias publicadas'}
+            {metrics.publicadas} {metrics.publicadas === 1 ? 'noticia publicada' : 'noticias publicadas'}
           </p>
         </div>
 
@@ -150,7 +175,7 @@ export default function AdminNovedades() {
         </Button>
       </div>
 
-      {/* Formulario Desplegable (Crear / Editar) */}
+      {/* Formulario de Carga y Edición */}
       {isFormOpen && (
         <form onSubmit={handleSubmit} className="bg-white border border-petrol-100 rounded-2xl p-6 shadow-sm space-y-4">
           <h2 className="text-base font-bold text-petrol-900">
@@ -181,34 +206,62 @@ export default function AdminNovedades() {
                 className="w-full bg-petrol-50 border border-petrol-100 rounded-lg px-3 py-2 text-sm text-petrol-900 focus:outline-none focus:border-mint-400"
               >
                 <option value="Novedades">Novedades</option>
-                <option value="Evento">Evento</option>
+                <option value="Eventos">Eventos</option>
                 <option value="Académico">Académico</option>
               </select>
             </div>
 
             <div>
               <label className="block text-xs font-bold text-petrol-900 uppercase tracking-wider mb-1">
-                Fecha *
+                Fecha de publicación *
               </label>
               <input
                 type="date"
                 required
-                value={formData.fecha}
-                onChange={(e) => setFormData({ ...formData, fecha: e.target.value })}
+                value={formData.fecha_publicacion}
+                onChange={(e) => setFormData({ ...formData, fecha_publicacion: e.target.value })}
                 className="w-full bg-petrol-50 border border-petrol-100 rounded-lg px-3 py-2 text-sm text-petrol-900 focus:outline-none focus:border-mint-400"
               />
             </div>
 
             <div>
               <label className="block text-xs font-bold text-petrol-900 uppercase tracking-wider mb-1">
-                URL de Imagen
+                Estado
+              </label>
+              <select
+                value={formData.estado}
+                onChange={(e) => setFormData({ ...formData, estado: e.target.value })}
+                className="w-full bg-petrol-50 border border-petrol-100 rounded-lg px-3 py-2 text-sm text-petrol-900 focus:outline-none focus:border-mint-400"
+              >
+                <option value="Publicado">Publicado</option>
+                <option value="Borrador">Borrador</option>
+              </select>
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-xs font-bold text-petrol-900 uppercase tracking-wider mb-1">
+                URL de Imagen de Portada
               </label>
               <input
                 type="url"
-                placeholder="https://..."
-                value={formData.imagen_url}
-                onChange={(e) => setFormData({ ...formData, imagen_url: e.target.value })}
+                placeholder="https://images.unsplash.com/..."
+                value={formData.imagen_portada_url}
+                onChange={(e) => setFormData({ ...formData, imagen_portada_url: e.target.value })}
                 className="w-full bg-petrol-50 border border-petrol-100 rounded-lg px-3 py-2 text-sm text-petrol-900 focus:outline-none focus:border-mint-400"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-xs font-bold text-petrol-900 uppercase tracking-wider mb-1">
+                Descripción Breve (Extracto) *
+              </label>
+              <textarea
+                rows="3"
+                required
+                placeholder="Resumen o bajada institucional de la noticia..."
+                value={formData.descripcion_breve}
+                onChange={(e) => setFormData({ ...formData, descripcion_breve: e.target.value })}
+                className="w-full bg-petrol-50 border border-petrol-100 rounded-lg px-3 py-2 text-sm text-petrol-900 focus:outline-none focus:border-mint-400 resize-none"
               />
             </div>
           </div>
@@ -238,26 +291,26 @@ export default function AdminNovedades() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white border border-petrol-100 rounded-2xl p-5 shadow-xs">
           <p className="font-display text-2xl font-bold text-petrol-900">{metrics.total}</p>
+          <p className="text-xs text-petrol-600 mt-0.5">Total novedades</p>
+        </div>
+        <div className="bg-white border border-petrol-100 rounded-2xl p-5 shadow-xs">
+          <p className="font-display text-2xl font-bold text-mint-500">{metrics.publicadas}</p>
           <p className="text-xs text-petrol-600 mt-0.5">Total publicadas</p>
         </div>
         <div className="bg-white border border-petrol-100 rounded-2xl p-5 shadow-xs">
-          <p className="font-display text-2xl font-bold text-petrol-900">{metrics.esteMes}</p>
-          <p className="text-xs text-petrol-600 mt-0.5">Este mes</p>
-        </div>
-        <div className="bg-white border border-petrol-100 rounded-2xl p-5 shadow-xs">
-          <p className="font-display text-2xl font-bold text-petrol-900">{metrics.etiquetas}</p>
-          <p className="text-xs text-petrol-600 mt-0.5">Etiquetas distintas</p>
+          <p className="font-display text-2xl font-bold text-amber-500">{metrics.borradores}</p>
+          <p className="text-xs text-petrol-600 mt-0.5">Borradores</p>
         </div>
       </div>
 
-      {/* Barra de Búsqueda y Tabla */}
+      {/* Buscador y Tabla */}
       <div className="bg-white border border-petrol-100 rounded-2xl p-6 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <h2 className="text-sm font-bold text-petrol-900">Lista de noticias</h2>
           <div className="relative w-full sm:w-64">
             <input
               type="text"
-              placeholder="Buscar..."
+              placeholder="Buscar…"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-petrol-50 border border-petrol-100 rounded-lg pl-9 pr-3 py-1.5 text-xs text-petrol-900 focus:outline-none focus:border-mint-400"
@@ -283,7 +336,7 @@ export default function AdminNovedades() {
                   <th className="pb-3 px-3">Imagen</th>
                   <th className="pb-3 px-3">Etiqueta</th>
                   <th className="pb-3 px-3">Título</th>
-                  <th className="pb-3 px-3">Fecha</th>
+                  <th className="pb-3 px-3">Fecha Publicación</th>
                   <th className="pb-3 px-3">Estado</th>
                   <th className="pb-3 px-3 text-right">Acciones</th>
                 </tr>
@@ -292,32 +345,43 @@ export default function AdminNovedades() {
                 {filteredNoticias.map((item) => (
                   <tr key={item.id} className="hover:bg-petrol-50/50 transition-colors">
                     <td className="py-3 px-3">
-                      {item.imagen_portada_url || item.imagen_url ? (
-                        <img 
-                          src={item.imagen_portada_url || item.imagen_url} 
-                          alt={item.titulo} 
-                          className="w-10 h-10 rounded-lg object-cover" 
-                        />
-                      ) : (
-                        <div className="w-10 h-10 rounded-lg bg-petrol-100 flex items-center justify-center text-petrol-600 font-bold">
-                          —
-                        </div>
-                      )}
+                      <img 
+                        src={item.imagen_portada_url || 'https://images.unsplash.com/photo-1577219492769-b63a779fac28?w=80&h=60&fit=crop&auto=format'} 
+                        alt="" 
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1577219492769-b63a779fac28?w=80&h=60&fit=crop&auto=format';
+                        }}
+                        className="w-10 h-10 rounded-lg object-cover bg-petrol-100" 
+                      />
                     </td>
                     <td className="py-3 px-3">
                       <Badge variant="mint">{item.etiqueta || item.categoria || 'Novedades'}</Badge>
                     </td>
-                    <td className="py-3 px-3 font-medium text-petrol-900 max-w-xs truncate">
+                    <td className="py-3 px-3 font-medium text-petrol-900 max-w-xs truncate" title={item.titulo}>
                       {item.titulo}
                     </td>
                     <td className="py-3 px-3 text-petrol-600">
-                      {(item.fecha_publicacion || item.fecha) ? (item.fecha_publicacion || item.fecha).split('T')[0] : '—'}
+                      {(() => {
+                        const rawDate = item.fecha_publicacion || item.fecha || item.created_at;
+                        if (!rawDate) return '—';
+                        const clean = String(rawDate).split('T')[0];
+                        const [year, month, day] = clean.split('-');
+                        return year && month && day ? `${day}-${month}-${year}` : clean;
+                      })()}
                     </td>
                     <td className="py-3 px-3">
-                      <span className="inline-flex items-center gap-1.5 text-xs text-mint-500 font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-mint-500"></span>
-                        Publicado
-                      </span>
+                      {item.estado === 'Borrador' ? (
+                        <span className="inline-flex items-center gap-1.5 text-xs text-amber-600 font-medium">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                          Borrador
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 text-xs text-mint-500 font-medium">
+                          <span className="w-1.5 h-1.5 rounded-full bg-mint-500"></span>
+                          Publicado
+                        </span>
+                      )}
                     </td>
                     <td className="py-3 px-3 text-right space-x-2">
                       <Button
