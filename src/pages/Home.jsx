@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
 import AccesosRapidos from '../components/AccesosRapidos';
@@ -16,6 +17,13 @@ import HorariosMateriasSection from '../components/HorariosMateriasSection';
 import LoginModal from '../components/LoginModal';
 
 export default function Home() {
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLoginSuccess = (usuario) => {
+    // Tras autenticar con éxito en el backend, navegamos al panel
+    navigate('/admin');
+  };
   return (
     <div className="min-h-screen flex flex-col">
       {/* Barra */}
