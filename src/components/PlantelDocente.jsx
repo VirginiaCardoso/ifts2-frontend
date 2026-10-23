@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ProfileCard from './ProfileCard';
+import { getAutoridades, getProfesores, getBedeles } from '../services/docentesService';
 
 // Datos oficiales actualizados
-const AUTORIDADES = [
+/*const AUTORIDADES = [
   { cargo: 'RECTORA', nombre: 'Prof. Alicia E. Ruidiaz' },
   { cargo: 'SECRETARIO ACADÉMICO', nombre: 'Lic. Leonardo Bermudez' },
   { cargo: 'SECRETARIA ADMINISTRATIVA', nombre: 'Prof. María Belén Orellano Camu' },
@@ -35,9 +36,50 @@ const BEDELES = [
   { year: 'SEGUNDO AÑO', nombre: 'Sra. Verónica Alarcón' },
   { year: 'TERCER AÑO', nombre: 'Sr. Esteban Suárez' }
 ];
-
+*/
 export default function PlantelDocente() {
-  return (
+  const [autoridades, setAutoridades] = useState([]);
+  const [docentes, setDocentes] = useState([]);
+  const [ayudantes, setAyudantes] = useState([]);
+  const [bedeles, setBedeles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function cargarPlantelPublico() {
+      try {
+        setLoading(true);
+        const [autosData, profsData, bedsData] = await Promise.all([
+          getAutoridades().catch(() => []),
+          getProfesores().catch(() => []),
+          getBedeles().catch(() => [])
+        ]);
+
+        setAutoridades(Array.isArray(autosData) ? autosData : []);
+
+        const profsArray = Array.isArray(profsData) ? profsData : [];
+
+        // 1. Docentes Titulares
+        setDocentes(
+          profsArray.filter((p) => !p.materias_detalle?.some((m) => m.rol === 'ayudante'))
+        );
+
+        // 2. Ayudantes de Trabajos Prácticos (ATP)
+        setAyudantes(
+          profsArray.filter((p) => p.materias_detalle?.some((m) => m.rol === 'ayudante'))
+        );
+
+        setBedeles(Array.isArray(bedsData) ? bedsData : []);
+      } catch (err) {
+        console.error('Error al cargar plantel en la vista pública:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    cargarPlantelPublico();
+  }, []);
+
+return (
     <section id="plantel-docente" className="py-16 md:py-24 px-4 bg-petrol-50">
       <div className="max-w-7xl mx-auto">
         
@@ -57,12 +99,12 @@ export default function PlantelDocente() {
             Autoridades
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {AUTORIDADES.map((autoridad, idx) => (
+           {autoridades.map((a) => (
               <ProfileCard 
-                key={idx} 
+                key={a.id} 
                 variant="dark" 
-                title={autoridad.nombre} 
-                subtitle={autoridad.cargo} 
+                title={a.nombre_responsable} 
+                subtitle={a.cargo} 
               />
             ))}
           </div>
@@ -74,11 +116,11 @@ export default function PlantelDocente() {
             Docentes
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {DOCENTES.map((docente, idx) => (
+            {docentes.map((d) => (
               <ProfileCard 
-                key={idx} 
-                title={docente.nombre} 
-                subtitle={docente.materias} 
+                key={d.id} 
+                title={d.nombre_completo} 
+                subtitle={d.materias_texto || 'Cátedra a designar'} 
               />
             ))}
           </div>
@@ -92,13 +134,24 @@ export default function PlantelDocente() {
             <h3 className="font-display text-petrol-900 text-[1.25rem] mb-4">
               Profesores Ayudantes de Trabajos
             </h3>
-            <div className="flex flex-col gap-2.5">
-              {AYUDANTES.map((nombreAyudante, idx) => (
-                <div key={idx} className="bg-white border border-petrol-100 rounded-xl p-3.5 flex items-center gap-3 shadow-sm">
-                  <span className="w-2 h-2 rounded-full bg-mint-400 shrink-0" />
-                  <span className="text-petrol-900 text-sm font-semibold">{nombreAyudante}</span>
+            <div className="space-y-3">
+              {ayudantes.length === 0 ? (
+                <div className="bg-white border border-petrol-100 rounded-xl p-4 text-xs text-petrol-600">
+                  No hay ayudantes registrados.
                 </div>
-              ))}
+              ) : (
+                ayudantes.map((a) => (
+                  <div
+                    key={a.id}
+                    className="bg-white border border-petrol-100 rounded-xl p-4 flex items-center gap-3 shadow-xs"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-mint-400 shrink-0"></span>
+                    <span className="text-sm font-semibold text-petrol-900">
+                      {a.nombre_completo}
+                    </span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
@@ -107,17 +160,26 @@ export default function PlantelDocente() {
             <h3 className="font-display text-petrol-900 text-[1.25rem] mb-4">
               Bedeles
             </h3>
-            <div className="flex flex-col gap-2.5">
-              {BEDELES.map((bedel, idx) => (
-                <div key={idx} className="bg-white border border-petrol-100 rounded-xl p-3.5 flex items-center justify-between shadow-sm">
-                  <span className="text-petrol-600 text-xs font-bold tracking-wider uppercase">
-                    {bedel.year}
-                  </span>
-                  <span className="text-petrol-900 text-sm font-bold">
-                    {bedel.nombre}
-                  </span>
+            <div className="space-y-3">
+              {bedeles.length === 0 ? (
+                <div className="bg-white border border-petrol-100 rounded-xl p-4 text-xs text-petrol-600">
+                  No hay bedeles registrados.
                 </div>
-              ))}
+              ) : (
+                bedeles.map((b) => (
+                  <div
+                    key={b.id}
+                    className="bg-white border border-petrol-100 rounded-xl p-4 flex items-center justify-between shadow-xs"
+                  >
+                    <span className="text-[0.7rem] uppercase tracking-widest font-bold text-petrol-600">
+                      {b.anio_asignado}
+                    </span>
+                    <span className="text-sm font-semibold text-petrol-900">
+                      {b.nombre}
+                    </span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 

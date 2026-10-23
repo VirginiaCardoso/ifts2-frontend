@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../components/AdminLayout';
 import AdminNovedades from '../components/AdminNovedades';
+import AdminPlantel from '../components/AdminPlantel';
 
 
 export default function AdminPanel({ onLogout }) {
@@ -23,7 +24,7 @@ export default function AdminPanel({ onLogout }) {
       {activeTab === 'novedades' && (
         <AdminNovedades/>
       )}
-      {activeTab === 'plantel' && <div>Componente Plantel Docente</div>}
+      {activeTab === 'plantel' && <AdminPlantel/>}
       {/* Resto de módulos */}
     </AdminLayout>
   );
