@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Button from './Button';
+import { LoginModalIcon1, LoginModalIcon2, LoginModalIcon3, LoginModalIcon4 } from '../assets/icons';
 
 export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
   const [formData, setFormData] = useState({ correo: '', password: '' });
@@ -59,19 +60,13 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
           className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-white/50 hover:text-white flex items-center justify-center transition-colors"
           aria-label="Cerrar modal"
         >
-          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
+          <LoginModalIcon1 />
         </button>
 
         {/* Encabezado */}
         <div className="flex items-center gap-3.5 mb-6">
           <div className="w-11 h-11 rounded-xl bg-mint-400 flex items-center justify-center shrink-0">
-            <svg className="w-5 h-5 text-petrol-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
+            <LoginModalIcon2 />
           </div>
           <div>
             <h2 className="font-display text-white text-lg font-bold leading-tight">
@@ -124,11 +119,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
           {/* Mensaje de error del Backend */}
           {errorMessage && (
             <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-2.5 flex items-center gap-2 text-red-400 text-xs font-medium">
-              <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="12" />
-                <line x1="12" y1="16" x2="12.01" y2="16" />
-              </svg>
+              <LoginModalIcon3 />
               <span>{errorMessage}</span>
             </div>
           )}
@@ -143,11 +134,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
               <span>Verificando...</span>
             ) : (
               <>
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                  <polyline points="10 17 15 12 10 7" />
-                  <line x1="15" y1="12" x2="3" y2="12" />
-                </svg>
+                <LoginModalIcon4 />
                 Ingresar al panel
               </>
             )}

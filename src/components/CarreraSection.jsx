@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from './Button';
 import Badge from './Badge';
+import { CarreraSectionIcon1, CarreraSectionIcon2, CarreraSectionIcon3 } from '../assets/icons';
 
 export default function CarreraSection() {
   return (
@@ -44,25 +45,19 @@ export default function CarreraSection() {
             {[
               { 
                 icon: (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 text-mint-400 flex-shrink-0">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
-                  </svg>
+                  <CarreraSectionIcon1 />
                 ), 
                 label: 'Cañada de Gómez 3850, Villa Lugano' 
               },
               { 
                 icon: (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 text-mint-400 flex-shrink-0">
-                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                  </svg>
+                  <CarreraSectionIcon2 />
                 ), 
                 label: 'Lun–Vie 18:00–22:00 hs' 
               },
               { 
                 icon: (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 text-mint-400 flex-shrink-0">
-                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
-                  </svg>
+                  <CarreraSectionIcon3 />
                 ), 
                 label: 'Título de validez nacional' 
               },

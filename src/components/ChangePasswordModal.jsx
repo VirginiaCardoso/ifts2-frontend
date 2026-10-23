@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { authService } from '../services/authService';
+import { ChangePasswordModalIcon1 } from '../assets/icons';
 
 export default function ChangePasswordModal({ isOpen, onClose, onSuccess }) {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -56,16 +57,7 @@ export default function ChangePasswordModal({ isOpen, onClose, onSuccess }) {
       <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl relative">
         {/* Ícono superior */}
         <div className="w-14 h-14 bg-[#C2F2E9] rounded-2xl flex items-center justify-center mb-6">
-          <svg
-            className="w-6 h-6 text-[#143340]"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-          </svg>
+          <ChangePasswordModalIcon1 />
         </div>
 
         {/* Títulos */}

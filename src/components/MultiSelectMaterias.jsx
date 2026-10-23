@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { MultiSelectMateriasIcon1 } from '../assets/icons';
 
 export default function MultiSelectMaterias({ materiasDisponibles = [], seleccionadas = [], onChange }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,15 +65,7 @@ export default function MultiSelectMaterias({ materiasDisponibles = [], seleccio
         )}
 
         <div className="ml-auto text-petrol-600 pr-1">
-          <svg
-            className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
+          <MultiSelectMateriasIcon1 className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
         </div>
       </div>
 

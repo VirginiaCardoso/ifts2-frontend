@@ -1,5 +1,6 @@
 import React from 'react';
 import BaseCard from './BaseCard';
+import { ProfileCardIcon1 } from '../assets/icons';
 
 // Este componente recibe:
 // - title: El nombre de la persona (Ej: "Prof. Miguel Colloca")
@@ -27,10 +28,7 @@ export default function ProfileCard({ title, subtitle, variant = 'light' }) {
       
       {/* Ícono de Usuario (ahora con variables de Tailwind) */}
       <div className="bg-petrol-200 rounded-lg w-10 h-10 flex items-center justify-center shrink-0">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-petrol-900">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>
+        <ProfileCardIcon1 />
       </div>
 
       {/* Textos */}

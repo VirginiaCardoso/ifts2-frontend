@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Input from './Input';
 import { contactoService } from '../services/contactoService';
+import { ContactoIcon1, ContactoIcon2, ContactoIcon3 } from '../assets/icons';
 
 export default function Contacto() {
   const [formData, setFormData] = useState({
@@ -60,19 +61,7 @@ export default function Contacto() {
             responderemos a la brevedad.
           </p>
           <div className="flex items-center gap-2 mt-2 text-sm text-petrol-900 font-medium">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-4 h-4 text-mint-400 shrink-0"
-            >
-              <rect width="21" height="16" x="2" y="4" rx="2" />
-              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-            </svg>
+            <ContactoIcon1 />
             <a
               href="mailto:bedelia.ifts2@gmail.com"
               className="text-petrol-900"
@@ -146,18 +135,7 @@ export default function Contacto() {
               </select>
               {/* Flechita del select */}
               <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-petrol-900/60">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="m6 9 6 6 6-6" />
-                </svg>
+                <ContactoIcon2 />
               </div>
             </div>
 
@@ -180,26 +158,7 @@ export default function Contacto() {
             >
               {status.loading ? (
                 <>
-                  <svg
-                    className="animate-spin -ml-1 mr-2 h-5 w-5 text-[#a4ebd8]"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
+                  <ContactoIcon3 />
                   Enviando...
                 </>
               ) : (

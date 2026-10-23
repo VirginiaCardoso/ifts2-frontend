@@ -17,6 +17,7 @@ import {
   updateBedel,
   deleteBedel
 } from '../services/docentesService';
+import { AdminPlantelIcon1, AdminPlantelIcon2 } from '../assets/icons';
 
 export default function AdminPlantel() {
   const [tabActiva, setTabActiva] = useState('docentes'); // 'docentes' | 'bedeles'
@@ -226,10 +227,7 @@ export default function AdminPlantel() {
                       className="text-petrol-400 hover:text-petrol-800 transition-colors"
                       title="Editar nombre"
                     >
-                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 20h9" />
-                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                      </svg>
+                      <AdminPlantelIcon1 />
                     </button>
                   )}
                 </div>
@@ -444,10 +442,7 @@ export default function AdminPlantel() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full bg-petrol-50 border border-petrol-100 rounded-lg pl-8 pr-3 py-1 text-xs text-petrol-900 focus:outline-none focus:border-mint-400"
                 />
-                <svg className="w-3.5 h-3.5 text-petrol-600 absolute left-2.5 top-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
+                <AdminPlantelIcon2 />
               </div>
             </div>
 

@@ -1,10 +1,11 @@
 import React from 'react';
+import { AccesosRapidosIcon1, AccesosRapidosIcon2, AccesosRapidosIcon3, AccesosRapidosIcon4 } from '../assets/icons';
 
 // Iconos SVG
-const IconGraduation = (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>;
-const IconScreen = (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>;
-const IconScholarship = (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>;
-const IconClipboard = (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>;
+const IconGraduation = (props) => <AccesosRapidosIcon1 {...props} />;
+const IconScreen = (props) => <AccesosRapidosIcon2 {...props} />;
+const IconScholarship = (props) => <AccesosRapidosIcon3 {...props} />;
+const IconClipboard = (props) => <AccesosRapidosIcon4 {...props} />;
 
 // Info accesos rapidos
 const ACCESOS_RAP = [

@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from './Button';
+import { AdminTopbarIcon1 } from '../assets/icons';
 
 export default function AdminTopbar({ title, subtitle }) {
   return (
@@ -20,19 +21,7 @@ export default function AdminTopbar({ title, subtitle }) {
         onClick={() => window.open('/', '_blank')}
         className="!border-petrol-100 !text-petrol-600 hover:!text-petrol-900 hover:!border-mint-400 hover:!bg-petrol-50 !py-1.5 !px-3 !text-xs !rounded-lg"
       >
-        <svg 
-          className="w-3.5 h-3.5" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="2" 
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-        >
-          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-          <polyline points="15 3 21 3 21 9" />
-          <line x1="10" y1="14" x2="21" y2="3" />
-        </svg>
+        <AdminTopbarIcon1 />
         Ver sitio
       </Button>
     </header>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td } from './Table';
+import { CorrelatividaesIcon1 } from '../assets/icons';
 
 export default function CorrelatividadesSection() {
   const correlativasData = [
@@ -65,9 +66,7 @@ export default function CorrelatividadesSection() {
             rel="noreferrer"
             className="inline-flex items-center gap-2 bg-petrol-900 text-mint-300 hover:bg-petrol-800 text-xs font-bold px-4 py-2.5 rounded-lg transition-colors w-fit"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
+            <CorrelatividaesIcon1 />
             Descargar PDF
           </a>
         </div>

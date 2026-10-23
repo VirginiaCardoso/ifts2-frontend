@@ -1,4 +1,5 @@
 import React from 'react';
+import { InputIcon1 } from '../assets/icons';
 
 // El componente Input acepta props clave para formularios:
 // - label: El texto descriptivo arriba del input.
@@ -48,21 +49,7 @@ export default function Input({
         {/* Advertencia que aparece solo si hay error */}
         {error && (
           <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-red-500">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="12"></line>
-              <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
+            <InputIcon1 />
           </div>
         )}
       </div>

@@ -7,6 +7,7 @@ import {
   updateNovedad, 
   deleteNovedad 
 } from '../services/novedadesService';
+import { AdminNovedadesIcon1, AdminNovedadesIcon2, AdminNovedadesIcon3 } from '../assets/icons';
 
 export default function AdminNovedades() {
   const [noticias, setNoticias] = useState([]);
@@ -167,10 +168,7 @@ export default function AdminNovedades() {
           onClick={handleOpenCreate}
           className="!rounded-lg shrink-0"
         >
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
+          <AdminNovedadesIcon1 />
           Cargar nueva noticia
         </Button>
       </div>
@@ -315,10 +313,7 @@ export default function AdminNovedades() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-petrol-50 border border-petrol-100 rounded-lg pl-9 pr-3 py-1.5 text-xs text-petrol-900 focus:outline-none focus:border-mint-400"
             />
-            <svg className="w-3.5 h-3.5 text-petrol-600 absolute left-3 top-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
+            <AdminNovedadesIcon2 />
           </div>
         </div>
 
@@ -412,9 +407,7 @@ export default function AdminNovedades() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#051218]/80 backdrop-blur-xs">
           <div className="bg-white border border-petrol-100 rounded-2xl p-6 max-w-sm w-full text-center space-y-4 shadow-xl">
             <div className="w-12 h-12 rounded-full bg-red-100 text-red-600 mx-auto flex items-center justify-center">
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-              </svg>
+              <AdminNovedadesIcon3 />
             </div>
             <div>
               <h3 className="font-bold text-base text-petrol-900">¿Eliminar esta noticia?</h3>

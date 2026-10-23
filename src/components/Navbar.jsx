@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import LogoIFTS2 from './LogoIFTS2';
+import { NavbarIcon1, NavbarIcon2 } from '../assets/icons';
 
 // Constante con todos los enlaces 
 const NAV_LINKS = [
@@ -99,9 +100,7 @@ export default function Navbar({ onLoginClick }) {
                       className="flex items-center gap-1 text-[#C2F2E9] text-sm font-medium px-3 py-2 rounded-md hover:bg-white/10 hover:text-white transition-colors"
                     >
                       {link.label}
-                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className={`w-2.5 h-2.5 opacity-70 transition-transform ${openDropdown === link.label ? 'rotate-180' : ''}`}>
-                        <path d="M2 4l4 4 4-4"/>
-                      </svg>
+                      <NavbarIcon1 className={`w-2.5 h-2.5 opacity-70 transition-transform ${openDropdown === link.label ? 'rotate-180' : ''}`} />
                     </button>
                     {openDropdown === link.label && (
                       <div className="absolute top-full left-0 pt-2 z-50">
@@ -156,9 +155,7 @@ export default function Navbar({ onLoginClick }) {
                       className="w-full flex items-center justify-between text-[#C2F2E9] p-2 rounded-md font-medium text-base hover:bg-white/10 text-left"
                     >
                       {link.label}
-                      <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" className={`w-3 h-3 opacity-60 transition-transform ${mobileExpanded === link.label ? 'rotate-180' : ''}`}>
-                        <path d="M2 4l4 4 4-4"/>
-                      </svg>
+                      <NavbarIcon2 className={`w-3 h-3 opacity-60 transition-transform ${mobileExpanded === link.label ? 'rotate-180' : ''}`} />
                     </button>
                     {mobileExpanded === link.label && (
                       <div className="border-l-2 border-[#518C8C] ml-3 pl-3 mb-1">

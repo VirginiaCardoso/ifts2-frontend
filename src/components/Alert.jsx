@@ -1,4 +1,5 @@
 import React from 'react';
+import { AlertIcon1 } from '../assets/icons';
 
 export default function Alert({ children, variant = 'info', icon = true }) {
   
@@ -25,11 +26,7 @@ export default function Alert({ children, variant = 'info', icon = true }) {
       
       {icon && (
         <div className={`mt-0.5 shrink-0 ${current.icon}`}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="16" x2="12" y2="12" />
-            <line x1="12" y1="8" x2="12.01" y2="8" />
-          </svg>
+          <AlertIcon1 />
         </div>
       )}
       

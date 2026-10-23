@@ -1,5 +1,6 @@
 import React from 'react';
 import BaseCard from './BaseCard';
+import { PromocionablesSectionIcon1, PromocionablesSectionIcon2, PromocionablesSectionIcon3 } from '../assets/icons';
 
 export default function PromocionablesSection() {
   const materiasPromo = [
@@ -78,18 +79,14 @@ export default function PromocionablesSection() {
             rel="noreferrer"
             className="inline-flex items-center gap-2 bg-petrol-900 text-mint-300 hover:bg-petrol-800 text-xs font-bold px-4 py-2.5 rounded-lg transition-colors w-fit"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
+            <PromocionablesSectionIcon1 />
             Descargar PDF
           </a>
         </div>
 
         {/* Caja de Alerta Informativa */}
         <div className="bg-mint-300/60 border border-mint-400 rounded-xl p-4 md:p-5 mb-10 flex gap-3.5 items-start">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#235459" strokeWidth="2" strokeLinecap="round" className="w-5 h-5 shrink-0 mt-0.5">
-            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
+          <PromocionablesSectionIcon2 />
           <p className="text-petrol-900 text-xs md:text-sm leading-relaxed">
             Una materia es <strong className="font-bold">promocional</strong> cuando se estipula que si se cumplen determinados requisitos no se deberá rendir examen final; una vez concluida la cursada se dará por aprobada la materia en su totalidad.
           </p>
@@ -116,9 +113,7 @@ export default function PromocionablesSection() {
                       {cuatri.materias.map((materia, mIdx) => (
                         <li key={mIdx} className="flex items-start gap-2.5 text-xs md:text-sm text-petrol-900">
                           {/* Pequeño ícono de tilde o viñeta institucional */}
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 text-petrol-600 mt-1 shrink-0">
-                            <polyline points="20 6 9 17 4 12"/>
-                          </svg>
+                          <PromocionablesSectionIcon3 />
                           <span className="leading-snug">{materia}</span>
                         </li>
                       ))}
