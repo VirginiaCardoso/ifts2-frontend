@@ -1,4 +1,3 @@
-import React from "react";
 import MesaExamenCard from "./MesaExamenCard";
 
 const MESAS_DATA = [

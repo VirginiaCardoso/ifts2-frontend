@@ -1,6 +1,4 @@
-import React from 'react';
 import Button from './Button';
-import Badge from './Badge';
 import { CarreraSectionIcon1, CarreraSectionIcon2, CarreraSectionIcon3 } from '../assets/icons';
 
 export default function CarreraSection() {

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import LogoIFTS2 from './LogoIFTS2';
 import { NavbarIcon1, NavbarIcon2 } from '../assets/icons';
 
@@ -41,7 +41,7 @@ const NAV_LINKS = [
   { label: 'Contacto', href: '#contacto' },
 ];
 
-export default function Navbar({ onLoginClick }) {
+export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const closeTimer = useRef(null);

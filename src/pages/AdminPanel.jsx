@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../components/AdminLayout';
 import AdminNovedades from '../components/AdminNovedades';
 import AdminPlantel from '../components/AdminPlantel';
 
 
-export default function AdminPanel({ onLogout }) {
+export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState('novedades');
   const navigate = useNavigate();
 

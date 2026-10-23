@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Card from './Card';
 import { getNovedades } from '../services/novedadesService';
 
@@ -37,19 +37,15 @@ const NEWS_DATA = [
 
 export default function Novedades() {
   const [newsList, setNewsList] = useState([]);
-  const [loading, setLoading] = useState(true);
   useEffect(() => {
     async function fetchPublicNovedades() {
       try {
-        setLoading(true);
         const data = await getNovedades();
         if (Array.isArray(data)) {
           setNewsList(data);
         }
       } catch (err) {
         console.error('Error al cargar las novedades públicas:', err);
-      } finally {
-        setLoading(false);
       }
     }
 

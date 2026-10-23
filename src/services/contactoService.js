@@ -20,7 +20,7 @@ export const contactoService = {
             return data;
         } catch (error) {
             if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
-                throw new Error('Error de conexión con el servidor. Inténtalo más tarde.');
+                throw new Error('Error de conexión con el servidor. Inténtalo más tarde.', { cause: error });
             }
             throw error;
         }

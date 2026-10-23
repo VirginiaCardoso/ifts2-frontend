@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Button from './Button';
 import { LoginModalIcon1, LoginModalIcon2, LoginModalIcon3, LoginModalIcon4 } from '../assets/icons';
 

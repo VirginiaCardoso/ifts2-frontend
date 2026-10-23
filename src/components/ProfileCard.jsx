@@ -1,4 +1,3 @@
-import React from 'react';
 import BaseCard from './BaseCard';
 import { ProfileCardIcon1 } from '../assets/icons';
 

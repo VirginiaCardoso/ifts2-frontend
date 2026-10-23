@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
@@ -20,7 +20,7 @@ export default function Home() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleLoginSuccess = (usuario) => {
+  const handleLoginSuccess = () => {
     // Tras autenticar con éxito en el backend, navegamos al panel
     navigate('/admin');
   };

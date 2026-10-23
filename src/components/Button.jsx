@@ -1,5 +1,3 @@
-import React from 'react';
-
 // El componente Button acepta las siguientes propiedades:
 // - children: El texto del botón.
 // - variant: 'primary' (Menta), 'secondary' (Petróleo claro), 'danger' (Rojo claro para eliminar), 'outline' (Borde menta para editar).

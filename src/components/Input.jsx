@@ -1,4 +1,3 @@
-import React from 'react';
 import { InputIcon1 } from '../assets/icons';
 
 // El componente Input acepta props clave para formularios:

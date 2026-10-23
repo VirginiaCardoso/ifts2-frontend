@@ -1,4 +1,3 @@
-import React from "react";
 import LogoIFTS2 from './LogoIFTS2';
 import { FooterIcon1, FooterIcon2, FooterIcon3, FooterIcon4, FooterIcon5, FooterIcon6, FooterIcon7 } from '../assets/icons';
 

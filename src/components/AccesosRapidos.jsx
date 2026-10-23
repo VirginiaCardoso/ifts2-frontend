@@ -1,4 +1,3 @@
-import React from 'react';
 import { AccesosRapidosIcon1, AccesosRapidosIcon2, AccesosRapidosIcon3, AccesosRapidosIcon4 } from '../assets/icons';
 
 // Iconos SVG

@@ -1,4 +1,3 @@
-import React from 'react';
 import { AlertIcon1 } from '../assets/icons';
 
 export default function Alert({ children, variant = 'info', icon = true }) {

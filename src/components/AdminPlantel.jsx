@@ -1,12 +1,12 @@
-// src/components/AdminPlantel.jsx
-import React, { useState, useEffect, useMemo } from 'react';
+/* eslint-disable react-hooks/set-state-in-effect */
+import  { useState, useEffect, useMemo } from 'react';
 import Button from './Button';
 import MultiSelectMaterias from './MultiSelectMaterias';
 import {
   getAutoridades,
   updateAutoridad,
-  createAutoridad,
-  deleteAutoridad,
+  //createAutoridad,
+  //deleteAutoridad,
   getProfesores,
   createProfesor,
   updateProfesor,

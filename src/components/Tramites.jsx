@@ -1,4 +1,3 @@
-import React from 'react';
 import BaseCard from './BaseCard';
 import { TramitesIcon1, TramitesIcon2, TramitesIcon3, TramitesIcon4, TramitesIcon5, TramitesIcon6, TramitesIcon7, TramitesIcon8, TramitesIcon9 } from '../assets/icons';
 

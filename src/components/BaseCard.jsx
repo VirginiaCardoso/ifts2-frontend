@@ -1,5 +1,3 @@
-import React from 'react';
-
 // - children: El contenido que va dentro de la tarjeta (texto, otras tarjetas, íconos, etc.).
 // - className: Clases de Tailwind adicionales para personalizar el estilo.
 // - variant: 'default' (fondo blanco), 'outlined' (solo borde sutil), o 'elevated' (con sombra).

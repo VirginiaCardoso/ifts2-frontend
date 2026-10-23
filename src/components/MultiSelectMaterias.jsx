@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { MultiSelectMateriasIcon1 } from '../assets/icons';
 
 export default function MultiSelectMaterias({ materiasDisponibles = [], seleccionadas = [], onChange }) {

@@ -1,5 +1,3 @@
-import React from 'react';
-
 // El componente Table se divide en sub-componentes para mayor flexibilidad.
 
 export function Table({ children, className = '', variant = 'default' }) {

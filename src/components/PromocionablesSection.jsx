@@ -1,4 +1,3 @@
-import React from 'react';
 import BaseCard from './BaseCard';
 import { PromocionablesSectionIcon1, PromocionablesSectionIcon2, PromocionablesSectionIcon3 } from '../assets/icons';
 

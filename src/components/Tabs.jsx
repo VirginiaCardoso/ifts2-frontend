@@ -1,5 +1,3 @@
-import React from 'react';
-
 // El componente Tabs recibe:
 // - tabs: Un arreglo de objetos con id y label. Ej: [{ id: 'materias', label: 'Listado de Materias' }, ...]
 // - activeTab: El id de la pestaña que está seleccionada actualmente.

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { authService } from '../services/authService';
 import { ChangePasswordModalIcon1 } from '../assets/icons';
 

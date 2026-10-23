@@ -1,5 +1,3 @@
-import React from 'react';
-
 // Propiedades:
 // - children: Texto (ej: "Lunes").
 // - variant: 'novedades', 'evento', 'academico', 'success', 'neutral', o 'dark'.

@@ -1,4 +1,3 @@
-import React from 'react';
 import { LogoIFTS2Icon1 } from '../assets/icons';
 
 export default function LogoIFTS2({ size = 52, className = '' }) {

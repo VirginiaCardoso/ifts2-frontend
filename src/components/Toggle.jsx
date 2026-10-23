@@ -1,5 +1,3 @@
-import React from 'react';
-
 // Recibe:
 // - checked: Booleano true/false.
 // - onChange: Función para cambiar el estado.

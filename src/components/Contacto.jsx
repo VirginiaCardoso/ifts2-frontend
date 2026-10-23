@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Input from './Input';
 import { contactoService } from '../services/contactoService';
 import { ContactoIcon1, ContactoIcon2, ContactoIcon3 } from '../assets/icons';

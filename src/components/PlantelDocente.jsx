@@ -1,53 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ProfileCard from './ProfileCard';
 import { getAutoridades, getProfesores, getBedeles } from '../services/docentesService';
 
-// Datos oficiales actualizados
-/*const AUTORIDADES = [
-  { cargo: 'RECTORA', nombre: 'Prof. Alicia E. Ruidiaz' },
-  { cargo: 'SECRETARIO ACADÉMICO', nombre: 'Lic. Leonardo Bermudez' },
-  { cargo: 'SECRETARIA ADMINISTRATIVA', nombre: 'Prof. María Belén Orellano Camu' },
-  { cargo: 'JEFATURA DE TRABAJOS PRÁCTICOS', nombre: 'Prof. Pedro Perez' },
-  { cargo: 'TUTOR', nombre: 'Prof. Axel Trebino' }
-];
-
-const DOCENTES = [
-  { nombre: 'Prof. Miguel Colloca', materias: 'Seguridad e Higiene en la Gastronomía' },
-  { nombre: 'Prof. Daniel Buczel', materias: 'Elementos de Química' },
-  { nombre: 'Prof. Evangelina Calderón', materias: 'Taller de Primeros Auxilios' },
-  { nombre: 'Prof. Grisel de Landeta', materias: 'Introducción al Idioma Inglés · Inglés técnico' },
-  { nombre: 'Prof. Iris Leyte', materias: 'Panadería básica · Pastelería · Repostería' },
-  { nombre: 'Prof. Julia Sboro', materias: 'Laboratorio de Tecnología de los alimentos' },
-  { nombre: 'Prof. Walter Albarracin', materias: 'Seminario de actualización y profundización I y II' },
-  { nombre: 'Prof. Evangelina Aguilar Corcuera', materias: 'Nutrición' },
-  { nombre: 'Prof. Camila Sabalsagaray Montera', materias: 'Introducción a la gastronomía · Industria de la hospitalidad' },
-  { nombre: 'Prof. Axel Trebino', materias: 'Organización de eventos gastronómicos' },
-  { nombre: 'Prof. Viviana Ferraro', materias: 'Taller de Francés técnico' }
-];
-
-const AYUDANTES = [
-  'Prof. Gladis Casalegno',
-  'Prof. Camila Sabalsagaray',
-  'Prof. Julia Sboro'
-];
-
-const BEDELES = [
-  { year: 'PRIMER AÑO', nombre: 'Sra. Andrea Barrios' },
-  { year: 'SEGUNDO AÑO', nombre: 'Sra. Verónica Alarcón' },
-  { year: 'TERCER AÑO', nombre: 'Sr. Esteban Suárez' }
-];
-*/
 export default function PlantelDocente() {
   const [autoridades, setAutoridades] = useState([]);
   const [docentes, setDocentes] = useState([]);
   const [ayudantes, setAyudantes] = useState([]);
   const [bedeles, setBedeles] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function cargarPlantelPublico() {
       try {
-        setLoading(true);
         const [autosData, profsData, bedsData] = await Promise.all([
           getAutoridades().catch(() => []),
           getProfesores().catch(() => []),
@@ -71,8 +34,6 @@ export default function PlantelDocente() {
         setBedeles(Array.isArray(bedsData) ? bedsData : []);
       } catch (err) {
         console.error('Error al cargar plantel en la vista pública:', err);
-      } finally {
-        setLoading(false);
       }
     }
 

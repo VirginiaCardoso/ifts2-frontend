@@ -1,4 +1,3 @@
-import React from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td } from './Table';
 import { CorrelatividaesIcon1 } from '../assets/icons';
 
