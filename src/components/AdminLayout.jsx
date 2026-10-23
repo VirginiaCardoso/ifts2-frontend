@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import AdminTopbar from './AdminTopbar';
+import ChangePasswordModal from './ChangePasswordModal';
+import Alert from '../components/Alert'
 
 const TAB_METADATA = {
   novedades: {
@@ -25,7 +27,8 @@ const TAB_METADATA = {
   },
   tramites: {
     title: 'Trámites',
-    subtitle: 'Gestión de requisitos de Bedelía y enlaces a plataformas externas',
+    subtitle:
+      'Gestión de requisitos de Bedelía y enlaces a plataformas externas',
   },
   config: {
     title: 'Configuración',
@@ -33,34 +36,59 @@ const TAB_METADATA = {
   },
 };
 
-export default function AdminLayout({ onLogout, children, activeTab, onSelectTab, user }) {
+export default function AdminLayout({
+  onLogout,
+  children,
+  activeTab,
+  onSelectTab,
+  user,
+}) {
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+
   const currentMeta = TAB_METADATA[activeTab] || {
     title: 'Panel de administración',
     subtitle: 'IFTS N° 2',
   };
+  
+  const handlePasswordSuccess = () => {
+    setShowSuccessAlert(true);
+    setTimeout(() => {
+      setShowSuccessAlert(false);
+    }, 4000);
+  };
 
   return (
     <div className="min-h-screen bg-petrol-50 flex">
-      {/* 1. Sidebar fijo a la izquierda */}
+      {showSuccessAlert && (
+        <div className="fixed top-6 right-6 z-50 shadow-xl rounded-lg min-w-[300px] animate-fade-in-down">
+          <Alert variant="info">¡Contraseña actualizada con éxito!</Alert>
+        </div>
+      )}
+
       <Sidebar
         activeTab={activeTab}
         onSelectTab={onSelectTab}
         onLogout={onLogout}
         user={user}
-        onChangePassword={() => alert('Abrir modal de cambiar contraseña')}
+        onChangePassword={() => setIsPasswordModalOpen(true)}
       />
 
-      {/* 2. Área principal de trabajo */}
       <div className="ml-[280px] flex-1 flex flex-col min-h-screen">
         <AdminTopbar
           title={currentMeta.title}
           subtitle={currentMeta.subtitle}
         />
 
-        <main className="flex-1 px-8 pt-7 pb-12 w-full">
-          {children}
-        </main>
+        <main className="flex-1 px-8 pt-7 pb-12 w-full">{children}</main>
       </div>
+
+      <ChangePasswordModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+        onSuccess={handlePasswordSuccess}
+      />
     </div>
   );
 }

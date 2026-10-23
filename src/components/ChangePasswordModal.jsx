@@ -1,0 +1,155 @@
+import React, { useState } from 'react';
+import { authService } from '../services/authService';
+
+export default function ChangePasswordModal({ isOpen, onClose, onSuccess }) {
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  if (!isOpen) return null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (newPassword.length < 8) {
+      return setError('La nueva contraseña debe tener al menos 8 caracteres.');
+    }
+
+    if (newPassword !== confirmPassword) {
+      return setError('Las contraseñas nuevas no coinciden.');
+    }
+
+    setIsLoading(true);
+
+    try {
+      await authService.changePassword(currentPassword, newPassword);
+
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+
+      onClose();
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleClose = () => {
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setError('');
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+      <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl relative">
+        {/* Ícono superior */}
+        <div className="w-14 h-14 bg-[#C2F2E9] rounded-2xl flex items-center justify-center mb-6">
+          <svg
+            className="w-6 h-6 text-[#143340]"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+        </div>
+
+        {/* Títulos */}
+        <h2
+          className="text-[1.75rem] font-bold text-[#143340] mb-2 leading-tight"
+          style={{ fontFamily: 'var(--font-display, serif)' }}
+        >
+          Cambiar mi contraseña
+        </h2>
+        <p className="text-[#849A9A] text-[0.95rem] leading-relaxed mb-6">
+          Ingresá tu contraseña actual y elegí una nueva de al menos 8
+          caracteres.
+        </p>
+
+        {/* Mensaje de error */}
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100">
+            {error}
+          </div>
+        )}
+
+        {/* Formulario */}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block text-[0.7rem] font-bold text-[#143340] tracking-widest uppercase mb-2">
+              Contraseña actual
+            </label>
+            <input
+              type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              required
+              className="w-full px-4 py-3 rounded-xl border border-[#C2F2E9] bg-[#F8FDFD] focus:outline-none focus:ring-2 focus:ring-[#8BD9CA] focus:bg-white text-[#143340] transition-all"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[0.7rem] font-bold text-[#143340] tracking-widest uppercase mb-2">
+              Nueva contraseña
+            </label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+              minLength={8}
+              className="w-full px-4 py-3 rounded-xl border border-[#C2F2E9] bg-[#F8FDFD] focus:outline-none focus:ring-2 focus:ring-[#8BD9CA] focus:bg-white text-[#143340] transition-all"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[0.7rem] font-bold text-[#143340] tracking-widest uppercase mb-2">
+              Confirmar nueva contraseña
+            </label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              minLength={8}
+              className="w-full px-4 py-3 rounded-xl border border-[#C2F2E9] bg-[#F8FDFD] focus:outline-none focus:ring-2 focus:ring-[#8BD9CA] focus:bg-white text-[#143340] transition-all"
+            />
+          </div>
+
+          {/* Botones */}
+          <div className="flex gap-4 pt-4">
+            <button
+              type="button"
+              onClick={handleClose}
+              disabled={isLoading}
+              className="flex-1 py-3.5 px-4 rounded-xl border border-[#E5E7EB] text-[#235459] font-bold hover:bg-gray-50 transition-colors cursor-pointer"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="flex-1 py-3.5 px-4 rounded-xl bg-[#235459] text-white font-bold hover:bg-[#143340] transition-colors disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+            >
+              {isLoading ? 'Guardando...' : 'Guardar contraseña'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
