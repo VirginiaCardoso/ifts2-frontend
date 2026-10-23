@@ -53,8 +53,8 @@ export default function ChangePasswordModal({ isOpen, onClose, onSuccess }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl relative">
+    <div className="fixed inset-0 z-0 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+      <div className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl relative">
         {/* Ícono superior */}
         <div className="w-14 h-14 bg-[#C2F2E9] rounded-2xl flex items-center justify-center mb-6">
           <ChangePasswordModalIcon1 />
