@@ -1,4 +1,3 @@
-// src/services/novedadesService.js
 const API_URL = 'http://localhost:3000/api/novedades';
 
 // Función auxiliar para obtener el header con el Bearer token
