@@ -4,17 +4,18 @@
 // - onClick: La función que se ejecuta al hacer clic.
 // - className: Clases adicionales de Tailwind para márgenes o ajustes específicos.
 // - type: Tipo de botón (submit, button).
+// - disabled: Deshabilita la interacción y aplica estilos visuales.
 
-export default function Button({ 
-  children, 
-  variant = 'primary', 
-  onClick, 
+export default function Button({
+  children,
+  variant = 'primary',
+  onClick,
   className = '',
-  type = 'button'
+  type = 'button',
+  disabled = false,
 }) {
-  
   // Estilos base que comparten todos los botones
-  const baseStyles = "inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200";
+  const baseStyles = 'inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50';
 
   // Estilos específicos para cada variante usando las variables de Tailwind (petrol y mint)
   const variants = {
@@ -30,6 +31,7 @@ export default function Button({
     <button
       type={type}
       onClick={onClick}
+      disabled={disabled}
       className={`${baseStyles} ${selectedVariant} ${className}`}
     >
       {children}

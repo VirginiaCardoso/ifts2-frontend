@@ -1,46 +1,9 @@
-import { useState } from 'react';
 import Input from './Input';
-import { contactoService } from '../services/contactoService';
 import { ContactoIcon1, ContactoIcon2, ContactoIcon3 } from '../assets/icons';
+import useContactoForm from '../hooks/useContactoForm';
 
 export default function Contacto() {
-  const [formData, setFormData] = useState({
-    nombre: '',
-    correo: '',
-    asunto: '',
-    mensaje: '',
-  });
-
-  const [status, setStatus] = useState({
-    loading: false,
-    error: '',
-    success: false,
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    setStatus({ loading: true, error: '', success: false });
-
-    try {
-      await contactoService.enviarConsulta(formData);
-
-      setStatus({ loading: false, error: '', success: true });
-      setFormData({ nombre: '', correo: '', asunto: '', mensaje: '' });
-
-      setTimeout(
-        () => setStatus((prev) => ({ ...prev, success: false })),
-        5000
-      );
-    } catch (error) {
-      setStatus({ loading: false, error: error.message, success: false });
-    }
-  };
+  const { formData, status, handleChange, handleSubmit } = useContactoForm();
 
   return (
     <section

@@ -1,44 +1,8 @@
-import { useState, useEffect } from 'react';
 import ProfileCard from './ProfileCard';
-import { getAutoridades, getProfesores, getBedeles } from '../services/docentesService';
+import usePublicPlantel from '../hooks/usePublicPlantel';
 
 export default function PlantelDocente() {
-  const [autoridades, setAutoridades] = useState([]);
-  const [docentes, setDocentes] = useState([]);
-  const [ayudantes, setAyudantes] = useState([]);
-  const [bedeles, setBedeles] = useState([]);
-
-  useEffect(() => {
-    async function cargarPlantelPublico() {
-      try {
-        const [autosData, profsData, bedsData] = await Promise.all([
-          getAutoridades().catch(() => []),
-          getProfesores().catch(() => []),
-          getBedeles().catch(() => [])
-        ]);
-
-        setAutoridades(Array.isArray(autosData) ? autosData : []);
-
-        const profsArray = Array.isArray(profsData) ? profsData : [];
-
-        // 1. Docentes Titulares
-        setDocentes(
-          profsArray.filter((p) => !p.materias_detalle?.some((m) => m.rol === 'ayudante'))
-        );
-
-        // 2. Ayudantes de Trabajos Prácticos (ATP)
-        setAyudantes(
-          profsArray.filter((p) => p.materias_detalle?.some((m) => m.rol === 'ayudante'))
-        );
-
-        setBedeles(Array.isArray(bedsData) ? bedsData : []);
-      } catch (err) {
-        console.error('Error al cargar plantel en la vista pública:', err);
-      }
-    }
-
-    cargarPlantelPublico();
-  }, []);
+  const { autoridades, docentes, ayudantes, bedeles, error } = usePublicPlantel();
 
 return (
     <section id="plantel-docente" className="py-16 md:py-24 px-4 bg-petrol-50">
@@ -52,6 +16,11 @@ return (
           <h2 className="font-display text-petrol-900 text-[clamp(2rem,4vw,2.8rem)] leading-[1.1]">
             Plantel docente
           </h2>
+          {error && (
+            <p role="alert" className="mt-3 text-sm text-red-600">
+              {error}
+            </p>
+          )}
         </div>
 
         {/* --- AUTORIDADES --- */}

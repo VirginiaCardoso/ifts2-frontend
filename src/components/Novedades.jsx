@@ -1,56 +1,9 @@
-import { useState, useEffect } from 'react';
 import Card from './Card';
-import { getNovedades } from '../services/novedadesService';
+import usePublicNovedades from '../hooks/usePublicNovedades';
 
-// Datos de prueba 
-/*
-const NEWS_DATA = [
-  {
-    tag: 'Novedades',
-    date: '10 sep 2026',
-    title: 'Inscripciones abiertas para el ciclo lectivo 2027',
-    excerpt: 'El período de preinscripción para la Tecnicatura Superior en Emprendimientos Gastronómicos ya está disponible. Completá el formulario en línea antes del 30 de noviembre.',
-    img: 'https://images.unsplash.com/photo-1577219492769-b63a779fac28?w=600&h=400&fit=crop&auto=format',
-  },
-  {
-    tag: 'Evento',
-    date: '5 sep 2026',
-    title: 'Festival Gastronómico Anual: edición 2026',
-    excerpt: 'Estudiantes y docentes se preparan para la muestra culinaria más importante del año, que reunirá a más de 300 comensales en nuestra sede de Villa Lugano.',
-    img: 'https://images.unsplash.com/photo-1581349485608-9469926a8e5e?w=600&h=400&fit=crop&auto=format',
-  },
-  {
-    tag: 'Académico',
-    date: '28 ago 2026',
-    title: 'Nuevo convenio con Grupo Llao Llao para prácticas profesionales',
-    excerpt: 'El IFTS N°2 firmó un acuerdo con uno de los complejos hoteleros más prestigiosos del país para ofrecer pasantías remuneradas a estudiantes avanzados.',
-    img: 'https://images.unsplash.com/photo-1572715376701-98568319fd0b?w=600&h=400&fit=crop&auto=format',
-  },
-  {
-    tag: 'Académico',
-    date: '28 ago 2026',
-    title: 'Nuevo convenio con Grupo Llao Llao para prácticas profesionales',
-    excerpt: 'El IFTS N°2 firmó un acuerdo con uno de los complejos hoteleros más prestigiosos del país para ofrecer pasantías remuneradas a estudiantes avanzados.',
-    img: 'https://images.unsplash.com/photo-1572715376701-98568319fd0b?w=600&h=400&fit=crop&auto=format',
-  },
-];*/
 
 export default function Novedades() {
-  const [newsList, setNewsList] = useState([]);
-  useEffect(() => {
-    async function fetchPublicNovedades() {
-      try {
-        const data = await getNovedades();
-        if (Array.isArray(data)) {
-          setNewsList(data);
-        }
-      } catch (err) {
-        console.error('Error al cargar las novedades públicas:', err);
-      }
-    }
-
-    fetchPublicNovedades();
-  }, []);
+  const { newsList, error } = usePublicNovedades();
 
   // Función para formatear fechas de MySQL (YYYY-MM-DD) a "10 sep 2026"
   const formatDate = (dateString) => {
@@ -89,6 +42,12 @@ export default function Novedades() {
             Ver más en Novedades →
           </a>
         </div>
+
+        {error && (
+          <p role="alert" className="mb-6 text-sm text-red-600">
+            {error}
+          </p>
+        )}
 
         {/* Grilla de Tarjetas Dinámica y Centrada con Flex */}
         <div className="flex flex-wrap justify-center gap-6">

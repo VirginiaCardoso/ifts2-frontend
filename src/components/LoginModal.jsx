@@ -1,49 +1,14 @@
-import { useState } from 'react';
 import Button from './Button';
 import { LoginModalIcon1, LoginModalIcon2, LoginModalIcon3, LoginModalIcon4 } from '../assets/icons';
+import useLogin from '../hooks/useLogin';
 
 export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
-  const [formData, setFormData] = useState({ correo: '', password: '' });
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const { errorMessage, formData, handleChange, handleSubmit, loading } = useLogin({
+    onClose,
+    onLoginSuccess,
+  });
 
   if (!isOpen) return null;
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMessage('');
-    setLoading(true);
-
-    try {
-      // Llamada al endpoint del backend
-      const response = await fetch('http://localhost:3000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          correo: formData.correo,
-          password: formData.password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Credenciales inválidas');
-      }
-
-      // Guardamos la sesión en el almacenamiento local
-      localStorage.setItem('ifts2_token', data.token);
-      localStorage.setItem('ifts2_user', JSON.stringify(data.usuario));
-
-      // Notificamos al componente padre
-      onLoginSuccess(data.usuario);
-      onClose();
-    } catch (err) {
-      setErrorMessage(err.message || 'Error de conexión con el servidor.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div
@@ -81,37 +46,35 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
         {/* Formulario */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-[0.7rem] font-bold text-mint-300/70 uppercase tracking-wider mb-1.5">
+            <label htmlFor="login-email" className="block text-[0.7rem] font-bold text-mint-300/70 uppercase tracking-wider mb-1.5">
               Usuario
             </label>
             <input
+              id="login-email"
+              name="correo"
               type="email"
               required
               autoComplete="username"
               placeholder="usuario@bue.edu.ar"
               value={formData.correo}
-              onChange={(e) => {
-                setFormData({ ...formData, correo: e.target.value });
-                setErrorMessage('');
-              }}
+              onChange={handleChange}
               className="w-full bg-petrol-800 border border-petrol-700 focus:border-mint-400 rounded-lg px-3.5 py-2.5 text-sm text-white placeholder-white/25 outline-none transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-[0.7rem] font-bold text-mint-300/70 uppercase tracking-wider mb-1.5">
+            <label htmlFor="login-password" className="block text-[0.7rem] font-bold text-mint-300/70 uppercase tracking-wider mb-1.5">
               Contraseña
             </label>
             <input
+              id="login-password"
+              name="password"
               type="password"
               required
               autoComplete="current-password"
               placeholder="••••••••"
               value={formData.password}
-              onChange={(e) => {
-                setFormData({ ...formData, password: e.target.value });
-                setErrorMessage('');
-              }}
+              onChange={handleChange}
               className="w-full bg-petrol-800 border border-petrol-700 focus:border-mint-400 rounded-lg px-3.5 py-2.5 text-sm text-white placeholder-white/25 outline-none transition-colors"
             />
           </div>
@@ -128,6 +91,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
           <Button
             type="submit"
             variant="primary"
+            disabled={loading}
             className="w-full !py-2.5 !rounded-lg !font-bold mt-2"
           >
             {loading ? (
