@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UsersTable from "./adminconfiguracion/UsersTable";
 import UserForm from "./adminconfiguracion/UserForm";
 import ChangePasswordModal from "./ChangePasswordModal";
+import DeleteConfirmationModal from "./AdminNovedades/DeleteConfirmationModal"
 import {
   ShieldIcon,
 } from '../assets/icons';
@@ -14,39 +15,38 @@ export default function AdminConfiguracion(){
     //para mostrar u ocultar el formulario
     const [showForm, setShowForm] = useState(false);
     const [userForPasswordReset, setUserForPasswordReset] = useState(null);
+    const [userToDelete, setUserToDelete] = useState(null);
     
-    const [usuarios] = useState([
-        {
-        id: 1,
-        nombre: 'Matías Peláez',
-        iniciales: 'MP',
-        estado: 'Activo',
-        rolInstitucional: 'Referente Digital',
-        nivelAcceso: 'Administrador general',
-        correo: 'mpelaez@ifts2.edu.ar',
-        ultimoAcceso: 'Hoy, 09:42 hs'
-        },
-        {
-        id: 2,
-        nombre: 'María del Carmen Canovi',
-        iniciales: 'MC',
-        estado: 'Activo',
-        rolInstitucional: 'Secretaria Académica',
-        nivelAcceso: 'Gestión académica',
-        correo: 'mcanovi@ifts2.edu.ar',
-        ultimoAcceso: 'Ayer, 14:15 hs'
-        },
-        {
-        id: 3,
-        nombre: 'Prof. Alicia E. Ruidiaz',
-        iniciales: 'AR',
-        estado: 'Activo',
-        rolInstitucional: 'Profesor',
-        nivelAcceso: 'Administrador general',
-        correo: 'aruidiaz@ifts2.edu.ar',
-        ultimoAcceso: 'Hace 3 d'
+    const [usuarios, setUsuarios] = useState([]);
+
+    const cargarUsuarios = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const token = localStorage.getItem('ifts2_token');
+            const response = await fetch('http://localhost:3000/api/usuarios' , {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 2. Envía el token al backend para que te autorice el acceso
+                    'Authorization': `Bearer ${token}` 
+                }
+            });
+            if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error('No autorizado. Por favor, vuelve a iniciar sesión.');
+                    }
+                    throw new Error('Error al cargar los usuarios desde el servidor');
+            }
+            const data = await response.json();
+            setUsuarios(data); 
+        } catch (error) {
+            console.error('Error al obtener usuarios:', error);
+            setError(error.message);
+        } finally {
+            setLoading(false);
         }
-    ]);
+    };
     const filteredUsers = usuarios.filter(user => {
         const nombre = user.nombre_completo || user.nombre || '';
         const correo = user.correo || '';
@@ -58,6 +58,37 @@ export default function AdminConfiguracion(){
         );
     });
 
+    const confirmarEliminacion = async () => {
+        if (!userToDelete) return;
+
+        try {
+            const token = localStorage.getItem('ifts2_token');
+            const userId = typeof userToDelete === 'object' ? userToDelete.id : userToDelete;
+            const response = await fetch(`http://localhost:3000/api/usuarios/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('No se pudo eliminar el usuario');
+            }
+
+            setUserToDelete(null);
+            
+            // Recarga la lista de usuarios para actualizar la tabla al instante
+            cargarUsuarios();
+            
+        } catch (error) {
+            console.error('Error al eliminar usuario:', error);
+            alert(error.message);
+        }
+    };
+    
+    useEffect(() => {
+        cargarUsuarios();
+    }, []);
     const handleEdit = (user) => {
         console.log('Editar usuario:', user);
     };
@@ -67,17 +98,16 @@ export default function AdminConfiguracion(){
     };
 
     const handleDelete = (id) => {
-        console.log('Eliminar usuario con ID:', id);
+        setUserToDelete(id);
     };
 
     const handleCreateNew = () => {
         setShowForm(true);
     };
 
-    const handleFormSubmit = (data) => {
-        console.log("Guardar nuevo usuario:", data);
-        // Aquí llamaremos al backend para guardar
+    const handleFormSubmit = () => {
         setShowForm(false);
+        cargarUsuarios();
     };
 
     return (
@@ -154,6 +184,16 @@ export default function AdminConfiguracion(){
                     setUserForPasswordReset(null);
                 }}
             />
+            {/* Componente Modal de eliminación (ejemplo de nombre, ajústalo al que tengas creado) */}
+            {userToDelete && (
+                <DeleteConfirmationModal
+                    isOpen={!!userToDelete}
+                    onClose={() => setUserToDelete(null)}
+                    onConfirm={confirmarEliminacion}
+                    title="Eliminar usuario"
+                    message={`¿Estás seguro de que deseas eliminar a ${userToDelete.nombre_completo || userToDelete.nombre}?`}
+                />
+            )}
         </div>
     );
 }

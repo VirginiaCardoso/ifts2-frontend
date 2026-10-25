@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Button from '../Button';
+import { ChangePasswordModalIcon1 } from "../../assets/icons";
 
 export default function UserForm({ onCancel, onSubmitSuccess }) {
     const [formData, setFormData] = useState({
@@ -10,20 +11,62 @@ export default function UserForm({ onCancel, onSubmitSuccess }) {
         password: '',
         confirmPassword: ''
     });
-    const handleSubmit = (e) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+
         if (formData.password !== formData.confirmPassword) {
-            alert("Las contraseñas no coinciden");
-            return;
+            return setError("Las contraseñas no coinciden");
         }
-        
-        // Aquí llamaremos a la API del backend más adelante
-        onSubmitSuccess(formData);
+
+        if (formData.password.length < 8) {
+            return setError("La contraseña debe tener al menos 8 caracteres");
+        }
+        setIsLoading(true);
+        try {
+            const token = localStorage.getItem('ifts2_token');
+            // Mapeamos los datos para que coincidan con el req.body del backend
+            const datosParaEnviar = {
+                nombre_completo: formData.nombre,
+                rol_institucional: formData.rolInstitucional,
+                nivel_de_acceso: formData.nivelAcceso,
+                correo: formData.correo,
+                password: formData.password
+            };
+            const response = await fetch('http://localhost:3000/api/usuarios', {
+                method: 'POST',
+                headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify(datosParaEnviar)
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Error al registrar el usuario.');
+            }
+            alert("¡Usuario creado exitosamente!");
+            if (onSubmitSuccess) {
+                onSubmitSuccess(data);
+            }
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
     };
     return (
         <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
             <h3 className="font-bold text-slate-800 text-base">Nuevo administrador</h3>
-            
+            {error && (
+                <div className="p-3 bg-red-50 text-red-600 rounded-xl text-xs border border-red-100">
+                    {error}
+                </div>
+            )}
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -94,8 +137,11 @@ export default function UserForm({ onCancel, onSubmitSuccess }) {
                     </div>
                 </div>
 
-                <div className="bg-emerald-50/50 border border-emerald-100 rounded-lg p-3 text-xs text-emerald-800">
-                     Entregale esta contraseña al usuario de forma segura. Luego podrá cambiarla desde su perfil.
+                <div className="flex gap-2 bg-emerald-50/50 border border-emerald-100 rounded-lg p-2 text-xs text-emerald-800 items-center">
+                    <div className="w-4 h-4 shrink-0 [&>svg]:w-full [&>svg]:h-full ml-1">
+                        <ChangePasswordModalIcon1 />
+                    </div>
+                    <span>Entregale esta contraseña al usuario de forma segura. Luego podrá cambiarla desde su perfil.</span>
                 </div>
 
                 <div className="flex justify-end gap-2 pt-2">
@@ -110,9 +156,10 @@ export default function UserForm({ onCancel, onSubmitSuccess }) {
                     <Button 
                         type="submit"
                         variant="primary"
+                        disabled={isLoading}
                         className="!py-2 !px-5"
                     >
-                        Crear usuario
+                        {isLoading ? 'Guardando...' : 'Crear usuario'}
                     </Button>
                 </div>
             </form>
