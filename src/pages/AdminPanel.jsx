@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../components/AdminLayout';
 import AdminNovedades from '../components/AdminNovedades';
 import AdminPlantel from '../components/AdminPlantel';
+import AdminConfiguracion from '../components/AdminConfiguracion';
 
 
 export default function AdminPanel() {
@@ -26,6 +27,7 @@ export default function AdminPanel() {
       )}
       {activeTab === 'plantel' && <AdminPlantel/>}
       {/* Resto de módulos */}
+      {activeTab === 'config' && <AdminConfiguracion/>}
     </AdminLayout>
   );
 }
