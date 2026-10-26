@@ -13,6 +13,7 @@ export default function Button({
   className = '',
   type = 'button',
   disabled = false,
+  ...props
 }) {
   // Estilos base que comparten todos los botones
   const baseStyles = 'inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50';
@@ -33,6 +34,7 @@ export default function Button({
       onClick={onClick}
       disabled={disabled}
       className={`${baseStyles} ${selectedVariant} ${className}`}
+      {...props}
     >
       {children}
     </button>

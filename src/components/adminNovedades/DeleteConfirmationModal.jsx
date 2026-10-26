@@ -1,7 +1,10 @@
 import Button from '../Button';
 import { AdminNovedadesIcon3 } from '../../assets/icons';
 
-export default function DeleteConfirmationModal({ submitting, onCancel, onConfirm }) {
+export default function DeleteConfirmationModal({ submitting, onCancel, onConfirm,
+  title = "¿Estás seguro?", 
+  message = "Esta acción no se puede deshacer."
+ }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#051218]/80 backdrop-blur-xs">
       <div className="bg-white border border-petrol-100 rounded-2xl p-6 max-w-sm w-full text-center space-y-4 shadow-xl">
@@ -9,8 +12,8 @@ export default function DeleteConfirmationModal({ submitting, onCancel, onConfir
           <AdminNovedadesIcon3 />
         </div>
         <div>
-          <h3 className="font-bold text-base text-petrol-900">¿Eliminar esta noticia?</h3>
-          <p className="text-xs text-petrol-600 mt-1">Esta acción no se puede deshacer.</p>
+          <h3 className="font-bold text-base text-petrol-900">{title}</h3>
+          <p className="text-xs text-petrol-600 mt-1">{message}</p>
         </div>
         <div className="flex gap-2 justify-center pt-2">
           <Button

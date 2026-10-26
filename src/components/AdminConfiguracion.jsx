@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import UsersTable from "./adminconfiguracion/UsersTable";
 import UserForm from "./adminconfiguracion/UserForm";
 import ChangePasswordModal from "./ChangePasswordModal";
-import DeleteConfirmationModal from "./AdminNovedades/DeleteConfirmationModal"
+import DeleteConfirmationModal from "./adminNovedades/DeleteConfirmationModal";
 import {
   ShieldIcon,
 } from '../assets/icons';
@@ -14,8 +14,11 @@ export default function AdminConfiguracion(){
     const [error, setError] = useState(null);
     //para mostrar u ocultar el formulario
     const [showForm, setShowForm] = useState(false);
+    const [editingId, setEditingId] = useState(null); //guarda el id del usuario en edición
+    const [editForm, setEditForm] = useState({}); //guarda los valores temporales de los inputs
     const [userForPasswordReset, setUserForPasswordReset] = useState(null);
     const [userToDelete, setUserToDelete] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
     
     const [usuarios, setUsuarios] = useState([]);
 
@@ -58,8 +61,49 @@ export default function AdminConfiguracion(){
         );
     });
 
+    //funciones para editar usuario
+    const handleEdit = (user) => {
+        console.log("Iniciando edición para el usuario:", user);
+        setEditingId(user.id);
+        setEditForm({
+            nombre_completo: user.nombre_completo,
+            rol_institucional: user.rol_institucional,
+            nivel_de_acceso: user.nivel_de_acceso,
+            correo: user.correo
+        });
+    };
+    //cancela la edición y limpia estados
+    const handleCancelEdit = () => {
+        setEditingId(null);
+        setEditForm({});
+    };
+    //envía los datos actualizados al backend
+    const handleSaveEdit = async (id) => {
+        try{
+            const token = localStorage.getItem('ifts2_token');
+            const response = await fetch (`http://localhost:3000/api/usuarios/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(editForm)
+            });
+            if (!response.ok){
+                throw new Error('No se pudo actualizar el usuario');
+            }
+            // Salimos del modo edición y recargamos la tabla
+            setEditingId(null);
+            cargarUsuarios();
+        } catch (error) {
+            console.error('Error al actualizar usuario:', error);
+            alert(error.message);
+        }
+    };
+
     const confirmarEliminacion = async () => {
         if (!userToDelete) return;
+        setIsDeleting(true);
 
         try {
             const token = localStorage.getItem('ifts2_token');
@@ -83,22 +127,21 @@ export default function AdminConfiguracion(){
         } catch (error) {
             console.error('Error al eliminar usuario:', error);
             alert(error.message);
+        } finally {
+            setIsDeleting(false);
         }
     };
     
     useEffect(() => {
         cargarUsuarios();
     }, []);
-    const handleEdit = (user) => {
-        console.log('Editar usuario:', user);
-    };
 
     const handleResetPassword = (user) => {
         setUserForPasswordReset(user);
     };
 
-    const handleDelete = (id) => {
-        setUserToDelete(id);
+    const handleDelete = (user) => {
+        setUserToDelete(user);
     };
 
     const handleCreateNew = () => {
@@ -172,7 +215,12 @@ export default function AdminConfiguracion(){
                     onEdit={handleEdit}
                     onResetPassword={handleResetPassword}
                     onDelete={handleDelete}
-                    onCreateNew={handleCreateNew}                           
+                    onCreateNew={handleCreateNew}
+                    editingId={editingId}
+                    editForm={editForm}
+                    setEditForm={setEditForm}
+                    onSaveEdit={handleSaveEdit}
+                    onCancelEdit={handleCancelEdit}                           
                    />
             </div>
             <ChangePasswordModal 
@@ -184,14 +232,14 @@ export default function AdminConfiguracion(){
                     setUserForPasswordReset(null);
                 }}
             />
-            {/* Componente Modal de eliminación (ejemplo de nombre, ajústalo al que tengas creado) */}
+            
             {userToDelete && (
                 <DeleteConfirmationModal
-                    isOpen={!!userToDelete}
-                    onClose={() => setUserToDelete(null)}
+                    submitting={isDeleting}
+                    onCancel={() => setUserToDelete(null)}
                     onConfirm={confirmarEliminacion}
-                    title="Eliminar usuario"
-                    message={`¿Estás seguro de que deseas eliminar a ${userToDelete.nombre_completo || userToDelete.nombre}?`}
+                    title={`¿Eliminar el usuario: ${userToDelete.nombre_completo || userToDelete.nombre}?`}
+                    message="Esta acción no se puede deshacer."
                 />
             )}
         </div>
