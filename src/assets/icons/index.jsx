@@ -1282,3 +1282,154 @@ export function MesaTacho() {
  </svg>
   );
 }
+
+export const IconCardTramite = () => (
+  <svg
+    className="w-5 h-5"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth="1.5"
+  >
+    <rect x="3" y="6" width="18" height="12" rx="2" />
+    <path d="M3 10h18M7 14h.01" />
+  </svg>
+);
+
+export const IconListTramite = () => (
+  <svg
+    className="w-5 h-5"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth="1.5"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"
+    />
+  </svg>
+);
+
+export const IconCheckTramite = () => (
+  <svg
+    className="w-5 h-5"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth="1.5"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M4.5 12.75l6 6 9-13.5"
+    />
+  </svg>
+);
+
+export const IconShieldTramite = () => (
+  <svg
+    className="w-5 h-5"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth="1.5"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+    />
+  </svg>
+);
+
+export const IconSwapTramite = () => (
+  <svg
+    className="w-5 h-5"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth="1.5"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M16 3h5m0 0v5m0-5l-6 6M8 21H3m0 0v-5m0 5l6-6"
+    />
+  </svg>
+);
+
+export const IconEditTramite = () => (
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth="1.5"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.89 1.112l-2.83.94c-.42.14-.81-.25-.67-.67l.94-2.83a4.5 4.5 0 011.112-1.89l13.36-13.36z"
+    />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M19.5 7.125L16.875 4.5"
+    />
+  </svg>
+);
+
+export const IconLinkEnlace = () => (
+  <svg
+    className="w-4 h-4 text-[#8BD9CA]"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+    />
+  </svg>
+);
+
+export const IconEditEnlace = () => (
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth="1.5"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.89 1.112l-2.83.94c-.42.14-.81-.25-.67-.67l.94-2.83a4.5 4.5 0 011.112-1.89l13.36-13.36z"
+    />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M19.5 7.125L16.875 4.5"
+    />
+  </svg>
+);
+
+export const IconCheckEnlace = () => (
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M4.5 12.75l6 6 9-13.5"
+    />
+  </svg>
+);

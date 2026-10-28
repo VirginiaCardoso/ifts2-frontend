@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../components/AdminLayout';
 import AdminNovedades from '../components/AdminNovedades';
 import AdminPlantel from '../components/AdminPlantel';
-import GestionAcademica from '../components/GestionAcademica'
+import GestionAcademica from '../components/adminGestionAcademica/GestionAcademica'
 import AdminConfiguracion from '../components/AdminConfiguracion';
+import AdminTramitesView from '../components/adminTramites/AdminTramitesView';
 
 
 export default function AdminPanel() {
@@ -31,6 +32,7 @@ export default function AdminPanel() {
       {activeTab === 'novedades' && <AdminNovedades />}
       {activeTab === 'plantel' && <AdminPlantel />}
       {activeTab === 'academica' && <GestionAcademica />}
+      {activeTab === 'tramites' && <AdminTramitesView />}
       {/* Resto de módulos */}
       {activeTab === 'config' && <AdminConfiguracion />}
     </AdminLayout>
