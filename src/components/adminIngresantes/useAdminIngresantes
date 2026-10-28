@@ -1,0 +1,91 @@
+import { useState, useEffect } from 'react';
+import { ingresantesService } from '../../services/ingresantesService';
+
+export function useIngresantes() {
+    
+    const [etapas, setEtapas] = useState([]);
+    const [error, setError] = useState(null);
+
+    // 2. Estados para el manejo del PDF
+    const [documentoActual, setDocumentoActual] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
+
+    //cargar datos desde backend al iniciar
+    const cargarDatos = async () => {
+        try {
+            setLoading(true);
+            const data = await ingresantesService.obtenerDatosIngresantes();
+            setEtapas(data.etapas || []);
+            setError(null);
+
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        cargarDatos();
+    }, []);
+
+
+    // Cargar el documento actual de la base de datos al iniciar
+    const cargarDocumento = async () => {
+        try {
+            setLoading(true);
+            const data = await ingresantesService.obtenerDocumento();
+            setDocumentoActual(data); // data contendrá { nombre, url_archivo, etc. }
+        } catch (err) {
+            console.error('Error al obtener el documento:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        cargarDocumento();
+    }, []);
+
+    // para cuando el usuario selecciona un archivo
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setArchivoSeleccionado(file);
+        }
+    };
+
+    // Enviar el PDF al backend usando el servicio
+    const handleSubirPdf = async () => {
+        if (!archivoSeleccionado) return;
+
+        try {
+            const formData = new FormData();
+           
+            formData.append('documento', archivoSeleccionado);
+
+            await ingresantesService.actualizarDocumento(formData);
+            alert('PDF actualizado con éxito');
+            setArchivoSeleccionado(null);
+            cargarDocumento(); // Recargamos para mostrar el nuevo archivo actual
+        } catch (err) {
+            alert(err.message);
+        }
+    };
+
+    const handleEditarEtapa = (id) => {
+        console.log("Editar etapa estática:", id);
+    };
+
+    return {
+        etapas,
+        documentoActual,
+        loading,
+        error,
+        archivoSeleccionado,
+        handleFileChange,
+        handleSubirPdf,
+        handleEditarEtapa
+    };
+}

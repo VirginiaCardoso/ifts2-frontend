@@ -4,6 +4,7 @@ import AdminLayout from '../components/AdminLayout';
 import AdminNovedades from '../components/AdminNovedades';
 import AdminPlantel from '../components/AdminPlantel';
 import GestionAcademica from '../components/adminGestionAcademica/GestionAcademica'
+import AdminIngresantes from '../components/AdminIngresantes';
 import AdminConfiguracion from '../components/AdminConfiguracion';
 import AdminTramitesView from '../components/adminTramites/AdminTramitesView';
 
@@ -32,6 +33,7 @@ export default function AdminPanel() {
       {activeTab === 'novedades' && <AdminNovedades />}
       {activeTab === 'plantel' && <AdminPlantel />}
       {activeTab === 'academica' && <GestionAcademica />}
+      {activeTab === 'ingresantes' && <AdminIngresantes />}
       {activeTab === 'tramites' && <AdminTramitesView />}
       {/* Resto de módulos */}
       {activeTab === 'config' && <AdminConfiguracion />}
