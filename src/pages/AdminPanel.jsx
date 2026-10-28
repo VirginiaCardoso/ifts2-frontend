@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../components/AdminLayout';
 import AdminNovedades from '../components/AdminNovedades';
 import AdminPlantel from '../components/AdminPlantel';
+import GestionAcademica from '../components/GestionAcademica'
 import AdminConfiguracion from '../components/AdminConfiguracion';
 
 
@@ -21,13 +22,17 @@ export default function AdminPanel() {
   };
 
   return (
-    <AdminLayout activeTab={activeTab} onSelectTab={setActiveTab} onLogout={handleLogout} user={currentUser}>
-      {activeTab === 'novedades' && (
-        <AdminNovedades/>
-      )}
-      {activeTab === 'plantel' && <AdminPlantel/>}
+    <AdminLayout
+      activeTab={activeTab}
+      onSelectTab={setActiveTab}
+      onLogout={handleLogout}
+      user={currentUser}
+    >
+      {activeTab === 'novedades' && <AdminNovedades />}
+      {activeTab === 'plantel' && <AdminPlantel />}
+      {activeTab === 'academica' && <GestionAcademica />}
       {/* Resto de módulos */}
-      {activeTab === 'config' && <AdminConfiguracion/>}
+      {activeTab === 'config' && <AdminConfiguracion />}
     </AdminLayout>
   );
 }

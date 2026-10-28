@@ -133,9 +133,13 @@ export default function AdminConfiguracion(){
     };
     
     useEffect(() => {
-        cargarUsuarios();
-    }, []);
+      const fetchData = async () => {
+        await cargarUsuarios();
+      };
 
+      fetchData();
+    }, []);
+    
     const handleResetPassword = (user) => {
         setUserForPasswordReset(user);
     };
