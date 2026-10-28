@@ -13,6 +13,7 @@ import PlanEstudiosSection from '../components/PlanEstudiosSection';
 import PromocionablesSection from '../components/PromocionablesSection';
 import CorrelatividadesSection from '../components/Correlatividaes';
 import MesaExamenSection from '../components/MesaExamenSection';
+import IngresantesSection from '../components/IngresantesSection';
 import HorariosMateriasSection from '../components/HorariosMateriasSection';
 import LoginModal from '../components/LoginModal';
 
@@ -48,7 +49,7 @@ export default function Home() {
         {/* Mesas finales */}
         <MesaExamenSection />
         {/* Fechas importantes ingresantes */}
-
+        <IngresantesSection />
         {/* Horarios */}
         <HorariosMateriasSection/>
         {/* Tramites */}
