@@ -28,7 +28,7 @@ export default function Ingresantes() {
                 </p>
             </div>
 
-            {/* SECCIÓN 1: Las 4 Tarjetas de Etapas (Estáticas) */}
+            {/* SECCIÓN 1: Tarjetas de Etapas */}
             <div>
                 <p className="text-[0.68rem] font-bold text-petrol-600 uppercase tracking-wider mb-3">
                     Etapas del Proceso de Admisión
@@ -43,7 +43,7 @@ export default function Ingresantes() {
                                         {index + 1}
                                     </span>
                                     <h3 className="font-bold text-xs tracking-wider">
-                                        {etapa.titulo}
+                                        {etapa.nombre}
                                     </h3>
                                 </div>
                                 <button 
@@ -57,7 +57,7 @@ export default function Ingresantes() {
                             <div className="pt-3.5 space-y-2">
                                 <div className="flex items-center gap-1.5 text-xs font-semibold text-petrol-900">
                                     <FooterIcon2 className="w-3.5 h-3.5" />
-                                    <span>{etapa.fecha}</span>
+                                    <span>{etapa.fecha_inicio}</span>
                                 </div>
                                 <p className="text-xs text-petrol-500 leading-relaxed">
                                     {etapa.descripcion}
