@@ -1,5 +1,5 @@
 import LogoIFTS2 from './LogoIFTS2';
-import { SidebarIcon1, SidebarIcon2, SidebarIcon3, SidebarIcon4, SidebarIcon5, SidebarIcon6, SidebarIcon7, SidebarIcon8, SidebarIcon9, SidebarIcon10 } from '../assets/icons';
+import { SidebarIcon1, SidebarIcon2, SidebarIcon3, SidebarIcon4, SidebarIcon5, SidebarIcon6, SidebarIcon7, SidebarIcon9, SidebarIcon10 } from '../assets/icons';
 
 const NAV_ITEMS = [
   {
