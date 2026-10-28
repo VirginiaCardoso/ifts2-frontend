@@ -1,5 +1,5 @@
-import MesasSection from './gestionAcademica/MesasSection';
-import HorariosCursada from './gestionAcademica/HorariosCursada';
+import MesasSection from './adminGestionAcademica/MesasSection';
+import HorariosCursada from './adminGestionAcademica/HorariosCursada';
 
 export default function GestionAcademica() {
   return (
