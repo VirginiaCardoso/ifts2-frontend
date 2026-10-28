@@ -1,6 +1,11 @@
 import { useState, useRef } from 'react';
 import LogoIFTS2 from './LogoIFTS2';
-import { NavbarIcon1, NavbarIcon2 } from '../assets/icons';
+import {
+  NavbarIcon1,
+  NavbarIcon2,
+  FooterIcon7,
+  FooterIcon6,
+} from '../assets/icons';
 
 // Constante con todos los enlaces 
 const NAV_LINKS = [
@@ -51,29 +56,71 @@ export default function Navbar() {
     <>
       {/* ── TOPBAR  ── */}
       <div className="hidden md:flex items-center justify-between gap-4 px-8 py-1.5 text-xs bg-petrol-950">
-        <span style={{ color: 'rgba(255,255,255,0.45)', letterSpacing: '0.06em' }}>
-          IFTS N° 2 · Instituto de Formación Técnica Superior · Ministerio de Educación · GCBA
+        <span
+          style={{ color: 'rgba(255,255,255,0.45)', letterSpacing: '0.06em' }}
+        >
+          IFTS N° 2 · Instituto de Formación Técnica Superior · Ministerio de
+          Educación · GCBA
         </span>
-        <div className="flex items-center gap-4">
-          <a href="https://www.instagram.com/ifts_2_ok/" target="_blank" rel="noreferrer" style={{ color: 'rgba(255,255,255,0.55)' }} className="flex items-center gap-1 hover:text-[#8BD9CA] transition-colors">
-            @ifts_2_ok
-          </a>
+        <div className="flex">
+          <div className="flex items-center gap-4 mr-2">
+            <a
+              href="https://www.instagram.com/ifts_2_ok/"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: 'rgba(255,255,255,0.55)' }}
+              className="flex items-center gap-1 hover:text-[#8BD9CA] transition-colors --text-xs"
+            >
+              <FooterIcon6 /> @ifts_2_ok
+            </a>
+          </div>
+          <div className="flex items-center gap-4">
+            <a
+              href="https://www.facebook.com/iftsn2/"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: 'rgba(255,255,255,0.55)' }}
+              className="flex items-center gap-1 hover:text-[#8BD9CA] transition-colors --text-xs"
+            >
+              <FooterIcon7 /> iftsn2
+            </a>
+          </div>
         </div>
       </div>
 
       {/* ── HEADER PRINCIPAL ── */}
       <header className="bg-petrol-900 sticky top-0 z-50 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 md:h-20">
-
           {/* Logo y Nombre */}
-          <a href="#inicio" className="flex items-center gap-3 group flex-shrink-0">
+          <a
+            href="#inicio"
+            className="flex items-center gap-3 group flex-shrink-0"
+          >
             {/* LogoIFTS2 */}
-            <LogoIFTS2 size={42} className="transition-transform group-hover:scale-105" />
+            <LogoIFTS2
+              size={42}
+              className="transition-transform group-hover:scale-105"
+            />
             <div className="hidden sm:block leading-tight">
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', color: '#ffffff', lineHeight: 1.1 }}>
+              <p
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '1.1rem',
+                  color: '#ffffff',
+                  lineHeight: 1.1,
+                }}
+              >
                 IFTS N° 2
               </p>
-              <p style={{ fontSize: '0.65rem', color: '#8BD9CA', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600 }}>
+              <p
+                style={{
+                  fontSize: '0.65rem',
+                  color: '#8BD9CA',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                }}
+              >
                 Emprendimientos Gastronómicos
               </p>
             </div>
@@ -81,7 +128,7 @@ export default function Navbar() {
 
           {/* Menú Desktop */}
           <nav className="hidden lg:flex items-center gap-1">
-            {NAV_LINKS.map(link => (
+            {NAV_LINKS.map((link) => (
               <div
                 key={link.label}
                 className="relative"
@@ -90,22 +137,31 @@ export default function Navbar() {
                   if (link.children) setOpenDropdown(link.label);
                 }}
                 onMouseLeave={() => {
-                  closeTimer.current = setTimeout(() => setOpenDropdown(null), 120);
+                  closeTimer.current = setTimeout(
+                    () => setOpenDropdown(null),
+                    120
+                  );
                 }}
               >
                 {link.children ? (
                   <>
                     <button
-                      onClick={() => setOpenDropdown(openDropdown === link.label ? null : link.label)}
+                      onClick={() =>
+                        setOpenDropdown(
+                          openDropdown === link.label ? null : link.label
+                        )
+                      }
                       className="flex items-center gap-1 text-[#C2F2E9] text-sm font-medium px-3 py-2 rounded-md hover:bg-white/10 hover:text-white transition-colors"
                     >
                       {link.label}
-                      <NavbarIcon1 className={`w-2.5 h-2.5 opacity-70 transition-transform ${openDropdown === link.label ? 'rotate-180' : ''}`} />
+                      <NavbarIcon1
+                        className={`w-2.5 h-2.5 opacity-70 transition-transform ${openDropdown === link.label ? 'rotate-180' : ''}`}
+                      />
                     </button>
                     {openDropdown === link.label && (
                       <div className="absolute top-full left-0 pt-2 z-50">
                         <div className="bg-[#0d2229] border border-[#235459] rounded-lg p-2 min-w-[240px] shadow-2xl">
-                          {link.children.map(child => (
+                          {link.children.map((child) => (
                             <a
                               key={child.label}
                               href={child.href}
@@ -115,7 +171,11 @@ export default function Navbar() {
                               className="flex items-center justify-between px-3 py-2 rounded-md text-[#C2F2E9] text-sm hover:bg-white/10 hover:text-white transition-colors"
                             >
                               {child.label}
-                              {child.external && <span className="text-[10px] opacity-50">↗</span>}
+                              {child.external && (
+                                <span className="text-[10px] opacity-50">
+                                  ↗
+                                </span>
+                              )}
                             </a>
                           ))}
                         </div>
@@ -132,34 +192,48 @@ export default function Navbar() {
                 )}
               </div>
             ))}
-            
           </nav>
 
           {/* Menú Hamburguesa (Mobile) */}
-          <button onClick={() => setMenuOpen(!menuOpen)} className="lg:hidden flex flex-col gap-1.5 p-2">
-            <span className={`block w-6 h-0.5 bg-[#8BD9CA] rounded-full transition-transform ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-            <span className={`block w-6 h-0.5 bg-[#8BD9CA] rounded-full transition-opacity ${menuOpen ? 'opacity-0' : ''}`} />
-            <span className={`block w-6 h-0.5 bg-[#8BD9CA] rounded-full transition-transform ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="lg:hidden flex flex-col gap-1.5 p-2"
+          >
+            <span
+              className={`block w-6 h-0.5 bg-[#8BD9CA] rounded-full transition-transform ${menuOpen ? 'rotate-45 translate-y-2' : ''}`}
+            />
+            <span
+              className={`block w-6 h-0.5 bg-[#8BD9CA] rounded-full transition-opacity ${menuOpen ? 'opacity-0' : ''}`}
+            />
+            <span
+              className={`block w-6 h-0.5 bg-[#8BD9CA] rounded-full transition-transform ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`}
+            />
           </button>
         </div>
 
         {/* Menú Desplegable Mobile */}
         {menuOpen && (
           <div className="lg:hidden bg-[#1a3f4e] border-t border-[#235459] px-4 py-3 flex flex-col gap-1">
-            {NAV_LINKS.map(link => (
+            {NAV_LINKS.map((link) => (
               <div key={link.label}>
                 {link.children ? (
                   <>
                     <button
-                      onClick={() => setMobileExpanded(mobileExpanded === link.label ? null : link.label)}
+                      onClick={() =>
+                        setMobileExpanded(
+                          mobileExpanded === link.label ? null : link.label
+                        )
+                      }
                       className="w-full flex items-center justify-between text-[#C2F2E9] p-2 rounded-md font-medium text-base hover:bg-white/10 text-left"
                     >
                       {link.label}
-                      <NavbarIcon2 className={`w-3 h-3 opacity-60 transition-transform ${mobileExpanded === link.label ? 'rotate-180' : ''}`} />
+                      <NavbarIcon2
+                        className={`w-3 h-3 opacity-60 transition-transform ${mobileExpanded === link.label ? 'rotate-180' : ''}`}
+                      />
                     </button>
                     {mobileExpanded === link.label && (
                       <div className="border-l-2 border-[#518C8C] ml-3 pl-3 mb-1">
-                        {link.children.map(child => (
+                        {link.children.map((child) => (
                           <a
                             key={child.label}
                             href={child.href}
