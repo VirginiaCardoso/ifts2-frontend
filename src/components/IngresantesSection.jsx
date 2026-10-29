@@ -1,34 +1,6 @@
+import React, { useState, useEffect } from 'react';
+import { ingresantesService } from '../services/ingresantesService';
 
-const etapas = [
-  {
-    numero: "01",
-    titulo: "Período de pre-inscripción y carga de documentación",
-    descripcion:
-      "Los aspirantes a la carrera completan el formulario de pre-inscripción en línea y adjuntan la documentación requerida.",
-    icono: "documento",
-  },
-  {
-    numero: "02",
-    titulo: "Curso de preingreso",
-    descripcion:
-      "Jornadas de introducción a la carrera, metodología de estudio y presentación institucional.",
-    icono: "libro",
-  },
-  {
-    numero: "03",
-    titulo: "Examen de preingreso",
-    descripcion:
-      "Evaluación de los conocimientos adquiridos durante el curso de preingreso.",
-    icono: "check",
-  },
-  {
-    numero: "04",
-    titulo: "Confirmación de vacantes",
-    descripcion:
-      "Publicación de los resultados y confirmación de ingreso a la carrera para el ciclo lectivo.",
-    icono: "reloj",
-  },
-];
 
 function IconoEtapa({ tipo }) {
   const paths = {
@@ -77,6 +49,27 @@ function IconoEtapa({ tipo }) {
 }
 
 export default function IngresantesSection() {
+  const [etapas, setEtapas] = useState([]);
+  const [documento, setDocumento] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    const cargarDatosPublicos = async () => {
+      try {
+        setLoading(true);
+        // Llamada al servicio que conecta con el backend (ajusta la ruta según tu proyecto)
+        const data = await ingresantesService.obtenerDatosIngresantes();
+        setEtapas(Array.isArray(data) ? data : []);
+        setDocumento(data.documento || null);
+      } catch (err) {
+        console.error("Error al cargar los datos de ingresantes:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    cargarDatosPublicos();
+  }, []);
   return (
     <section
       id="fechas-ingresantes"
@@ -98,33 +91,50 @@ export default function IngresantesSection() {
 
         {/* Tarjetas de las etapas */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {etapas.map((etapa) => (
-            <article
-              key={etapa.numero}
-              className="flex min-h-40 gap-4 rounded-2xl border border-petrol-100 bg-white p-5 md:p-6"
-            >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-petrol-900 text-mint-400">
-                <IconoEtapa tipo={etapa.icono} />
-              </div>
+          {loading ? (
+            <p className="text-sm text-petrol-600 col-span-full text-center py-6">
+              Cargando etapas...
+            </p>
+          ) : etapas.length > 0 ? (
+            etapas.map((etapa, index) => (
+              <article
+                key={etapa.id || index}
+                className="flex min-h-40 gap-4 rounded-2xl border border-petrol-100 bg-white p-5 md:p-6"
+              >
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-petrol-900 text-mint-400">
+                  {/* Si tu base de datos no tiene iconos guardados, puedes usar uno por defecto o mapearlo */}
+                  <IconoEtapa tipo={etapa.icono || 'documento'} />
+                </div>
 
-              <div className="min-w-0">
-                <span className="inline-block rounded bg-petrol-900 px-2.5 py-1 text-[11px] font-bold tracking-wider text-mint-400">
-                  ETAPA {etapa.numero}
-                </span>
+                <div className="min-w-0">
+                  <span className="inline-block rounded bg-petrol-900 px-2.5 py-1 text-[11px] font-bold tracking-wider text-mint-400">
+                    ETAPA {String(index + 1).padStart(2, '0')}
+                  </span>
 
-                <h3 className="mt-2 font-body text-base font-bold leading-snug text-petrol-900">
-                  {etapa.titulo}
-                </h3>
+                  <h3 className="mt-2 font-body text-base font-bold leading-snug text-petrol-900">
+                    {etapa.nombre || etapa.titulo}
+                  </h3>
 
-                <p className="mt-2 font-body text-sm leading-6 text-petrol-800">
-                  {etapa.descripcion}
-                </p>
-              </div>
-            </article>
-          ))}
+                  <p className="mt-2 font-body text-sm leading-6 text-petrol-800">
+                    {etapa.descripcion}
+                  </p>
+                  
+                  {etapa.fecha_inicio && (
+                    <span className="inline-block mt-2 text-xs font-semibold text-petrol-600">
+                      📅 {etapa.fecha_inicio}
+                    </span>
+                  )}
+                </div>
+              </article>
+            ))
+          ) : (
+            <p className="text-sm text-petrol-600 col-span-full text-center py-6">
+              No hay etapas disponibles en este momento.
+            </p>
+          )}
         </div>
 
-        {/* Documento informativo */}
+        {/* Documento informativo dinámico */}
         <div className="mt-7 flex flex-col gap-4 rounded-2xl border border-petrol-100 bg-white p-5 sm:flex-row sm:items-center sm:justify-between md:px-6">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-mint-300 text-petrol-900">
@@ -137,13 +147,15 @@ export default function IngresantesSection() {
               </h3>
 
               <p className="mt-1 font-body text-sm text-petrol-600">
-                Fechas, requisitos y detalles del proceso de admisión
+                {documento?.nombre || 'Fechas, requisitos y detalles del proceso de admisión'}
               </p>
             </div>
           </div>
 
           <a
-            href="#contacto"
+            href={documento?.url_archivo || '#contacto'}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-petrol-900 px-5 py-3 font-body text-xs font-bold text-mint-300 transition-colors hover:bg-petrol-800 focus:outline-none focus:ring-2 focus:ring-mint-400 w-fit"
           >
             Ver documento

@@ -16,7 +16,7 @@ export function useIngresantes() {
         try {
             setLoading(true);
             const data = await ingresantesService.obtenerDatosIngresantes();
-            setEtapas(data.etapas || []);
+            setEtapas(Array.isArray(data) ? data : []);
             setError(null);
 
         } catch (err) {
@@ -36,7 +36,7 @@ export function useIngresantes() {
         try {
             setLoading(true);
             const data = await ingresantesService.obtenerDocumento();
-            setDocumentoActual(data); // data contendrá { nombre, url_archivo, etc. }
+            setDocumentoActual(data); 
         } catch (err) {
             console.error('Error al obtener el documento:', err);
         } finally {
