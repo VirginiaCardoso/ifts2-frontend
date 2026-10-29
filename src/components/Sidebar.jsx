@@ -1,5 +1,5 @@
 import LogoIFTS2 from './LogoIFTS2';
-import { SidebarIcon1, SidebarIcon2, SidebarIcon3, SidebarIcon4, SidebarIcon5, SidebarIcon6, SidebarIcon7, SidebarIcon8, SidebarIcon9, SidebarIcon10 } from '../assets/icons';
+import { SidebarIcon1, SidebarIcon2, SidebarIcon3, SidebarIcon4, SidebarIcon5, SidebarIcon6, SidebarIcon7, SidebarIcon9, SidebarIcon10 } from '../assets/icons';
 
 const NAV_ITEMS = [
   {
@@ -49,13 +49,12 @@ const NAV_ITEMS = [
 export default function Sidebar({ activeTab, onSelectTab, onLogout, onChangePassword, user }) {
   return (
     <aside className="fixed top-0 left-0 bottom-0 w-[280px] bg-[#0d2229] flex flex-col z-20 border-r border-white/5 select-none">
-      
       {/* ── HEADER CON LOGO OFICIAL ── */}
       <div className="p-6 border-b border-white/10 flex items-center gap-3.5">
         <LogoIFTS2 size={46} className="shrink-0" />
         <div>
-          <span 
-            className="text-white text-lg font-bold tracking-tight block leading-tight" 
+          <span
+            className="text-white text-lg font-bold tracking-tight block leading-tight"
             style={{ fontFamily: 'var(--font-display, serif)' }}
           >
             IFTS Nº 2
@@ -85,7 +84,9 @@ export default function Sidebar({ activeTab, onSelectTab, onLogout, onChangePass
               }`}
             >
               <div className="flex items-center gap-3.5 min-w-0">
-                <span className={isActive ? 'text-[#143340]' : 'text-[#8BD9CA]/80'}>
+                <span
+                  className={isActive ? 'text-[#143340]' : 'text-[#8BD9CA]/80'}
+                >
                   {item.icon}
                 </span>
                 <span className="truncate">{item.label}</span>
@@ -112,7 +113,13 @@ export default function Sidebar({ activeTab, onSelectTab, onLogout, onChangePass
             }`}
           >
             <div className="flex items-center gap-3.5 min-w-0">
-              <span className={activeTab === 'config' ? 'text-[#143340]' : 'text-[#8BD9CA]/80'}>
+              <span
+                className={
+                  activeTab === 'config'
+                    ? 'text-[#143340]'
+                    : 'text-[#8BD9CA]/80'
+                }
+              >
                 <SidebarIcon7 />
               </span>
               <span className="truncate">Configuración</span>
@@ -128,7 +135,12 @@ export default function Sidebar({ activeTab, onSelectTab, onLogout, onChangePass
       <div className="p-5 border-t border-white/10 space-y-2.5">
         <div className="flex items-center gap-3 px-1 py-1 mb-1">
           <div className="w-9 h-9 rounded-full bg-[#235459] flex items-center justify-center shrink-0">
-            <SidebarIcon8 />
+            <div className="w-8 h-8 rounded-full bg-petrol-900 text-mint-300 font-bold text-xs flex items-center justify-center">
+              {user.iniciales ||
+                (user.nombre_completo || user.nombre || 'US')
+                  .substring(0, 2)
+                  .toUpperCase()}
+            </div>
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-white text-xs font-semibold leading-tight truncate">
@@ -158,7 +170,6 @@ export default function Sidebar({ activeTab, onSelectTab, onLogout, onChangePass
           Cerrar sesión
         </button>
       </div>
-
     </aside>
   );
 }
