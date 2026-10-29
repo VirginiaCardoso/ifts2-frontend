@@ -72,7 +72,7 @@ export default function IngresantesSection() {
   }, []);
   return (
     <section
-      id="fechas-ingresantes"
+      id="carrera-requisitos"
       className="bg-petrol-50 px-4 py-12 text-petrol-900 scroll-mt-20 md:px-4 md:py-16"
     >
       <div className="mx-auto max-w-7xl">

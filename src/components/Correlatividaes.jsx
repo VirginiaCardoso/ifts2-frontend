@@ -50,7 +50,7 @@ export default function CorrelatividadesSection() {
   ];
 
   return (
-    <section id="carrera-correlatividades" className="py-12 md:py-16 px-4 bg-petrol-50 text-petrol-900 scroll-mt-20">
+    <section id="carrera-correlativas" className="py-12 md:py-16 px-4 bg-petrol-50 text-petrol-900 scroll-mt-20">
       <div className="max-w-7xl mx-auto">
         
         {/* Cabecera de la sección + Botón de Descarga PDF */}

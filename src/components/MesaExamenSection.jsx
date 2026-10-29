@@ -36,7 +36,7 @@ export default function MesaExamenSection() {
 
   return (
     <section
-      id="mesa-examen"
+      id="carrera-mesas"
       className="pt-3 pb-14 px-6 md:px-12 bg-petrol-50 text-petrol-900 font-sans w-full"
     >
       <div className="max-w-7xl mx-auto">

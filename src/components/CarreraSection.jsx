@@ -3,7 +3,7 @@ import { CarreraSectionIcon1, CarreraSectionIcon2, CarreraSectionIcon3 } from '.
 
 export default function CarreraSection() {
   return (
-    <section id="carrera" className="py-16 md:py-24 px-4 bg-petrol-900 text-white relative overflow-hidden">
+    <section id="institucional" className="py-16 md:py-24 px-4 bg-petrol-900 text-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         
         {/* Columna Izquierda: Información de la carrera */}

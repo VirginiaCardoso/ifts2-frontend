@@ -107,7 +107,7 @@ export default function HorariosMateriasSection() {
 
   return (
     <section
-      id="horarios-materias"
+      id="carrera-horarios"
       className="py-12 md:py-16 px-4 bg-petrol-50 text-petrol-900 animate-fade-in"
     >
       <div className="max-w-7xl mx-auto">
