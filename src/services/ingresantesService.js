@@ -13,6 +13,38 @@ export const ingresantesService = {
         return response.json();
     },
 
+    async actualizarEtapa (id, datos) {
+        const token = localStorage.getItem('ifts2_token');
+        const response = await fetch(`${API_URL}/api/ingresantes/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(datos)
+        });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.mensaje || 'Error al actualizar la etapa');
+        }
+        return response.json();
+    },
+
+    async eliminarEtapa (id) {
+       const token = localStorage.getItem('ifts2_token');
+       const response = await fetch(`${API_URL}/api/ingresantes/${id}`,{
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+       });
+       if (!response.ok) {
+           const errorData = await response.json().catch(() => ({}));
+           throw new Error(errorData.mensaje || 'Error al eliminar la etapa');
+       } 
+       return response.json();
+    },
+
     // Obtener el documento actual desde la tabla 'documentos'
     async obtenerDocumento() {
         const token = localStorage.getItem('ifts2_token');

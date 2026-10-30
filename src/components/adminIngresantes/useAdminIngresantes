@@ -6,6 +6,16 @@ export function useIngresantes() {
     const [etapas, setEtapas] = useState([]);
     const [error, setError] = useState(null);
 
+    const [editandoId, setEditandoId] = useState(null);
+    const [formEditado, setFormEditado] = useState({
+            nombre: '',
+            anio: '',
+            fecha_inicio: '',
+            fecha_fin: '',
+            descripcion: '',
+            requisitos: '',
+    });
+
     // 2. Estados para el manejo del PDF
     const [documentoActual, setDocumentoActual] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -16,7 +26,11 @@ export function useIngresantes() {
         try {
             setLoading(true);
             const data = await ingresantesService.obtenerDatosIngresantes();
-            setEtapas(Array.isArray(data) ? data : []);
+            const etapasOrdenadas = Array.isArray(data) 
+                ? data.sort((a, b) => a.id_etapa - b.id_etapa) 
+                : [];
+
+            setEtapas(etapasOrdenadas);
             setError(null);
 
         } catch (err) {
@@ -30,15 +44,23 @@ export function useIngresantes() {
         cargarDatos();
     }, []);
 
+    const formatearFecha = (fechaStr) => {
+        if (!fechaStr) return '';
+        const [anio, mes, dia] = fechaStr.split('T')[0].split('-');
+        return `${dia}/${mes}/${anio}`;
+    };
+
 
     // Cargar el documento actual de la base de datos al iniciar
     const cargarDocumento = async () => {
         try {
-            setLoading(true);
-            const data = await ingresantesService.obtenerDocumento();
-            setDocumentoActual(data); 
+           // setLoading(true);
+            //const data = await ingresantesService.obtenerDocumento();
+            //setDocumentoActual(data); 
+            setDocumentoActual({ nombre: 'ingresantes.pdf' });
         } catch (err) {
-            console.error('Error al obtener el documento:', err);
+            console.log("Documento omitido temporalmente");
+            //console.error('Error al obtener el documento:', err);
         } finally {
             setLoading(false);
         }
@@ -75,7 +97,48 @@ export function useIngresantes() {
     };
 
     const handleEditarEtapa = (id) => {
-        console.log("Editar etapa estática:", id);
+        
+        const etapaAEditar = etapas.find(e => e.id_etapa === id);
+
+        if (etapaAEditar) {
+            setEditandoId(id);
+            setFormEditado({
+                nombre: etapaAEditar.nombre || '',
+                anio: etapaAEditar.anio || '',
+                fecha_inicio: etapaAEditar.fecha_inicio ? etapaAEditar.fecha_inicio.split('T')[0] : '',
+                fecha_fin: etapaAEditar.fecha_fin ? etapaAEditar.fecha_fin.split('T')[0] : '',
+                descripcion: etapaAEditar.descripcion || '',
+                requisitos: etapaAEditar.requisitos || ''
+            })
+        }
+    };
+
+    //Handle para guardar los cambios editados
+    const handleGuardarEdicion = async (id_etapa) => {
+        try{
+            await ingresantesService.actualizarEtapa(id_etapa, formEditado);
+            //cerramos el formulario de edición limpiando el id
+            setEditandoId(null);
+            //recargamos los datos
+            await cargarDatos();
+        } catch(err){
+            console.error("Error al guardar la etapa:", err);
+            setError(err.message);
+        }
+    };
+
+    //Handle para eliminar etapa
+    const handleEliminarEtapa = async (id_etapa) => {
+        if (!window.confirm("¿Estás seguro que deseas eliminar la etapa?")) {
+            return;
+        }
+        try {
+            await ingresantesService.eliminarEtapa(id_etapa);
+            await cargarDatos();
+        } catch (err){
+            console.error("Error al eliminar la etapa:", err);
+            setError(err.message);
+        }
     };
 
     return {
@@ -84,8 +147,16 @@ export function useIngresantes() {
         loading,
         error,
         archivoSeleccionado,
+        formatearFecha,
         handleFileChange,
         handleSubirPdf,
-        handleEditarEtapa
+        handleEditarEtapa,
+        handleGuardarEdicion,
+        handleEliminarEtapa,
+        editandoId,
+        setEditandoId,
+        formEditado,
+        setFormEditado,
+        cargarDatos
     };
 }
