@@ -1,3 +1,4 @@
+import CarreraProvider from '../components/CarreraProvider';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -11,7 +12,7 @@ import Contacto from '../components/Contacto';
 import Footer from '../components/Footer';
 import PlanEstudiosSection from '../components/PlanEstudiosSection';
 import PromocionablesSection from '../components/PromocionablesSection';
-import CorrelatividadesSection from '../components/Correlatividaes';
+import CorrelatividadesSection from '../components/Correlatividades';
 import MesaExamenSection from '../components/MesaExamenSection';
 import IngresantesSection from '../components/IngresantesSection';
 import HorariosMateriasSection from '../components/HorariosMateriasSection';
@@ -26,7 +27,7 @@ export default function Home() {
     navigate('/admin');
   };
   return (
-    <div className="min-h-screen flex flex-col">
+    <CarreraProvider><div className="min-h-screen flex flex-col">
       {/* Barra */}
       <Navbar />
       <main>
@@ -64,6 +65,6 @@ export default function Home() {
               onClose={() => setIsLoginOpen(false)}
               onLoginSuccess={handleLoginSuccess}
             />
-    </div>
+    </div></CarreraProvider>
   );
 }

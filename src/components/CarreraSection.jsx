@@ -1,3 +1,4 @@
+import { CarreraAviso } from './CarreraPublica';
 import Button from './Button';
 import { CarreraSectionIcon1, CarreraSectionIcon2, CarreraSectionIcon3 } from '../assets/icons';
 
@@ -96,11 +97,7 @@ export default function CarreraSection() {
 
           {/* Badge Flotante "Ciclo 2027" */}
           <div className="absolute bottom-6 left-[-1rem] md:left-[-1.5rem] bg-white rounded-xl p-4 shadow-2xl max-w-[210px] text-petrol-900 border border-black/5">
-            <p className="font-display text-2xl leading-none">Ciclo 2027</p>
-            <p className="text-petrol-600 text-xs font-bold mt-1">Inscripciones abiertas</p>
-            <p className="text-petrol-900/80 text-[0.7rem] mt-1.5 leading-tight">
-              Habilitación en Noviembre desde la página del GCBA
-            </p>
+            <CarreraAviso />
           </div>
         </div>
 

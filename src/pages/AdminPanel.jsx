@@ -1,3 +1,4 @@
+import AdminCarrera from '../components/adminCarrera/AdminCarrera';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../components/AdminLayout';
@@ -33,6 +34,7 @@ export default function AdminPanel() {
       {activeTab === 'novedades' && <AdminNovedades />}
       {activeTab === 'plantel' && <AdminPlantel />}
       {activeTab === 'academica' && <GestionAcademica />}
+      {activeTab === 'carrera' && <AdminCarrera />}
       {activeTab === 'ingresantes' && <AdminIngresantes />}
       {activeTab === 'tramites' && <AdminTramitesView />}
       {/* Resto de módulos */}
