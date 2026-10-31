@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { useIngresantes } from './adminIngresantes/useAdminIngresantes';
 import BaseCard from './BaseCard';
 import Button from './Button';
