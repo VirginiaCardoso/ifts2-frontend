@@ -1487,8 +1487,7 @@ export const UploadIcon = () => (
   </svg>
 );
 
-export 
-function IconoEtapaIngresante({ tipo }) {
+export function IconoEtapaIngresante({ tipo }) {
   const paths = {
     documento: (
       <>
@@ -1529,7 +1528,7 @@ function IconoEtapaIngresante({ tipo }) {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      {paths[tipo]}
+      {paths[tipo] || paths.documento}
     </svg>
   );
 }
