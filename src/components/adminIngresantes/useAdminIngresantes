@@ -3,47 +3,35 @@ import { ingresantesService } from '../../services/ingresantesService';
 import { formatearFecha } from '../../utils/dateUtils';
 
 export function useIngresantes() {
-    
     const [etapas, setEtapas] = useState([]);
     const [error, setError] = useState(null);
-
     const [editandoId, setEditandoId] = useState(null);
     const [etapaAEliminar, setEtapaAEliminar] = useState(null);
     const [eliminandoEtapa, setEliminandoEtapa] = useState(false);
     const [mostrarFormularioNuevo, setMostrarFormularioNuevo] = useState(false);
     const [creandoEtapa, setCreandoEtapa] = useState(false);
-    const [formNuevaEtapa, setFormNuevaEtapa] = useState({
-        anio: '',
-        nombre: '',
-        descripcion: '',
-        fecha_inicio: '',
-        fecha_fin: '',
-        requisitos: '',
-        orden: ''
-    });
-    const [formEditado, setFormEditado] = useState({
-            nombre: '',
-            anio: '',
-            fecha_inicio: '',
-            fecha_fin: '',
-            descripcion: '',
-            requisitos: '',
-            orden: '',
-    });
 
     // Estados para el manejo del PDF
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadSuccessMessage, setUploadSuccessMessage] = useState('');
     const [documentoActual, setDocumentoActual] = useState(null);
     const [loading, setLoading] = useState(true);
     const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
 
-    //cargar datos desde backend al iniciar
+    const [formNuevaEtapa, setFormNuevaEtapa] = useState({
+        anio: '', nombre: '', descripcion: '', fecha_inicio: '', fecha_fin: '', requisitos: '', orden: ''
+    });
+    const [formEditado, setFormEditado] = useState({
+        nombre: '', anio: '', fecha_inicio: '', fecha_fin: '', descripcion: '', requisitos: '', orden: '',
+    });
+
+    // Cargar datos desde backend al iniciar
     const cargarDatos = async () => {
         try {
             setLoading(true);
             const data = await ingresantesService.obtenerDatosIngresantes();
             setEtapas(Array.isArray(data) ? data : []);
             setError(null);
-
         } catch (err) {
             setError(err.message);
         } finally {
@@ -51,33 +39,33 @@ export function useIngresantes() {
         }
     };
 
-    useEffect(() => {
-        cargarDatos();
-    }, []);
-
     // Cargar el documento actual de la base de datos al iniciar
     const cargarDocumento = async () => {
         try {
-           // setLoading(true);
-            //const data = await ingresantesService.obtenerDocumento();
-            //setDocumentoActual(data); 
-            setDocumentoActual({ nombre: 'ingresantes.pdf' });
+            const data = await ingresantesService.obtenerDocumento();
+            setDocumentoActual(data);
         } catch (err) {
-            console.log("Documento omitido temporalmente");
-            //console.error('Error al obtener el documento:', err);
-        } finally {
-            setLoading(false);
+            console.error('Error al obtener el documento:', err);
         }
     };
 
     useEffect(() => {
+        cargarDatos();
         cargarDocumento();
     }, []);
 
-    // para cuando el usuario selecciona un archivo
+    // Para cuando el usuario selecciona un archivo
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
+            if (file.type !== 'application/pdf') {
+                alert("Por favor, selecciona un archivo PDF válido.");
+                return;
+            }
+            if (file.size > 10 * 1024 * 1024) {
+                alert("El archivo supera los 10MB permitidos.");
+                return;
+            }
             setArchivoSeleccionado(file);
         }
     };
@@ -87,16 +75,24 @@ export function useIngresantes() {
         if (!archivoSeleccionado) return;
 
         try {
+            setIsUploading(true);
+
+            // Preparamos el FormData
             const formData = new FormData();
-           
             formData.append('documento', archivoSeleccionado);
 
-            await ingresantesService.actualizarDocumento(formData);
-            alert('PDF actualizado con éxito');
+            // Llamamos al servicio
+            const res = await ingresantesService.actualizarDocumento(formData);
+
             setArchivoSeleccionado(null);
-            cargarDocumento(); // Recargamos para mostrar el nuevo archivo actual
+
+            // Recargamos para mostrar el nombre del nuevo archivo en pantalla
+            await cargarDocumento();
+            setUploadSuccessMessage(res.mensaje || 'El PDF se actualizó correctamente.');
         } catch (err) {
             alert(err.message);
+        } finally {
+            setIsUploading(false);
         }
     };
 
@@ -190,6 +186,9 @@ export function useIngresantes() {
         confirmarEliminarEtapa,
         documentoActual,
         loading,
+        isUploading,
+        uploadSuccessMessage,
+        setUploadSuccessMessage,
         error,
         mostrarFormularioNuevo,
         setMostrarFormularioNuevo,

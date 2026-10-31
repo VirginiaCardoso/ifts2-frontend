@@ -31,7 +31,7 @@ export default function AdminConfiguracion(){
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    // 2. Envía el token al backend para que te autorice el acceso
+                    // Envía el token al backend para que te autorice el acceso
                     'Authorization': `Bearer ${token}` 
                 }
             });
@@ -202,7 +202,7 @@ export default function AdminConfiguracion(){
                     </div>
                 </div>
             </div>
-            {/* 3. FORMULARIO DESPLEGABLE*/}
+            {/* FORMULARIO DESPLEGABLE*/}
             {showForm && (
                 <UserForm 
                     onCancel={() => setShowForm(false)} 

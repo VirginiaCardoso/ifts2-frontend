@@ -70,7 +70,7 @@ export const ingresantesService = {
     // Obtener el documento actual desde la tabla 'documentos'
     async obtenerDocumento() {
         const token = localStorage.getItem('ifts2_token');
-        const response = await fetch(`${API_URL}/api/ingresantes/documento`, {
+        const response = await fetch(`${API_URL}/api/documentos/ingresantes`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -79,19 +79,23 @@ export const ingresantesService = {
         return response.json();
     },
 
-    // Actualizar el PDF
+    // Actualizar el PDF (Subir nuevo archivo)
     async actualizarDocumento(formData) {
         const token = localStorage.getItem('ifts2_token');
-        const response = await fetch(`${API_URL}/api/ingresantes/documento`, {
-            method: 'PUT',
+        const response = await fetch(`${API_URL}/api/documentos/ingresantes`, {
+            method: 'POST', // POST coincide con el router del back
             headers: {
                 'Authorization': `Bearer ${token}`
-                // Nota: Al usar FormData, fetch configura automáticamente el Content-Type con el boundary correcto.
+                // IMPORTANTE: NO pongas 'Content-Type': 'application/json' aquí.
+                // fetch configurará el Content-Type multipart/form-data automáticamente.
             },
             body: formData
         });
 
-        if (!response.ok) throw new Error('No se pudo actualizar el documento');
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.mensaje || 'No se pudo actualizar el documento');
+        }
         return response.json();
     }
 };

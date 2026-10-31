@@ -3,6 +3,8 @@ import { ingresantesService } from '../services/ingresantesService';
 import { IconoEtapaIngresante } from '../assets/icons';
 import { formatearFecha } from '../utils/dateUtils';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function IngresantesSection() {
   const [etapas, setEtapas] = useState([]);
   const [documento, setDocumento] = useState(null);
@@ -39,8 +41,8 @@ export default function IngresantesSection() {
 
         {/* Subtítulo*/}
         <p className="text-petrol-600 text-xs md:text-sm mb-8 leading-relaxed">
-          El proceso de admisión al IFTS N.º 2 se desarrolla en etapas.
-          A continuación encontrás el calendario orientativo de cada instancia.
+          El proceso de admisión al IFTS N.º 2 se desarrolla en etapas. A
+          continuación encontrás el calendario orientativo de cada instancia.
         </p>
 
         {/* Tarjetas de las etapas */}
@@ -71,7 +73,7 @@ export default function IngresantesSection() {
                   <p className="mt-2 font-body text-sm leading-6 text-petrol-800">
                     {etapa.descripcion}
                   </p>
-                  
+
                   {(etapa.fecha_inicio || etapa.fecha_fin) && (
                     <span className="inline-block mt-2 text-xs font-semibold text-petrol-600">
                       📅 {formatearFecha(etapa.fecha_inicio)}
@@ -102,18 +104,16 @@ export default function IngresantesSection() {
               </h3>
 
               <p className="mt-1 font-body text-sm text-petrol-600">
-                {documento?.nombre || 'Fechas, requisitos y detalles del proceso de admisión'}
+                {documento?.nombre ||
+                  'Fechas, requisitos y detalles del proceso de admisión'}
               </p>
             </div>
           </div>
-
           <a
-            href={documento?.url_archivo || '#contacto'}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-petrol-900 px-5 py-3 font-body text-xs font-bold text-mint-300 transition-colors hover:bg-petrol-800 focus:outline-none focus:ring-2 focus:ring-mint-400 w-fit"
+            href={`${API_URL}/api/documentos/ingresantes/descargar`}
+            className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-petrol-900 px-5 py-3 font-body text-xs font-bold text-mint-300 transition-colors focus:outline-none focus:ring-2 focus:ring-mint-400 w-fit `}
           >
-            Ver documento
+            Descargar documento
           </a>
         </div>
       </div>
