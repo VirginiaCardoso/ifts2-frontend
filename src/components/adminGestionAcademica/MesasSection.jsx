@@ -8,7 +8,7 @@ import {
 import { getProfesores, getMaterias } from '../../services/docentesService';
 import MesaCard from './MesaCard';
 import MesaForm from './MesaForm';
-import DeleteModal from './DeleteModal';
+import DeleteConfirmationModal from '../DeleteConfirmationModal';
 
 export default function MesasSection() {
   const [mesas, setMesas] = useState([]);
@@ -21,6 +21,7 @@ export default function MesasSection() {
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [mesaToDelete, setMesaToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // ── CARGA INICIAL DE DATOS ──
   useEffect(() => {
@@ -90,11 +91,14 @@ export default function MesasSection() {
 
   const handleDelete = async (id) => {
     try {
+      setIsDeleting(true);
       await deleteMesa(id);
       setMesas(mesas.filter((m) => m.id !== id));
       setMesaToDelete(null);
     } catch (err) {
       alert(err.message);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -176,12 +180,15 @@ export default function MesasSection() {
       </div>
 
       {/* Modal de Eliminación */}
-      <DeleteModal
-        item={mesaToDelete}
-        tipo="mesa"
-        onConfirm={handleDelete}
-        onCancel={() => setMesaToDelete(null)}
-      />
+      {mesaToDelete && (
+        <DeleteConfirmationModal
+          submitting={isDeleting}
+          title="¿Eliminar mesa?"
+          message={`La mesa "${mesaToDelete.materia_nombre} - ${mesaToDelete.fecha?.split('T')[0].split('-').reverse().join('/')} - ${mesaToDelete.hora?.slice(0, 5)} hs" será eliminada permanentemente.`}
+          onConfirm={() => handleDelete(mesaToDelete.id)}
+          onCancel={() => setMesaToDelete(null)}
+        />
+      )}
     </div>
   );
 }

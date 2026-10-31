@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import UsersTable from "./adminconfiguracion/UsersTable";
 import UserForm from "./adminconfiguracion/UserForm";
 import ChangePasswordModal from "./ChangePasswordModal";
-import DeleteConfirmationModal from "./adminNovedades/DeleteConfirmationModal";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import {
   ShieldIcon,
 } from '../assets/icons';

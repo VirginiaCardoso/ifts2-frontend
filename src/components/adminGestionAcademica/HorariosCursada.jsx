@@ -7,7 +7,7 @@ import {
 } from '../../services/horariosService';
 import { getProfesores, getMaterias } from '../../services/docentesService';
 import HorarioForm from './HorarioForm';
-import DeleteModal from './DeleteModal';
+import DeleteConfirmationModal from '../DeleteConfirmationModal';
 import { MesaLapiz, MesaTacho } from '../../assets/icons';
 
 export default function HorariosCursada() {
@@ -19,6 +19,7 @@ export default function HorariosCursada() {
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [horarioToDelete, setHorarioToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,11 +83,14 @@ export default function HorariosCursada() {
 
   const handleDelete = async (id) => {
     try {
+      setIsDeleting(true);
       await deleteHorario(id);
       setHorarios(horarios.filter((h) => h.id !== id));
       setHorarioToDelete(null);
     } catch (err) {
       alert(err.message);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -195,12 +199,15 @@ export default function HorariosCursada() {
         </div>
       </div>
 
-      <DeleteModal
-        item={horarioToDelete}
-        tipo="horario"
-        onConfirm={handleDelete}
-        onCancel={() => setHorarioToDelete(null)}
-      />
+      {horarioToDelete && (
+        <DeleteConfirmationModal
+          submitting={isDeleting}
+          title="¿Eliminar horario?"
+          message={`Se eliminará "${horarioToDelete.materia_nombre}" del ${horarioToDelete.dia_semana} a las ${horarioToDelete.hora_inicio?.slice(0, 5)}-${horarioToDelete.hora_fin?.slice(0, 5)} hs.`}
+          onConfirm={() => handleDelete(horarioToDelete.id)}
+          onCancel={() => setHorarioToDelete(null)}
+        />
+      )}
     </div>
   );
 }

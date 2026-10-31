@@ -2,7 +2,7 @@ import Button from './Button';
 import {
   AdminNovedadesIcon1,
 } from '../assets/icons';
-import DeleteConfirmationModal from './adminNovedades/DeleteConfirmationModal';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 import NewsFormModal from './adminNovedades/NewsFormModal';
 import NewsMetrics from './adminNovedades/NewsMetrics';
 import NewsTable from './adminNovedades/NewsTable';

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import MesaExamenCard from './MesaExamenCard';
 import { getMesas } from '../services/mesasService';
+import { formatearFecha } from '../utils/dateUtils';
 
 export default function MesaExamenSection() {
   const [mesas, setMesas] = useState([]);
@@ -21,13 +22,6 @@ export default function MesaExamenSection() {
     };
     fetchMesas();
   }, []);
-
-  // Helpers para dar formato a los datos de la base de datos
-  const formatearFecha = (fechaString) => {
-    if (!fechaString) return '';
-    const fecha = new Date(fechaString + 'T00:00:00');
-    return fecha.toLocaleDateString('es-AR', { day: 'numeric', month: 'long' });
-  };
 
   const formatearHora = (horaString) => {
     if (!horaString) return '';
@@ -65,7 +59,10 @@ export default function MesaExamenSection() {
                   turno={mesa.periodo}
                   anio={anioAMostrar}
                   materia={mesa.materia_nombre}
-                  fechas={formatearFecha(mesa.fecha)}
+                  fechas={formatearFecha(mesa.fecha, {
+                    day: 'numeric',
+                    month: 'long',
+                  })}
                   horario={formatearHora(mesa.hora)}
                   tribunal={mesa.tribunal?.map((p) => p.nombre_completo) || []}
                 />

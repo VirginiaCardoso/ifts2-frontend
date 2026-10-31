@@ -3,10 +3,12 @@ import BedelForm from './BedelForm';
 import BedelesTable from './BedelesTable';
 import ProfessorForm from './ProfessorForm';
 import ProfessorsTable from './ProfessorsTable';
+import DeleteConfirmationModal from '../DeleteConfirmationModal';
 
 export default function PlantelManagement({
   bedelForm,
   bedeles,
+  deleteTarget,
   editingBedelId,
   editingProfessorId,
   filteredProfesores,
@@ -30,6 +32,8 @@ export default function PlantelManagement({
   openEditProfessor,
   removeBedel,
   removeProfessor,
+  setDeleteTarget,
+  confirmDelete,
   saveBedel,
   saveProfessor,
   error,
@@ -127,6 +131,16 @@ export default function PlantelManagement({
           error={error}
           onEdit={openEditBedel}
           onDelete={removeBedel}
+        />
+      )}
+
+      {deleteTarget && (
+        <DeleteConfirmationModal
+          submitting={submitting}
+          title={`¿Eliminar ${deleteTarget.type === 'professor' ? 'docente' : 'bedel'}?`}
+          message={`Se eliminará "${deleteTarget.name}". Esta acción no se puede deshacer.`}
+          onCancel={() => setDeleteTarget(null)}
+          onConfirm={confirmDelete}
         />
       )}
     </section>

@@ -55,6 +55,7 @@ export default function useAdminPlantel() {
   const [isBedelFormOpen, setIsBedelFormOpen] = useState(false);
   const [editingBedelId, setEditingBedelId] = useState(null);
   const [bedelForm, setBedelForm] = useState(createBedelForm);
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   function updatePlantel(data) {
     setAutoridades(data.autoridades);
@@ -141,11 +142,25 @@ export default function useAdminPlantel() {
     }
   }
 
-  async function removeProfessor(id) {
-    if (!window.confirm('¿Desea eliminar a este integrante del plantel docente?')) return;
+  function removeProfessor(id) {
+    const professor = profesores.find((item) => item.id === id);
+    setDeleteTarget({
+      type: 'professor',
+      id,
+      name: professor?.nombre_completo || 'este integrante del plantel docente',
+    });
+  }
+
+  async function confirmDelete() {
+    if (!deleteTarget) return;
     try {
       setSubmitting(true);
-      await deleteProfesor(id);
+      if (deleteTarget.type === 'professor') {
+        await deleteProfesor(deleteTarget.id);
+      } else {
+        await deleteBedel(deleteTarget.id);
+      }
+      setDeleteTarget(null);
       await reloadPlantel();
     } catch (deleteError) {
       window.alert(deleteError.message || 'Error al eliminar');
@@ -187,17 +202,13 @@ export default function useAdminPlantel() {
     }
   }
 
-  async function removeBedel(id) {
-    if (!window.confirm('¿Desea eliminar este bedel?')) return;
-    try {
-      setSubmitting(true);
-      await deleteBedel(id);
-      await reloadPlantel();
-    } catch (deleteError) {
-      window.alert(deleteError.message || 'Error al eliminar');
-    } finally {
-      setSubmitting(false);
-    }
+  function removeBedel(id) {
+    const bedel = bedeles.find((item) => item.id === id);
+    setDeleteTarget({
+      type: 'bedel',
+      id,
+      name: bedel?.nombre || 'este bedel',
+    });
   }
 
   async function saveAuthority(authority) {
@@ -220,6 +231,7 @@ export default function useAdminPlantel() {
     autoridades,
     bedelForm,
     bedeles,
+    deleteTarget,
     editingAuthorityId,
     editingBedelId,
     editingProfessorId,
@@ -236,6 +248,7 @@ export default function useAdminPlantel() {
     authorityName,
     setAuthorityName,
     setBedelForm,
+    setDeleteTarget,
     setEditingAuthorityId,
     setIsBedelFormOpen,
     setIsProfessorFormOpen,
@@ -248,6 +261,7 @@ export default function useAdminPlantel() {
     openEditProfessor,
     removeBedel,
     removeProfessor,
+    confirmDelete,
     saveAuthority,
     saveBedel,
     saveProfessor,

@@ -4,18 +4,9 @@ import {
   MesaReloj,
   MesaTacho,
 } from '../../assets/icons';
+import { formatearFecha } from '../../utils/dateUtils';
 
 export default function MesaCard({ mesa, onEdit, onDelete }) {
-  const formatearFecha = (fechaString) => {
-    if (!fechaString) return '';
-    const fecha = new Date(fechaString + 'T00:00:00');
-    return fecha.toLocaleDateString('es-AR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-  };
-
   const formatearHora = (horaString) => {
     if (!horaString) return '';
     return horaString.slice(0, 5) + ' hs';
@@ -48,7 +39,11 @@ export default function MesaCard({ mesa, onEdit, onDelete }) {
         </div>
 
         <p className="font-bold text-[#143340] text-sm capitalize">
-          {formatearFecha(mesa.fecha)}
+          {formatearFecha(mesa.fecha, {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          })}
         </p>
 
         <div className="mt-2 flex-1">

@@ -1,52 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ingresantesService } from '../services/ingresantesService';
-
-
-function IconoEtapa({ tipo }) {
-  const paths = {
-    documento: (
-      <>
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <path d="M14 2v6h6M8 13h8M8 17h8" />
-      </>
-    ),
-    libro: (
-      <>
-        <path d="M12 7v14" />
-        <path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H12v18H5.5A2.5 2.5 0 0 1 3 18.5z" />
-        <path d="M21 5.5A2.5 2.5 0 0 0 18.5 3H12v18h6.5a2.5 2.5 0 0 0 2.5-2.5z" />
-      </>
-    ),
-    check: (
-      <>
-        <rect x="3" y="3" width="18" height="18" rx="2" />
-        <path d="m7 12 3 3 7-7" />
-      </>
-    ),
-    reloj: (
-      <>
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l3 2" />
-      </>
-    ),
-  };
-
-  return (
-    <svg
-      width="23"
-      height="23"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      {paths[tipo]}
-    </svg>
-  );
-}
+import { IconoEtapaIngresante } from '../assets/icons';
+import { formatearFecha } from '../utils/dateUtils';
 
 export default function IngresantesSection() {
   const [etapas, setEtapas] = useState([]);
@@ -57,7 +12,6 @@ export default function IngresantesSection() {
     const cargarDatosPublicos = async () => {
       try {
         setLoading(true);
-        // Llamada al servicio que conecta con el backend (ajusta la ruta según tu proyecto)
         const data = await ingresantesService.obtenerDatosIngresantes();
         setEtapas(Array.isArray(data) ? data : []);
         setDocumento(data.documento || null);
@@ -83,7 +37,7 @@ export default function IngresantesSection() {
           </h2>
         </div>
 
-        {/* Subtítulo aclaratorio */}
+        {/* Subtítulo*/}
         <p className="text-petrol-600 text-xs md:text-sm mb-8 leading-relaxed">
           El proceso de admisión al IFTS N.º 2 se desarrolla en etapas.
           A continuación encontrás el calendario orientativo de cada instancia.
@@ -102,13 +56,12 @@ export default function IngresantesSection() {
                 className="flex min-h-40 gap-4 rounded-2xl border border-petrol-100 bg-white p-5 md:p-6"
               >
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-petrol-900 text-mint-400">
-                  {/* Si tu base de datos no tiene iconos guardados, puedes usar uno por defecto o mapearlo */}
-                  <IconoEtapa tipo={etapa.icono || 'documento'} />
+                  <IconoEtapaIngresante tipo={etapa.icono || 'documento'} />
                 </div>
 
                 <div className="min-w-0">
                   <span className="inline-block rounded bg-petrol-900 px-2.5 py-1 text-[11px] font-bold tracking-wider text-mint-400">
-                    ETAPA {String(index + 1).padStart(2, '0')}
+                    ETAPA {String(etapa.orden ?? index + 1).padStart(2, '0')}
                   </span>
 
                   <h3 className="mt-2 font-body text-base font-bold leading-snug text-petrol-900">
@@ -119,9 +72,11 @@ export default function IngresantesSection() {
                     {etapa.descripcion}
                   </p>
                   
-                  {etapa.fecha_inicio && (
+                  {(etapa.fecha_inicio || etapa.fecha_fin) && (
                     <span className="inline-block mt-2 text-xs font-semibold text-petrol-600">
-                      📅 {etapa.fecha_inicio}
+                      📅 {formatearFecha(etapa.fecha_inicio)}
+                      {etapa.fecha_inicio && etapa.fecha_fin && ' - '}
+                      {etapa.fecha_fin && formatearFecha(etapa.fecha_fin)}
                     </span>
                   )}
                 </div>
@@ -138,7 +93,7 @@ export default function IngresantesSection() {
         <div className="mt-7 flex flex-col gap-4 rounded-2xl border border-petrol-100 bg-white p-5 sm:flex-row sm:items-center sm:justify-between md:px-6">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-mint-300 text-petrol-900">
-              <IconoEtapa tipo="documento" />
+              <IconoEtapaIngresante tipo="documento" />
             </div>
 
             <div>

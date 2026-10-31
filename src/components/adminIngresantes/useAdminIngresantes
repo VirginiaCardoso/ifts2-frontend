@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ingresantesService } from '../../services/ingresantesService';
+import { formatearFecha } from '../../utils/dateUtils';
 
 export function useIngresantes() {
     
@@ -7,6 +8,19 @@ export function useIngresantes() {
     const [error, setError] = useState(null);
 
     const [editandoId, setEditandoId] = useState(null);
+    const [etapaAEliminar, setEtapaAEliminar] = useState(null);
+    const [eliminandoEtapa, setEliminandoEtapa] = useState(false);
+    const [mostrarFormularioNuevo, setMostrarFormularioNuevo] = useState(false);
+    const [creandoEtapa, setCreandoEtapa] = useState(false);
+    const [formNuevaEtapa, setFormNuevaEtapa] = useState({
+        anio: '',
+        nombre: '',
+        descripcion: '',
+        fecha_inicio: '',
+        fecha_fin: '',
+        requisitos: '',
+        orden: ''
+    });
     const [formEditado, setFormEditado] = useState({
             nombre: '',
             anio: '',
@@ -14,9 +28,10 @@ export function useIngresantes() {
             fecha_fin: '',
             descripcion: '',
             requisitos: '',
+            orden: '',
     });
 
-    // 2. Estados para el manejo del PDF
+    // Estados para el manejo del PDF
     const [documentoActual, setDocumentoActual] = useState(null);
     const [loading, setLoading] = useState(true);
     const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
@@ -26,11 +41,7 @@ export function useIngresantes() {
         try {
             setLoading(true);
             const data = await ingresantesService.obtenerDatosIngresantes();
-            const etapasOrdenadas = Array.isArray(data) 
-                ? data.sort((a, b) => a.id_etapa - b.id_etapa) 
-                : [];
-
-            setEtapas(etapasOrdenadas);
+            setEtapas(Array.isArray(data) ? data : []);
             setError(null);
 
         } catch (err) {
@@ -43,13 +54,6 @@ export function useIngresantes() {
     useEffect(() => {
         cargarDatos();
     }, []);
-
-    const formatearFecha = (fechaStr) => {
-        if (!fechaStr) return '';
-        const [anio, mes, dia] = fechaStr.split('T')[0].split('-');
-        return `${dia}/${mes}/${anio}`;
-    };
-
 
     // Cargar el documento actual de la base de datos al iniciar
     const cargarDocumento = async () => {
@@ -108,7 +112,8 @@ export function useIngresantes() {
                 fecha_inicio: etapaAEditar.fecha_inicio ? etapaAEditar.fecha_inicio.split('T')[0] : '',
                 fecha_fin: etapaAEditar.fecha_fin ? etapaAEditar.fecha_fin.split('T')[0] : '',
                 descripcion: etapaAEditar.descripcion || '',
-                requisitos: etapaAEditar.requisitos || ''
+                requisitos: etapaAEditar.requisitos || '',
+                orden: etapaAEditar.orden ?? ''
             })
         }
     };
@@ -116,7 +121,10 @@ export function useIngresantes() {
     //Handle para guardar los cambios editados
     const handleGuardarEdicion = async (id_etapa) => {
         try{
-            await ingresantesService.actualizarEtapa(id_etapa, formEditado);
+            await ingresantesService.actualizarEtapa(id_etapa, {
+                ...formEditado,
+                orden: Number(formEditado.orden)
+            });
             //cerramos el formulario de edición limpiando el id
             setEditandoId(null);
             //recargamos los datos
@@ -127,25 +135,68 @@ export function useIngresantes() {
         }
     };
 
-    //Handle para eliminar etapa
-    const handleEliminarEtapa = async (id_etapa) => {
-        if (!window.confirm("¿Estás seguro que deseas eliminar la etapa?")) {
-            return;
-        }
+    const handleCrearEtapa = async () => {
         try {
-            await ingresantesService.eliminarEtapa(id_etapa);
+            setCreandoEtapa(true);
+            await ingresantesService.crearEtapa({
+                ...formNuevaEtapa,
+                anio: Number(formNuevaEtapa.anio),
+                orden: Number(formNuevaEtapa.orden)
+            });
+            setFormNuevaEtapa({
+                anio: '',
+                nombre: '',
+                descripcion: '',
+                fecha_inicio: '',
+                fecha_fin: '',
+                requisitos: '',
+                orden: ''
+            });
+            setMostrarFormularioNuevo(false);
+            await cargarDatos();
+        } catch (err) {
+            console.error('Error al crear la etapa:', err);
+            setError(err.message);
+        } finally {
+            setCreandoEtapa(false);
+        }
+    };
+
+    //Handle para eliminar etapa
+    const handleEliminarEtapa = (id_etapa) => {
+        setEtapaAEliminar(etapas.find((etapa) => etapa.id_etapa === id_etapa) || { id_etapa });
+    };
+
+    const confirmarEliminarEtapa = async () => {
+        if (!etapaAEliminar) return;
+        try {
+            setEliminandoEtapa(true);
+            await ingresantesService.eliminarEtapa(etapaAEliminar.id_etapa);
+            setEtapaAEliminar(null);
             await cargarDatos();
         } catch (err){
             console.error("Error al eliminar la etapa:", err);
             setError(err.message);
+        } finally {
+            setEliminandoEtapa(false);
         }
     };
 
     return {
         etapas,
+        etapaAEliminar,
+        setEtapaAEliminar,
+        eliminandoEtapa,
+        confirmarEliminarEtapa,
         documentoActual,
         loading,
         error,
+        mostrarFormularioNuevo,
+        setMostrarFormularioNuevo,
+        creandoEtapa,
+        formNuevaEtapa,
+        setFormNuevaEtapa,
+        handleCrearEtapa,
         archivoSeleccionado,
         formatearFecha,
         handleFileChange,
