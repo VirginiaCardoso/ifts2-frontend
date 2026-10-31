@@ -166,7 +166,6 @@ export default function Ingresantes() {
                     <input
                       name="fecha_inicio"
                       type="date"
-                      required
                       value={formNuevaEtapa.fecha_inicio}
                       onChange={(event) =>
                         setFormNuevaEtapa({
@@ -182,7 +181,6 @@ export default function Ingresantes() {
                     <input
                       name="fecha_fin"
                       type="date"
-                      required
                       value={formNuevaEtapa.fecha_fin}
                       onChange={(event) =>
                         setFormNuevaEtapa({
@@ -425,9 +423,15 @@ export default function Ingresantes() {
 
                     <div className="pt-3.5 space-y-2">
                       <div className="flex items-center gap-1.5 text-xs font-semibold text-petrol-900">
-                        <FooterIcon2 className="w-3.5 h-3.5" />
-                        <span>{formatearFecha(etapa.fecha_inicio)}</span>
-                        <span>- {formatearFecha(etapa.fecha_fin)}</span>
+                        {etapa.fecha_inicio || etapa.fecha_inicio ? (
+                          <>
+                            <FooterIcon2 className="w-3.5 h-3.5" />
+                            <span>{formatearFecha(etapa.fecha_inicio)}</span>
+                            <span>- {formatearFecha(etapa.fecha_fin)}</span>
+                          </>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                       <p className="text-xs text-petrol-500 leading-relaxed">
                         {etapa.descripcion}
