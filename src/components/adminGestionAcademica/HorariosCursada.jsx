@@ -9,8 +9,9 @@ import { getProfesores, getMaterias } from '../../services/docentesService';
 import HorarioForm from './HorarioForm';
 import DeleteConfirmationModal from '../DeleteConfirmationModal';
 import { MesaLapiz, MesaTacho } from '../../assets/icons';
+import { notifyActionError } from '../../utils/userRoles';
 
-export default function HorariosCursada() {
+export default function HorariosCursada({ user }) {
   const [horarios, setHorarios] = useState([]);
   const [materias, setMaterias] = useState([]);
   const [profesores, setProfesores] = useState([]);
@@ -77,7 +78,7 @@ export default function HorariosCursada() {
         setIsCreating(false);
       }
     } catch (err) {
-      alert(err.message);
+      notifyActionError(err, 'Error al guardar el horario', user);
     }
   };
 
@@ -88,7 +89,9 @@ export default function HorariosCursada() {
       setHorarios(horarios.filter((h) => h.id !== id));
       setHorarioToDelete(null);
     } catch (err) {
-      alert(err.message);
+      if (notifyActionError(err, 'Error al eliminar el horario', user)) {
+        setHorarioToDelete(null);
+      }
     } finally {
       setIsDeleting(false);
     }

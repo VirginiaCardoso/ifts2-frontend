@@ -12,6 +12,7 @@ import {
   updateBedel,
   updateProfesor,
 } from '../../services/docentesService';
+import { notifyActionError } from '../../utils/userRoles';
 
 function createProfessorForm() {
   return { nombre_completo: '', rol: 'titular', materias: [] };
@@ -136,7 +137,7 @@ export default function useAdminPlantel() {
       setIsProfessorFormOpen(false);
       await reloadPlantel();
     } catch (saveError) {
-      window.alert(saveError.message || 'Error al guardar docente');
+      notifyActionError(saveError, 'Error al guardar docente');
     } finally {
       setSubmitting(false);
     }
@@ -163,7 +164,9 @@ export default function useAdminPlantel() {
       setDeleteTarget(null);
       await reloadPlantel();
     } catch (deleteError) {
-      window.alert(deleteError.message || 'Error al eliminar');
+      if (notifyActionError(deleteError, 'Error al eliminar')) {
+        setDeleteTarget(null);
+      }
     } finally {
       setSubmitting(false);
     }
@@ -196,7 +199,7 @@ export default function useAdminPlantel() {
       setIsBedelFormOpen(false);
       await reloadPlantel();
     } catch (saveError) {
-      window.alert(saveError.message || 'Error al guardar bedel');
+      notifyActionError(saveError, 'Error al guardar bedel');
     } finally {
       setSubmitting(false);
     }
@@ -221,7 +224,7 @@ export default function useAdminPlantel() {
       setEditingAuthorityId(null);
       await reloadPlantel();
     } catch (saveError) {
-      window.alert(saveError.message || 'Error al actualizar autoridad');
+      notifyActionError(saveError, 'Error al actualizar autoridad');
     } finally {
       setSubmitting(false);
     }

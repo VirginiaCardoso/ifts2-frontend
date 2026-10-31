@@ -6,6 +6,7 @@ import {
   updateNovedad,
 } from '../../services/novedadesService';
 import { createInitialForm, mapFormToNews, mapNewsToForm } from './utils';
+import { notifyActionError } from '../../utils/userRoles';
 
 export default function useAdminNovedades() {
   const [noticias, setNoticias] = useState([]);
@@ -94,7 +95,7 @@ export default function useAdminNovedades() {
       setFormData(createInitialForm());
       await reloadNoticias();
     } catch (saveError) {
-      window.alert(saveError.message || 'Error al guardar la novedad');
+      notifyActionError(saveError, 'Error al guardar la novedad');
     } finally {
       setSubmitting(false);
     }
@@ -108,7 +109,9 @@ export default function useAdminNovedades() {
       setDeletingId(null);
       await reloadNoticias();
     } catch (deleteError) {
-      window.alert(deleteError.message || 'Error al eliminar la novedad');
+      if (notifyActionError(deleteError, 'Error al eliminar la novedad')) {
+        setDeletingId(null);
+      }
     } finally {
       setSubmitting(false);
     }

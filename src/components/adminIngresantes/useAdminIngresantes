@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ingresantesService } from '../../services/ingresantesService';
 import { formatearFecha } from '../../utils/dateUtils';
+import { showUnauthorizedActionModal } from '../../utils/userRoles';
 
 export function useIngresantes() {
     const [etapas, setEtapas] = useState([]);
@@ -90,7 +91,7 @@ export function useIngresantes() {
             await cargarDocumento();
             setUploadSuccessMessage(res.mensaje || 'El PDF se actualizó correctamente.');
         } catch (err) {
-            alert(err.message);
+            if (!showUnauthorizedActionModal(err)) alert(err.message);
         } finally {
             setIsUploading(false);
         }
@@ -127,6 +128,7 @@ export function useIngresantes() {
             await cargarDatos();
         } catch(err){
             console.error("Error al guardar la etapa:", err);
+            if (showUnauthorizedActionModal(err)) return;
             setError(err.message);
         }
     };
@@ -152,6 +154,7 @@ export function useIngresantes() {
             await cargarDatos();
         } catch (err) {
             console.error('Error al crear la etapa:', err);
+            if (showUnauthorizedActionModal(err)) return;
             setError(err.message);
         } finally {
             setCreandoEtapa(false);
@@ -172,6 +175,10 @@ export function useIngresantes() {
             await cargarDatos();
         } catch (err){
             console.error("Error al eliminar la etapa:", err);
+            if (showUnauthorizedActionModal(err)) {
+                setEtapaAEliminar(null);
+                return;
+            }
             setError(err.message);
         } finally {
             setEliminandoEtapa(false);

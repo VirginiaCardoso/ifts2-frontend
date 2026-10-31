@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import AdminTopbar from './AdminTopbar';
 import ChangePasswordModal from './ChangePasswordModal';
 import Alert from '../components/Alert'
+import ActionErrorModal from './ActionErrorModal';
 
 const TAB_METADATA = {
   novedades: {
@@ -46,6 +47,23 @@ export default function AdminLayout({
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [actionErrorMessage, setActionErrorMessage] = useState('');
+
+  useEffect(() => {
+    const handleUnauthorizedAction = (event) => {
+      setActionErrorMessage(event.detail.message);
+    };
+
+    window.addEventListener(
+      'ifts2:unauthorized-action',
+      handleUnauthorizedAction
+    );
+    return () =>
+      window.removeEventListener(
+        'ifts2:unauthorized-action',
+        handleUnauthorizedAction
+      );
+  }, []);
 
   const currentMeta = TAB_METADATA[activeTab] || {
     title: 'Panel de administración',
@@ -65,6 +83,12 @@ export default function AdminLayout({
         <div className="fixed top-6 right-6 z-50 shadow-xl rounded-lg min-w-[300px] animate-fade-in-down">
           <Alert variant="info">¡Contraseña actualizada con éxito!</Alert>
         </div>
+      )}
+      {actionErrorMessage && (
+        <ActionErrorModal
+          message={actionErrorMessage}
+          onClose={() => setActionErrorMessage('')}
+        />
       )}
 
       <Sidebar

@@ -60,20 +60,23 @@ src/
 ├── assets/
 │   └── icons/                 # Componentes SVG reutilizables
 ├── components/
+│   ├── adminGestionAcademica/ # Mesas de examen y horarios de cursada
 │   ├── adminNovedades/        # Formularios, métricas, tabla y lógica de novedades
 │   ├── adminPlantel/          # Autoridades, gestión, formularios y tablas de plantel
 │   └── *.jsx                  # Componentes de página, secciones y UI compartida
 ├── hooks/                     # Estado y lógica reutilizable de formularios y datos
 ├── pages/                     # Composición de páginas (Home, AdminPanel y Demo)
-└── services/                  # Comunicación HTTP con el backend
+├── services/                  # Comunicación HTTP con el backend
+└── utils/                     # Funciones compartidas, incluido el reconocimiento de roles
 ```
 
 ### Responsabilidades
 
 - **`pages/`** compone pantallas y conecta navegación o acciones de alto nivel.
-- **`components/`** contiene la interfaz reutilizable. Las carpetas `adminNovedades/` y `adminPlantel/` agrupan componentes y hooks propios de cada funcionalidad.
+- **`components/`** contiene la interfaz reutilizable. Las carpetas `adminGestionAcademica/`, `adminNovedades/` y `adminPlantel/` agrupan componentes y lógica propios de cada funcionalidad.
 - **`hooks/`** encapsula estado, carga de datos y comportamiento de formularios para mantener la vista enfocada en la presentación.
-- **`services/`** contiene las llamadas a la API: autenticación, contacto, novedades y docentes.
+- **`services/`** contiene las llamadas a la API, incluidos autenticación, contacto, novedades, docentes, mesas de examen y horarios.
+- **`utils/`** reúne funciones compartidas como la normalización del rol y el manejo de errores de autorización.
 - **`assets/icons/`** centraliza los íconos SVG y **`index.css`** configura Tailwind CSS v4, colores y tipografías del sitio.
 
 ## Rutas de la aplicación
@@ -86,6 +89,12 @@ src/
 
 La ruta `/admin` verifica que exista `ifts2_token` en el almacenamiento local del navegador. Al iniciar sesión, la aplicación guarda el token y los datos del usuario con las claves `ifts2_token` e `ifts2_user`. Esta comprobación del frontend mejora la navegación, pero no reemplaza la autenticación ni autorización que el backend debe aplicar en cada endpoint protegido.
 
+### Roles y permisos del panel
+
+El panel utiliza `nivel_de_acceso` (y los campos de rol disponibles en los datos de sesión) para identificar el rol **Gestión académica**, sin distinguir mayúsculas ni acentos. Para ese rol, la opción **Configuración** aparece deshabilitada y el acceso a esa sección también se bloquea desde la navegación del panel.
+
+La autorización efectiva corresponde siempre al backend. Si una operación administrativa devuelve un error `401` o `403`, o un mensaje que indique falta de autorización o permisos, el frontend muestra un modal de acceso no autorizado con el estilo del modal de eliminación. Los errores que no sean de autorización conservan su tratamiento habitual.
+
 ## Integración con el backend
 
 El frontend utiliza `VITE_API_URL` como origen y espera que el backend exponga, bajo `/api`, endpoints para:
@@ -94,6 +103,7 @@ El frontend utiliza `VITE_API_URL` como origen y espera que el backend exponga, 
 - Contacto: `POST /contacto`.
 - Novedades: `GET /novedades`, además de operaciones de creación, actualización y eliminación. La consulta administrativa envía `?admin=true`.
 - Plantel: `GET /autoridades`, `GET /profesores`, `GET /materias` y `GET /bedeles`; también se utilizan operaciones de creación, actualización y eliminación para las entidades administrables.
+- Gestión académica: `/mesas-examenes` y `/horarios-cursada`, con operaciones de consulta, creación, actualización y eliminación.
 
 Las operaciones administrativas envían el token guardado en `ifts2_token` como `Authorization: Bearer <token>`. El backend debe validar ese token y aplicar la autorización correspondiente. Las respuestas de error de la API deberían incluir una propiedad `error` cuando sea posible para mostrar mensajes útiles en la interfaz.
 

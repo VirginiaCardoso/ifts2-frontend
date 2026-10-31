@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { IconLinkEnlace, IconEditEnlace, IconCheckEnlace } from '../../assets/icons';
+import { notifyActionError } from '../../utils/userRoles';
 
 export default function EnlaceRow({ enlace, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -20,7 +21,7 @@ export default function EnlaceRow({ enlace, onSave }) {
       await onSave(enlace.id, url);
       setIsEditing(false);
     } catch (error) {
-      alert(error.message);
+      notifyActionError(error, 'Error al actualizar el enlace');
     } finally {
       setIsSaving(false);
     }

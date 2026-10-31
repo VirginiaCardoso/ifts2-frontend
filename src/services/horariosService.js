@@ -1,3 +1,5 @@
+import { createHttpError } from './httpError';
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 function getAuthHeaders() {
@@ -21,8 +23,10 @@ export async function createHorario(data) {
     headers: getAuthHeaders(),
     body: JSON.stringify(data)
   });
-  const resData = await res.json();
-  if (!res.ok) throw new Error(resData.error || 'Error al crear horario');
+  const resData = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw createHttpError(res, resData, 'Error al crear horario');
+  }
   return resData;
 }
 
@@ -32,8 +36,10 @@ export async function updateHorario(id, data) {
     headers: getAuthHeaders(),
     body: JSON.stringify(data)
   });
-  const resData = await res.json();
-  if (!res.ok) throw new Error(resData.error || 'Error al actualizar horario');
+  const resData = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw createHttpError(res, resData, 'Error al actualizar horario');
+  }
   return resData;
 }
 
@@ -42,7 +48,9 @@ export async function deleteHorario(id) {
     method: 'DELETE',
     headers: getAuthHeaders()
   });
-  const resData = await res.json();
-  if (!res.ok) throw new Error(resData.error || 'Error al eliminar horario');
+  const resData = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw createHttpError(res, resData, 'Error al eliminar horario');
+  }
   return resData;
 }

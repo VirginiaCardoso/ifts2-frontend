@@ -1,5 +1,6 @@
 import LogoIFTS2 from './LogoIFTS2';
 import { SidebarIcon1, SidebarIcon2, SidebarIcon3, SidebarIcon4, SidebarIcon5, SidebarIcon6, SidebarIcon7, SidebarIcon9, SidebarIcon10 } from '../assets/icons';
+import { isGestionAcademicaRole } from '../utils/userRoles';
 
 const NAV_ITEMS = [
   {
@@ -47,6 +48,8 @@ const NAV_ITEMS = [
 ];
 
 export default function Sidebar({ activeTab, onSelectTab, onLogout, onChangePassword, user }) {
+  const isGestionAcademica = isGestionAcademicaRole(user);
+
   return (
     <aside className="fixed top-0 left-0 bottom-0 w-[280px] bg-[#0d2229] flex flex-col z-20 border-r border-white/5 select-none">
       {/* ── HEADER CON LOGO OFICIAL ── */}
@@ -105,26 +108,37 @@ export default function Sidebar({ activeTab, onSelectTab, onLogout, onChangePass
           </p>
 
           <button
+            type="button"
+            disabled={isGestionAcademica}
             onClick={() => onSelectTab('config')}
-            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-[0.85rem] transition-all cursor-pointer ${
-              activeTab === 'config'
+            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-[0.85rem] transition-all ${
+              isGestionAcademica
+                ? 'text-white/30 cursor-not-allowed'
+                : activeTab === 'config'
                 ? 'bg-[#8BD9CA] text-[#143340] font-bold shadow-sm'
-                : 'text-[#C2F2E9]/75 font-medium hover:bg-white/5 hover:text-white'
+                : 'text-[#C2F2E9]/75 font-medium hover:bg-white/5 hover:text-white cursor-pointer'
             }`}
           >
             <div className="flex items-center gap-3.5 min-w-0">
               <span
                 className={
-                  activeTab === 'config'
+                  !isGestionAcademica && activeTab === 'config'
                     ? 'text-[#143340]'
-                    : 'text-[#8BD9CA]/80'
+                    : isGestionAcademica
+                      ? 'text-white/30'
+                      : 'text-[#8BD9CA]/80'
                 }
               >
                 <SidebarIcon7 />
               </span>
-              <span className="truncate">Configuración</span>
+              <span
+                className="truncate"
+                title={isGestionAcademica ? 'No disponible para este rol' : undefined}
+              >
+                Configuración
+              </span>
             </div>
-            {activeTab === 'config' && (
+            {!isGestionAcademica && activeTab === 'config' && (
               <span className="w-2 h-2 rounded-full bg-[#143340] shrink-0" />
             )}
           </button>

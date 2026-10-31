@@ -8,6 +8,7 @@ import GestionAcademica from '../components/adminGestionAcademica/GestionAcademi
 import AdminIngresantes from '../components/AdminIngresantes';
 import AdminConfiguracion from '../components/AdminConfiguracion';
 import AdminTramitesView from '../components/adminTramites/AdminTramitesView';
+import { isGestionAcademicaRole } from '../utils/userRoles';
 
 
 export default function AdminPanel() {
@@ -16,6 +17,12 @@ export default function AdminPanel() {
 
   // Datos del usuario logueado en la sesión
   const currentUser = JSON.parse(localStorage.getItem('ifts2_user') || '{}');
+  const isGestionAcademica = isGestionAcademicaRole(currentUser);
+
+  const handleSelectTab = (tab) => {
+    if (tab === 'config' && isGestionAcademica) return;
+    setActiveTab(tab);
+  };
 
   // Cierre de sesión
   const handleLogout = () => {
@@ -27,18 +34,18 @@ export default function AdminPanel() {
   return (
     <AdminLayout
       activeTab={activeTab}
-      onSelectTab={setActiveTab}
+      onSelectTab={handleSelectTab}
       onLogout={handleLogout}
       user={currentUser}
     >
       {activeTab === 'novedades' && <AdminNovedades />}
       {activeTab === 'plantel' && <AdminPlantel />}
-      {activeTab === 'academica' && <GestionAcademica />}
+      {activeTab === 'academica' && <GestionAcademica user={currentUser} />}
       {activeTab === 'carrera' && <AdminCarrera />}
       {activeTab === 'ingresantes' && <AdminIngresantes />}
       {activeTab === 'tramites' && <AdminTramitesView />}
       {/* Resto de módulos */}
-      {activeTab === 'config' && <AdminConfiguracion />}
+      {activeTab === 'config' && !isGestionAcademica && <AdminConfiguracion />}
     </AdminLayout>
   );
 }

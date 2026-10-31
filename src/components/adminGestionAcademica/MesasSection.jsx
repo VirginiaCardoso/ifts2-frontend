@@ -9,8 +9,9 @@ import { getProfesores, getMaterias } from '../../services/docentesService';
 import MesaCard from './MesaCard';
 import MesaForm from './MesaForm';
 import DeleteConfirmationModal from '../DeleteConfirmationModal';
+import { notifyActionError } from '../../utils/userRoles';
 
-export default function MesasSection() {
+export default function MesasSection({ user }) {
   const [mesas, setMesas] = useState([]);
   const [materias, setMaterias] = useState([]);
   const [profesores, setProfesores] = useState([]);
@@ -85,7 +86,7 @@ export default function MesasSection() {
         setIsCreating(false);
       }
     } catch (err) {
-      alert(err.message);
+      notifyActionError(err, 'Error al guardar la mesa', user);
     }
   };
 
@@ -96,7 +97,9 @@ export default function MesasSection() {
       setMesas(mesas.filter((m) => m.id !== id));
       setMesaToDelete(null);
     } catch (err) {
-      alert(err.message);
+      if (notifyActionError(err, 'Error al eliminar la mesa', user)) {
+        setMesaToDelete(null);
+      }
     } finally {
       setIsDeleting(false);
     }

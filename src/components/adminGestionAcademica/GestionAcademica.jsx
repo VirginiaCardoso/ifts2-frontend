@@ -1,11 +1,11 @@
 import MesasSection from './MesasSection';
 import HorariosCursada from './HorariosCursada';
 
-export default function GestionAcademica() {
+export default function GestionAcademica({ user }) {
   return (
     <>
-      <MesasSection />
-      <HorariosCursada />
+      <MesasSection user={user} />
+      <HorariosCursada user={user} />
     </>
   );
 }

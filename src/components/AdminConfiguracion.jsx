@@ -6,6 +6,7 @@ import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import {
   ShieldIcon,
 } from '../assets/icons';
+import { notifyActionError } from '../utils/userRoles';
 
 
 export default function AdminConfiguracion(){
@@ -97,7 +98,7 @@ export default function AdminConfiguracion(){
             cargarUsuarios();
         } catch (error) {
             console.error('Error al actualizar usuario:', error);
-            alert(error.message);
+            notifyActionError(error, 'No se pudo actualizar el usuario');
         }
     };
 
@@ -126,7 +127,7 @@ export default function AdminConfiguracion(){
             
         } catch (error) {
             console.error('Error al eliminar usuario:', error);
-            alert(error.message);
+            notifyActionError(error, 'No se pudo eliminar el usuario');
         } finally {
             setIsDeleting(false);
         }
@@ -158,94 +159,105 @@ export default function AdminConfiguracion(){
     };
 
     return (
-        <div className="w-full space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-                <div>
-                    <h1 className="font-display text-petrol-900 text-3xl md:text-4xl leading-tight">
-                        Configuración de Usuarios y Accesos
-                    </h1>
-                    <p className="text-petrol-600 text-sm font-medium mt-1">
-                        Administrá las cuentas con acceso al panel. Podés crear usuarios, restablecer contraseñas y gestionar roles.
-                    </p>
-                </div>
-            </div>
-            <div className="bg-emerald-50/60 border border-emerald-100 rounded-xl p-4 flex items-start gap-3">
-                <div className="bg-emerald-100 p-2 rounded-lg text-emerald-700 mt-0.5">
-                    <ShieldIcon />
-                </div>
-                <div>
-                    <h4 className="font-bold text-slate-800 text-sm">
-                        Acceso seguro sin límite de usuarios
-                    </h4>
-                    <p className="text-xs text-slate-500 mt-0.5">
-                        Cada cuenta tiene credenciales independientes. Las contraseñas se almacenan cifradas y nunca se muestran en texto plano.
-                    </p>
-                </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-white border border-slate-200/80 rounded-xl p-4 flex items-start gap-3 shadow-sm">
-                    <div className="bg-emerald-50 p-2 rounded-lg text-emerald-600">
-                        <ShieldIcon />
-                    </div>
-                    <div>
-                        <h4 className="font-bold text-slate-800 text-sm">Administrador general</h4>
-                        <p className="text-xs text-slate-500 mt-0.5">Puede editar todas las secciones y administrar usuarios.</p>
-                    </div>
-                </div>
-                <div className="bg-white border border-slate-200/80 rounded-xl p-4 flex items-start gap-3 shadow-sm">
-                    <div className="bg-emerald-50 p-2 rounded-lg text-emerald-600">
-                        <ShieldIcon />
-                    </div>
-                    <div>
-                        <h4 className="font-bold text-slate-800 text-sm">Administrador general</h4>
-                        <p className="text-xs text-slate-500 mt-0.5">Puede editar todas las secciones y administrar usuarios.</p>
-                    </div>
-                </div>
-            </div>
-            {/* FORMULARIO DESPLEGABLE*/}
-            {showForm && (
-                <UserForm 
-                    onCancel={() => setShowForm(false)} 
-                    onSubmitSuccess={handleFormSubmit} 
-                />
-            )}
-            <div>
-                   <UsersTable 
-                    error={error}
-                    loading={loading}
-                    users={filteredUsers}
-                    searchTerm={searchTerm}
-                    onSearchChange={setSearchTerm}
-                    onEdit={handleEdit}
-                    onResetPassword={handleResetPassword}
-                    onDelete={handleDelete}
-                    onCreateNew={handleCreateNew}
-                    editingId={editingId}
-                    editForm={editForm}
-                    setEditForm={setEditForm}
-                    onSaveEdit={handleSaveEdit}
-                    onCancelEdit={handleCancelEdit}                           
-                   />
-            </div>
-            <ChangePasswordModal 
-                isOpen={Boolean(userForPasswordReset)}
-                onClose={() => setUserForPasswordReset(null)}
-                user={userForPasswordReset}
-                onSuccess={() => {
-                    alert("Contraseña restablecida con éxito");
-                    setUserForPasswordReset(null);
-                }}
-            />
-            
-            {userToDelete && (
-                <DeleteConfirmationModal
-                    submitting={isDeleting}
-                    onCancel={() => setUserToDelete(null)}
-                    onConfirm={confirmarEliminacion}
-                    title={`¿Eliminar el usuario: ${userToDelete.nombre_completo || userToDelete.nombre}?`}
-                    message="Esta acción no se puede deshacer."
-                />
-            )}
+      <div className="w-full space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+          <div>
+            <h1 className="font-display text-petrol-900 text-3xl md:text-4xl leading-tight">
+              Configuración de Usuarios y Accesos
+            </h1>
+            <p className="text-petrol-600 text-sm font-medium mt-1">
+              Administrá las cuentas con acceso al panel. Podés crear usuarios,
+              restablecer contraseñas y gestionar roles.
+            </p>
+          </div>
         </div>
+        <div className="bg-emerald-50/60 border border-emerald-100 rounded-xl p-4 flex items-start gap-3">
+          <div className="bg-emerald-100 p-2 rounded-lg text-emerald-700 mt-0.5">
+            <ShieldIcon />
+          </div>
+          <div>
+            <h4 className="font-bold text-slate-800 text-sm">
+              Acceso seguro sin límite de usuarios
+            </h4>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Cada cuenta tiene credenciales independientes. Las contraseñas se
+              almacenan cifradas y nunca se muestran en texto plano.
+            </p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-white border border-slate-200/80 rounded-xl p-4 flex items-start gap-3 shadow-sm">
+            <div className="bg-emerald-50 p-2 rounded-lg text-emerald-600">
+              <ShieldIcon />
+            </div>
+            <div>
+              <h4 className="font-bold text-slate-800 text-sm">
+                Administrador general
+              </h4>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Puede editar todas las secciones y administrar usuarios.
+              </p>
+            </div>
+          </div>
+          <div className="bg-white border border-slate-200/80 rounded-xl p-4 flex items-start gap-3 shadow-sm">
+            <div className="bg-emerald-50 p-2 rounded-lg text-emerald-600">
+              <ShieldIcon />
+            </div>
+            <div>
+              <h4 className="font-bold text-slate-800 text-sm">
+                Gestión académica
+              </h4>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Puede editar alumnos, horarios, mesas de examen y contenidos
+                académicos.
+              </p>
+            </div>
+          </div>
+        </div>
+        {/* FORMULARIO DESPLEGABLE*/}
+        {showForm && (
+          <UserForm
+            onCancel={() => setShowForm(false)}
+            onSubmitSuccess={handleFormSubmit}
+          />
+        )}
+        <div>
+          <UsersTable
+            error={error}
+            loading={loading}
+            users={filteredUsers}
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            onEdit={handleEdit}
+            onResetPassword={handleResetPassword}
+            onDelete={handleDelete}
+            onCreateNew={handleCreateNew}
+            editingId={editingId}
+            editForm={editForm}
+            setEditForm={setEditForm}
+            onSaveEdit={handleSaveEdit}
+            onCancelEdit={handleCancelEdit}
+          />
+        </div>
+        <ChangePasswordModal
+          isOpen={Boolean(userForPasswordReset)}
+          onClose={() => setUserForPasswordReset(null)}
+          user={userForPasswordReset}
+          onSuccess={() => {
+            alert('Contraseña restablecida con éxito');
+            setUserForPasswordReset(null);
+          }}
+        />
+
+        {userToDelete && (
+          <DeleteConfirmationModal
+            submitting={isDeleting}
+            onCancel={() => setUserToDelete(null)}
+            onConfirm={confirmarEliminacion}
+            title={`¿Eliminar el usuario: ${userToDelete.nombre_completo || userToDelete.nombre}?`}
+            message="Esta acción no se puede deshacer."
+          />
+        )}
+      </div>
     );
 }

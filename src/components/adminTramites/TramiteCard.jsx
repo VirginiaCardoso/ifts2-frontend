@@ -7,6 +7,7 @@ import {
   IconSwapTramite,
   IconEditTramite,
 } from '../../assets/icons';
+import { notifyActionError } from '../../utils/userRoles';
 
 export default function TramiteCard({ tramite, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -33,7 +34,7 @@ export default function TramiteCard({ tramite, onSave }) {
       });
       setIsEditing(false);
     } catch (error) {
-      alert(error.message);
+      notifyActionError(error, 'Error al actualizar el trámite');
     } finally {
       setIsSaving(false);
     }
