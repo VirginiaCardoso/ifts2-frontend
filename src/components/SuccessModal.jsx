@@ -1,4 +1,5 @@
 import Button from './Button';
+import { SuccessModalIcon } from '../assets/icons';
 
 export default function SuccessModal({ title, message, onClose }) {
   return (
@@ -13,21 +14,13 @@ export default function SuccessModal({ title, message, onClose }) {
         className="bg-white border border-petrol-100 rounded-2xl p-6 max-w-sm w-full text-center space-y-4 shadow-xl"
       >
         <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center">
-          <svg
-            aria-hidden="true"
-            className="w-6 h-6"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="m5 12 4 4L19 6" />
-          </svg>
+          <SuccessModalIcon />
         </div>
         <div>
-          <h3 id="success-modal-title" className="font-bold text-base text-petrol-900">
+          <h3
+            id="success-modal-title"
+            className="font-bold text-base text-petrol-900"
+          >
             {title}
           </h3>
           <p className="text-xs text-petrol-600 mt-1">{message}</p>
