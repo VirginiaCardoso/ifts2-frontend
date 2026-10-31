@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ingresantesService } from '../services/ingresantesService';
 import { IconoEtapaIngresante } from '../assets/icons';
 import { formatearFecha } from '../utils/dateUtils';
+import { DownloadIcon } from '../assets/icons';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -138,16 +139,22 @@ export default function IngresantesSection() {
               href={`${API_URL}/api/documentos/ingresantes/descargar`}
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-petrol-900 px-5 py-3 font-body text-xs font-bold text-mint-300 transition-colors hover:bg-petrol-800 focus:outline-none focus:ring-2 focus:ring-mint-400 w-fit"
             >
-              Descargar documento
+              <DownloadIcon />
+              Ver documento
             </a>
           ) : (
             <button
               type="button"
               disabled
-              title={documentoLoading ? 'Cargando documento' : 'No hay documento disponible'}
+              title={
+                documentoLoading
+                  ? 'Cargando documento'
+                  : 'No hay documento disponible'
+              }
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-gray-300 px-5 py-3 font-body text-xs font-bold text-gray-500 cursor-not-allowed w-fit"
             >
-              Descargar documento
+              <DownloadIcon />
+              Ver documento
             </button>
           )}
         </div>
