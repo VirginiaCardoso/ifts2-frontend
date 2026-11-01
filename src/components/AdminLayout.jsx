@@ -78,7 +78,20 @@ export default function AdminLayout({
   };
 
   return (
-    <div className="min-h-screen bg-petrol-50 flex">
+    <div
+      className="min-h-screen bg-petrol-50 flex"
+      onInputCapture={(event) => event.target.setCustomValidity?.('')}
+      onSubmitCapture={(event) => {
+        const vacio = [...event.target.querySelectorAll('input[required], textarea[required], select[required]')]
+          .find((campo) => !campo.matches(':disabled') && !['checkbox', 'radio', 'file'].includes(campo.type) && !campo.value.trim());
+        if (vacio) {
+          event.preventDefault();
+          event.stopPropagation();
+          vacio.setCustomValidity('Completá este campo. No puede contener solo espacios.');
+          vacio.reportValidity();
+        }
+      }}
+    >
       {showSuccessAlert && (
         <div className="fixed top-6 right-6 z-50 shadow-xl rounded-lg min-w-[300px] animate-fade-in-down">
           <Alert variant="info">¡Contraseña actualizada con éxito!</Alert>

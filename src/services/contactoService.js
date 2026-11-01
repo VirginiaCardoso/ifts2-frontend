@@ -1,9 +1,10 @@
+import { fetchApi } from './httpError';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export const contactoService = {
     enviarConsulta: async (datosFormulario) => {
         try {
-            const response = await fetch(`${API_URL}/api/contacto`, {
+            const response = await fetchApi(`${API_URL}/api/contacto`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

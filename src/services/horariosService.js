@@ -1,4 +1,4 @@
-import { createHttpError } from './httpError';
+import { createHttpError, fetchApi } from './httpError';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -12,13 +12,13 @@ function getAuthHeaders() {
 
 
 export async function getHorarios() {
-  const res = await fetch(`${API_URL}/api/horarios-cursada`, { headers: getAuthHeaders() });
+  const res = await fetchApi(`${API_URL}/api/horarios-cursada`, { headers: getAuthHeaders() });
   if (!res.ok) throw new Error('Error al obtener los horarios');
   return res.json();
 }
 
 export async function createHorario(data) {
-  const res = await fetch(`${API_URL}/api/horarios-cursada`, {
+  const res = await fetchApi(`${API_URL}/api/horarios-cursada`, {
     method: 'POST',
     headers: getAuthHeaders(),
     body: JSON.stringify(data)
@@ -31,7 +31,7 @@ export async function createHorario(data) {
 }
 
 export async function updateHorario(id, data) {
-  const res = await fetch(`${API_URL}/api/horarios-cursada/${id}`, {
+  const res = await fetchApi(`${API_URL}/api/horarios-cursada/${id}`, {
     method: 'PUT',
     headers: getAuthHeaders(),
     body: JSON.stringify(data)
@@ -44,7 +44,7 @@ export async function updateHorario(id, data) {
 }
 
 export async function deleteHorario(id) {
-  const res = await fetch(`${API_URL}/api/horarios-cursada/${id}`, {
+  const res = await fetchApi(`${API_URL}/api/horarios-cursada/${id}`, {
     method: 'DELETE',
     headers: getAuthHeaders()
   });

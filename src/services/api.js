@@ -1,3 +1,4 @@
+import { fetchApi } from './httpError';
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export async function fetchWithAuth(endpoint, options = {}) {
@@ -9,7 +10,7 @@ export async function fetchWithAuth(endpoint, options = {}) {
     ...options.headers,
   };
 
-  const response = await fetch(`${API_BASE}${endpoint}`, {
+  const response = await fetchApi(`${API_BASE}${endpoint}`, {
     ...options,
     headers,
   });
