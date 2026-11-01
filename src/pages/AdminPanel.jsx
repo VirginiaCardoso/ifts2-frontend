@@ -41,7 +41,7 @@ export default function AdminPanel() {
       {activeTab === 'novedades' && <AdminNovedades />}
       {activeTab === 'plantel' && <AdminPlantel />}
       {activeTab === 'academica' && <GestionAcademica user={currentUser} />}
-      {activeTab === 'carrera' && <AdminCarrera />}
+      {activeTab === 'carrera' && <AdminCarrera user={currentUser} />}
       {activeTab === 'ingresantes' && <AdminIngresantes />}
       {activeTab === 'tramites' && <AdminTramitesView />}
       {/* Resto de módulos */}

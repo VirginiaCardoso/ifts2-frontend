@@ -4,7 +4,7 @@ import MateriasPanel from './MateriasPanel';
 import ReglasPanel from './ReglasPanel';
 import AvisosArchivos from './AvisosArchivos';
 import { boton, Dialogo } from './Controles';
-export default function AdminCarrera() {
+export default function AdminCarrera({ user }) {
   const [data, setData] = useState(null);
   const [profesores, setProfesores] = useState([]);
   const [tab, setTab] = useState('materias');
@@ -100,6 +100,7 @@ export default function AdminCarrera() {
         <>
           <AvisosArchivos
             data={data}
+            puedeEditarAviso={user?.nivel_de_acceso === 'Administrador General'}
             busy={busy}
             ejecutar={ejecutar}
             pedirEliminar={pedirEliminar}
