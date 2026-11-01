@@ -27,7 +27,7 @@ export default function HeroSection() {
           
           {/* Botones */}
           <div className="flex flex-wrap gap-3">
-            <Button variant="primary" onClick={() => document.getElementById('carrera')?.scrollIntoView({ behavior: 'smooth' })}>
+            <Button variant="primary" onClick={() => document.getElementById('carrera-plan')?.scrollIntoView({ behavior: 'smooth' })}>
               Conocé la carrera
             </Button>
             <Button variant="secondary" onClick={() => window.open('https://guarani-gestionagencia.bue.edu.ar/')}>
