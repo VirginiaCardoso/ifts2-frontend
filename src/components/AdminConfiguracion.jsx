@@ -1,3 +1,5 @@
+import { createHttpError, fetchApi } from '../services/httpError';
+import { validateUser } from '../utils/validateUser';
 import { useState, useEffect } from "react";
 import UsersTable from "./adminconfiguracion/UsersTable";
 import UserForm from "./adminconfiguracion/UserForm";
@@ -13,6 +15,7 @@ export default function AdminConfiguracion(){
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [actionError, setActionError] = useState('');
     //para mostrar u ocultar el formulario
     const [showForm, setShowForm] = useState(false);
     const [editingId, setEditingId] = useState(null); //guarda el id del usuario en edición
@@ -28,7 +31,7 @@ export default function AdminConfiguracion(){
         setError(null);
         try {
             const token = localStorage.getItem('ifts2_token');
-            const response = await fetch('http://localhost:3000/api/usuarios' , {
+            const response = await fetchApi(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/usuarios` , {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -64,7 +67,7 @@ export default function AdminConfiguracion(){
 
     //funciones para editar usuario
     const handleEdit = (user) => {
-        console.log("Iniciando edición para el usuario:", user);
+        setActionError('');
         setEditingId(user.id);
         setEditForm({
             nombre_completo: user.nombre_completo,
@@ -80,9 +83,12 @@ export default function AdminConfiguracion(){
     };
     //envía los datos actualizados al backend
     const handleSaveEdit = async (id) => {
+        const validation = validateUser(editForm);
+        if (validation) { setActionError(validation); return; }
+        setActionError('');
         try{
             const token = localStorage.getItem('ifts2_token');
-            const response = await fetch (`http://localhost:3000/api/usuarios/${id}`, {
+            const response = await fetchApi (`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/usuarios/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -91,14 +97,14 @@ export default function AdminConfiguracion(){
                 body: JSON.stringify(editForm)
             });
             if (!response.ok){
-                throw new Error('No se pudo actualizar el usuario');
+                throw createHttpError(response, await response.json().catch(() => ({})), 'No se pudo actualizar el usuario');
             }
             // Salimos del modo edición y recargamos la tabla
             setEditingId(null);
             cargarUsuarios();
         } catch (error) {
             console.error('Error al actualizar usuario:', error);
-            notifyActionError(error, 'No se pudo actualizar el usuario');
+            setActionError(error.message || 'No se pudo actualizar el usuario');
         }
     };
 
@@ -109,7 +115,7 @@ export default function AdminConfiguracion(){
         try {
             const token = localStorage.getItem('ifts2_token');
             const userId = typeof userToDelete === 'object' ? userToDelete.id : userToDelete;
-            const response = await fetch(`http://localhost:3000/api/usuarios/${userId}`, {
+            const response = await fetchApi(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/usuarios/${userId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -117,7 +123,7 @@ export default function AdminConfiguracion(){
             });
 
             if (!response.ok) {
-                throw new Error('No se pudo eliminar el usuario');
+                throw createHttpError(response, await response.json().catch(() => ({})), 'No se pudo eliminar el usuario');
             }
 
             setUserToDelete(null);
@@ -160,6 +166,7 @@ export default function AdminConfiguracion(){
 
     return (
       <div className="w-full space-y-6">
+        {actionError && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{actionError}</p>}
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div>
             <h1 className="font-display text-petrol-900 text-3xl md:text-4xl leading-tight">

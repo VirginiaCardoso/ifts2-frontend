@@ -9,6 +9,7 @@ const documentos = [
 ];
 export default function AvisosArchivos({
   data,
+  puedeEditarAviso = false,
   busy,
   ejecutar,
   pedirEliminar,
@@ -25,7 +26,7 @@ export default function AvisosArchivos({
       <div className="grid xl:grid-cols-2 gap-6">
         <div>
           <p className="text-xs font-bold mb-3">ESTADO DEL CICLO LECTIVO</p>
-          {editando ? (
+          {puedeEditarAviso && editando ? (
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
@@ -71,7 +72,12 @@ export default function AvisosArchivos({
             </form>
           ) : (
             <button
-              disabled={busy}
+              disabled={busy || !puedeEditarAviso}
+              title={
+                puedeEditarAviso
+                  ? 'Editar aviso'
+                  : 'Solo Administrador General puede editar el aviso'
+              }
               className="flex justify-between gap-4 w-full text-left bg-petrol-50 rounded-lg p-4 border border-petrol-100"
               onClick={() => {
                 setAviso(data.aviso);
@@ -79,9 +85,11 @@ export default function AvisosArchivos({
               }}
             >
               <span>{data.aviso || 'Configurar estado del ciclo lectivo'}</span>
-              <span aria-label="Editar aviso" className="text-petrol-600">
-                <CarreraIcon tipo="editar" />
-              </span>
+              {puedeEditarAviso && (
+                <span aria-label="Editar aviso" className="text-petrol-600">
+                  <CarreraIcon tipo="editar" />
+                </span>
+              )}
             </button>
           )}
         </div>

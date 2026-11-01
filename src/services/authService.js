@@ -1,8 +1,9 @@
+import { fetchApi } from './httpError';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export const authService = {
     login: async (correo, password) => {
-        const response = await fetch(`${API_URL}/api/auth/login`, {
+        const response = await fetchApi(`${API_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -24,7 +25,7 @@ export const authService = {
             throw new Error('No hay una sesión activa. Por favor, vuelve a iniciar sesión.');
         }
 
-        const response = await fetch(`${API_URL}/api/auth/cambiar-password`, {
+        const response = await fetchApi(`${API_URL}/api/auth/cambiar-password`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

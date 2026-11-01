@@ -100,8 +100,8 @@ import { AdminNovedadesIcon1,
                                                             onChange={(e) => setEditForm({...editForm, nivel_de_acceso: e.target.value})}
                                                             className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-mint-400"
                                                         >
-                                                            <option value="Gestión académica">Gestión académica</option>
-                                                            <option value="Administrador general">Administrador general</option>
+                                                            <option value="Gestión Académica">Gestión académica</option>
+                                                            <option value="Administrador General">Administrador general</option>
                                                         </select>
                                                     </td>
                                                     <td className="py-2.5 px-3">

@@ -1,3 +1,5 @@
+import { fetchApi } from '../../services/httpError';
+import { validateUser } from '../../utils/validateUser';
 import { useState } from "react";
 import Button from '../Button';
 import { ChangePasswordModalIcon1 } from "../../assets/icons";
@@ -7,7 +9,7 @@ export default function UserForm({ onCancel, onSubmitSuccess }) {
         nombre: '',
         rolInstitucional: '',
         correo: '',
-        nivelAcceso: 'Gestión académica',
+        nivelAcceso: 'Gestión Académica',
         password: '',
         confirmPassword: ''
     });
@@ -17,6 +19,9 @@ export default function UserForm({ onCancel, onSubmitSuccess }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+
+        const validation = validateUser({ nombre_completo: formData.nombre.trim(), rol_institucional: formData.rolInstitucional.trim(), correo: formData.correo.trim(), nivel_de_acceso: formData.nivelAcceso });
+        if (validation) return setError(validation);
 
         if (formData.password !== formData.confirmPassword) {
             return setError("Las contraseñas no coinciden");
@@ -30,13 +35,13 @@ export default function UserForm({ onCancel, onSubmitSuccess }) {
             const token = localStorage.getItem('ifts2_token');
             // Mapeamos los datos para que coincidan con el req.body del backend
             const datosParaEnviar = {
-                nombre_completo: formData.nombre,
-                rol_institucional: formData.rolInstitucional,
+                nombre_completo: formData.nombre.trim(),
+                rol_institucional: formData.rolInstitucional.trim(),
                 nivel_de_acceso: formData.nivelAcceso,
-                correo: formData.correo,
+                correo: formData.correo.trim(),
                 password: formData.password
             };
-            const response = await fetch('http://localhost:3000/api/usuarios', {
+            const response = await fetchApi(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/usuarios`, {
                 method: 'POST',
                 headers: { 
                 'Content-Type': 'application/json',
@@ -63,7 +68,7 @@ export default function UserForm({ onCancel, onSubmitSuccess }) {
         <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
             <h3 className="font-bold text-slate-800 text-base">Nuevo administrador</h3>
             {error && (
-                <div className="p-3 bg-red-50 text-red-600 rounded-xl text-xs border border-red-100">
+                <div role="alert" className="p-3 bg-red-50 text-red-600 rounded-xl text-xs border border-red-100">
                     {error}
                 </div>
             )}
@@ -109,14 +114,15 @@ export default function UserForm({ onCancel, onSubmitSuccess }) {
                             onChange={(e) => setFormData({...formData, nivelAcceso: e.target.value})}
                             className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-mint-400"
                         >
-                            <option value="Gestión académica">Gestión académica</option>
-                            <option value="Administrador general">Administrador general</option>
+                            <option value="Gestión Académica">Gestión académica</option>
+                            <option value="Administrador General">Administrador general</option>
                         </select>
                     </div>
                     <div>
                         <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Contraseña inicial *</label>
                         <input 
                             type="password" 
+                            minLength={8}
                             required
                             placeholder="Mínimo 8 caracteres" 
                             value={formData.password}
@@ -128,6 +134,7 @@ export default function UserForm({ onCancel, onSubmitSuccess }) {
                         <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Confirmar contraseña *</label>
                         <input 
                             type="password" 
+                            minLength={8}
                             required
                             placeholder="Repetí la contraseña" 
                             value={formData.confirmPassword}

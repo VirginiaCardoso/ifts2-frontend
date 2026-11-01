@@ -1,3 +1,4 @@
+import { createHttpError, fetchApi } from './httpError';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 function getAuthHeaders() {
@@ -9,18 +10,18 @@ function getAuthHeaders() {
 }
 
 export async function getTramites() {
-    const res = await fetch(`${API_URL}/api/tramites`, { headers: getAuthHeaders() });
+    const res = await fetchApi(`${API_URL}/api/tramites`, { headers: getAuthHeaders() });
     if (!res.ok) throw new Error('Error al obtener los trámites');
     return res.json();
 }
 
 export async function updateTramite(id, data) {
-    const res = await fetch(`${API_URL}/api/tramites/${id}`, {
+    const res = await fetchApi(`${API_URL}/api/tramites/${id}`, {
         method: 'PUT',
         headers: getAuthHeaders(),
         body: JSON.stringify(data)
     });
-    const resData = await res.json();
-    if (!res.ok) throw new Error(resData.error || 'Error al actualizar el trámite');
+    const resData = await res.json().catch(() => ({}));
+    if (!res.ok) throw createHttpError(res, resData, 'Error al actualizar el trámite');
     return resData;
 }

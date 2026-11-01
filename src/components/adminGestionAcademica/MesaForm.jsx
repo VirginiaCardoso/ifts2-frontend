@@ -33,8 +33,11 @@ export default function MesaForm({
     };
   });
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value,
+      ...(name === 'fecha' && value ? { anio_vigencia: Number(value.slice(0, 4)) } : {}) });
+  };
 
   const toggleProfesor = (id) => {
     setFormData((prev) => ({
@@ -47,7 +50,7 @@ export default function MesaForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    onSave({ ...formData, periodo: formData.periodo.trim(), anio_vigencia: Number(formData.anio_vigencia) });
   };
 
   const containerClasses = isInline
