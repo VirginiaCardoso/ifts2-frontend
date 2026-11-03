@@ -54,7 +54,6 @@ export default function UserForm({ onCancel, onSubmitSuccess }) {
             if (!response.ok) {
                 throw new Error(data.error || 'Error al registrar el usuario.');
             }
-            alert("¡Usuario creado exitosamente!");
             if (onSubmitSuccess) {
                 onSubmitSuccess(data);
             }

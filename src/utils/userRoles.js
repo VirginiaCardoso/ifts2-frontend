@@ -67,6 +67,19 @@ export function showUnauthorizedActionModal(error, user) {
 
 export function notifyActionError(error, fallbackMessage, user) {
   if (showUnauthorizedActionModal(error, user)) return true;
-  window.alert(error?.message || fallbackMessage);
+  const message =
+    typeof error === 'string'
+      ? error
+      : error?.message ||
+        error?.error ||
+        error?.response?.data?.error ||
+        error?.response?.data?.message ||
+        error?.response?.data?.mensaje ||
+        fallbackMessage;
+  window.dispatchEvent(
+    new CustomEvent('ifts2:action-error', {
+      detail: { message },
+    })
+  );
   return false;
 }

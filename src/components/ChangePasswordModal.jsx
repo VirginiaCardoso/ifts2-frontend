@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { authService } from '../services/authService';
+import { fetchWithAuth } from '../services/api';
 import { ChangePasswordModalIcon1 } from '../assets/icons';
 
 export default function ChangePasswordModal({ isOpen, onClose, onSuccess, user }) {
@@ -33,16 +34,12 @@ export default function ChangePasswordModal({ isOpen, onClose, onSuccess, user }
 
     try {
       if (isResetMode) {
-      // Llamada al backend para restablecer la contraseña del usuario seleccionado
-        const response = await fetch(`http://localhost:3000/api/usuarios/${userId}/password`, {
+        const response = await fetchWithAuth(`/api/usuarios/${userId}/password`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
             body: JSON.stringify({ password: newPassword })
         });
+        const errorData = await response.json().catch(() => ({}));
         if (!response.ok) {
-            const errorData = await response.json();
             throw new Error(errorData.error || 'Error al restablecer la contraseña');
         }
         } else {

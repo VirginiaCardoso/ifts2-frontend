@@ -5,10 +5,11 @@ import UsersTable from "./adminconfiguracion/UsersTable";
 import UserForm from "./adminconfiguracion/UserForm";
 import ChangePasswordModal from "./ChangePasswordModal";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import SuccessModal from "./SuccessModal";
+import ActionErrorModal from "./ActionErrorModal";
 import {
   ShieldIcon,
 } from '../assets/icons';
-import { notifyActionError } from '../utils/userRoles';
 
 
 export default function AdminConfiguracion(){
@@ -16,11 +17,14 @@ export default function AdminConfiguracion(){
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [actionError, setActionError] = useState('');
+    const [deleteError, setDeleteError] = useState('');
     //para mostrar u ocultar el formulario
     const [showForm, setShowForm] = useState(false);
     const [editingId, setEditingId] = useState(null); //guarda el id del usuario en edición
     const [editForm, setEditForm] = useState({}); //guarda los valores temporales de los inputs
     const [userForPasswordReset, setUserForPasswordReset] = useState(null);
+    const [passwordResetSuccess, setPasswordResetSuccess] = useState(false);
+    const [userCreatedSuccess, setUserCreatedSuccess] = useState(false);
     const [userToDelete, setUserToDelete] = useState(null);
     const [isDeleting, setIsDeleting] = useState(false);
     
@@ -133,7 +137,8 @@ export default function AdminConfiguracion(){
             
         } catch (error) {
             console.error('Error al eliminar usuario:', error);
-            notifyActionError(error, 'No se pudo eliminar el usuario');
+            setUserToDelete(null);
+            setDeleteError(error.message || 'No se pudo eliminar el usuario');
         } finally {
             setIsDeleting(false);
         }
@@ -161,11 +166,18 @@ export default function AdminConfiguracion(){
 
     const handleFormSubmit = () => {
         setShowForm(false);
+        setUserCreatedSuccess(true);
         cargarUsuarios();
     };
 
     return (
       <div className="w-full space-y-6">
+        {deleteError && (
+          <ActionErrorModal
+            message={deleteError}
+            onClose={() => setDeleteError('')}
+          />
+        )}
         {actionError && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{actionError}</p>}
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div>
@@ -251,10 +263,26 @@ export default function AdminConfiguracion(){
           onClose={() => setUserForPasswordReset(null)}
           user={userForPasswordReset}
           onSuccess={() => {
-            alert('Contraseña restablecida con éxito');
             setUserForPasswordReset(null);
+            setPasswordResetSuccess(true);
           }}
         />
+
+        {passwordResetSuccess && (
+          <SuccessModal
+            title="Contraseña restablecida"
+            message="La contraseña del usuario se actualizó correctamente."
+            onClose={() => setPasswordResetSuccess(false)}
+          />
+        )}
+
+        {userCreatedSuccess && (
+          <SuccessModal
+            title="Usuario creado"
+            message="El usuario se creó exitosamente."
+            onClose={() => setUserCreatedSuccess(false)}
+          />
+        )}
 
         {userToDelete && (
           <DeleteConfirmationModal

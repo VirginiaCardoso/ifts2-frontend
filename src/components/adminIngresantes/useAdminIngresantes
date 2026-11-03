@@ -6,6 +6,7 @@ import { showUnauthorizedActionModal } from '../../utils/userRoles';
 export function useIngresantes() {
     const [etapas, setEtapas] = useState([]);
     const [error, setError] = useState(null);
+    const [actionErrorMessage, setActionErrorMessage] = useState('');
     const [editandoId, setEditandoId] = useState(null);
     const [etapaAEliminar, setEtapaAEliminar] = useState(null);
     const [eliminandoEtapa, setEliminandoEtapa] = useState(false);
@@ -60,11 +61,11 @@ export function useIngresantes() {
         const file = e.target.files[0];
         if (file) {
             if (file.type !== 'application/pdf') {
-                alert("Por favor, selecciona un archivo PDF válido.");
+                setActionErrorMessage('Por favor, selecciona un archivo PDF válido.');
                 return;
             }
             if (file.size > 10 * 1024 * 1024) {
-                alert("El archivo supera los 10MB permitidos.");
+                setActionErrorMessage('El archivo supera los 10MB permitidos.');
                 return;
             }
             setArchivoSeleccionado(file);
@@ -91,7 +92,9 @@ export function useIngresantes() {
             await cargarDocumento();
             setUploadSuccessMessage(res.mensaje || 'El PDF se actualizó correctamente.');
         } catch (err) {
-            if (!showUnauthorizedActionModal(err)) alert(err.message);
+            if (!showUnauthorizedActionModal(err)) {
+                setActionErrorMessage(err.message || 'No se pudo actualizar el documento.');
+            }
         } finally {
             setIsUploading(false);
         }
@@ -196,6 +199,8 @@ export function useIngresantes() {
         isUploading,
         uploadSuccessMessage,
         setUploadSuccessMessage,
+        actionErrorMessage,
+        setActionErrorMessage,
         error,
         mostrarFormularioNuevo,
         setMostrarFormularioNuevo,

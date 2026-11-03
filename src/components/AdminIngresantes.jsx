@@ -3,6 +3,7 @@ import BaseCard from './BaseCard';
 import Button from './Button';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import SuccessModal from './SuccessModal';
+import ActionErrorModal from './ActionErrorModal';
 import { AdminNovedadesIcon3 } from '../assets/icons';
 
 import { EditIcon, FooterIcon2, IngresantesIcon1, UploadIcon } from '../assets/icons';
@@ -29,6 +30,8 @@ export default function Ingresantes() {
         handleSubirPdf,
         uploadSuccessMessage,
         setUploadSuccessMessage,
+        actionErrorMessage,
+        setActionErrorMessage,
         handleEditarEtapa,
         formatearFecha,
         editandoId,
@@ -532,6 +535,12 @@ export default function Ingresantes() {
             title="PDF actualizado"
             message={uploadSuccessMessage}
             onClose={() => setUploadSuccessMessage('')}
+          />
+        )}
+        {actionErrorMessage && (
+          <ActionErrorModal
+            message={actionErrorMessage}
+            onClose={() => setActionErrorMessage('')}
           />
         )}
       </div>

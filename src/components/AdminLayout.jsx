@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import AdminTopbar from './AdminTopbar';
 import ChangePasswordModal from './ChangePasswordModal';
-import Alert from '../components/Alert'
+import SuccessModal from './SuccessModal';
 import ActionErrorModal from './ActionErrorModal';
 
 const TAB_METADATA = {
@@ -46,11 +46,14 @@ export default function AdminLayout({
 }) {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showPasswordSuccess, setShowPasswordSuccess] = useState(false);
   const [actionErrorMessage, setActionErrorMessage] = useState('');
 
   useEffect(() => {
     const handleUnauthorizedAction = (event) => {
+      setActionErrorMessage(event.detail.message);
+    };
+    const handleActionError = (event) => {
       setActionErrorMessage(event.detail.message);
     };
 
@@ -58,11 +61,14 @@ export default function AdminLayout({
       'ifts2:unauthorized-action',
       handleUnauthorizedAction
     );
-    return () =>
+    window.addEventListener('ifts2:action-error', handleActionError);
+    return () => {
       window.removeEventListener(
         'ifts2:unauthorized-action',
         handleUnauthorizedAction
       );
+      window.removeEventListener('ifts2:action-error', handleActionError);
+    };
   }, []);
 
   const currentMeta = TAB_METADATA[activeTab] || {
@@ -71,10 +77,7 @@ export default function AdminLayout({
   };
   
   const handlePasswordSuccess = () => {
-    setShowSuccessAlert(true);
-    setTimeout(() => {
-      setShowSuccessAlert(false);
-    }, 4000);
+    setShowPasswordSuccess(true);
   };
 
   return (
@@ -92,10 +95,12 @@ export default function AdminLayout({
         }
       }}
     >
-      {showSuccessAlert && (
-        <div className="fixed top-6 right-6 z-50 shadow-xl rounded-lg min-w-[300px] animate-fade-in-down">
-          <Alert variant="info">¡Contraseña actualizada con éxito!</Alert>
-        </div>
+      {showPasswordSuccess && (
+        <SuccessModal
+          title="Contraseña actualizada"
+          message="Tu contraseña se cambió correctamente."
+          onClose={() => setShowPasswordSuccess(false)}
+        />
       )}
       {actionErrorMessage && (
         <ActionErrorModal
