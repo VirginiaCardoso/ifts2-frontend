@@ -7,6 +7,9 @@ export default function HorariosMateriasSection() {
   const [horariosData, setHorariosData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [cuatrimestre, setCuatrimestre] = useState(() => (new Date().getMonth() >= 7 ? 2 : 1));
+  const [anioCarrera, setAnioCarrera] = useState(1);
+
 
   useEffect(() => {
     const fetchDatos = async () => {
@@ -23,8 +26,13 @@ export default function HorariosMateriasSection() {
     fetchDatos();
   }, []);
 
+  const horariosFiltrados = horariosData.filter(
+  (h) => h.cuatrimestre === cuatrimestre && Number(h.anio_carrera) === anioCarrera
+);
+
+
   // Verificamos si hay alguna clase el sábado
-  const tieneSabado = horariosData.some((h) => h.dia_semana === 'Sábado');
+  const tieneSabado = horariosFiltrados.some((h) => h.dia_semana === 'Sábado');
   const DIAS_SEMANA = tieneSabado
     ? ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
     : ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
@@ -34,7 +42,7 @@ export default function HorariosMateriasSection() {
   // Obtener todas las franjas horarias únicas ordenadas
   const franjasUnicas = Array.from(
     new Set(
-      horariosData.map(
+      horariosFiltrados.map(
         (h) => `${formatearHora(h.hora_inicio)} – ${formatearHora(h.hora_fin)}`
       )
     )
@@ -45,7 +53,7 @@ export default function HorariosMateriasSection() {
     const [inicio, fin] = franja.split(' – ');
 
     // Filtrar los registros que caen en esta franja
-    const itemsEnFranja = horariosData.filter(
+    const itemsEnFranja = horariosFiltrados.filter(
       (h) =>
         formatearHora(h.hora_inicio) === inicio &&
         formatearHora(h.hora_fin) === fin
@@ -71,7 +79,7 @@ export default function HorariosMateriasSection() {
   const coloresPaleta = ['#143340', '#235459', '#518C8C', '#8BD9CA', '#0A1C22'];
   const resumenMateriasMap = new Map();
 
-  horariosData.forEach((h) => {
+  horariosFiltrados.forEach((h) => {
     // Omitimos el recreo del resumen de tarjetas
     if (h.materia_nombre?.toLowerCase().includes('recreo')) return;
 
@@ -120,6 +128,24 @@ export default function HorariosMateriasSection() {
             Grilla de cursada
           </p>
         </div>
+        <div className="flex flex-wrap gap-3 mb-6">
+          <select
+            aria-label="Año de la carrera"
+            value={anioCarrera}
+            onChange={(e) => setAnioCarrera(Number(e.target.value))}
+            className="border border-petrol-100 rounded-lg px-3 py-2 text-sm bg-white"
+          >
+            {[1, 2, 3].map((n) => <option key={n} value={n}>{n}º año</option>)}
+          </select>
+          <select
+            aria-label="Cuatrimestre"
+            value={cuatrimestre}
+            onChange={(e) => setCuatrimestre(Number(e.target.value))}
+            className="border border-petrol-100 rounded-lg px-3 py-2 text-sm bg-white"
+          >
+            {[1, 2].map((n) => <option key={n} value={n}>{n}º cuatrimestre</option>)}
+          </select>
+        </div>
 
         {/* Grilla Semanal */}
         <div className="overflow-x-auto">
@@ -165,7 +191,7 @@ export default function HorariosMateriasSection() {
                             </span>
                             {cell.prof && (
                               <span className="text-petrol-600 text-[0.7rem]">
-                                Prof. {cell.prof}
+                                {cell.prof}
                               </span>
                             )}
                           </div>

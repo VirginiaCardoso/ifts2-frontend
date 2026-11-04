@@ -180,7 +180,24 @@ export default function HorarioForm({
             ))}
           </select>
         </div>
-
+        {/* CUATRIMESTRE */}
+        {!isInline && (
+          <div>
+            <label className="block text-[0.7rem] font-bold text-[#143340] uppercase tracking-widest mb-1.5">
+              Cuatrimestre *
+            </label>
+            <select
+              name="cuatrimestre"
+              value={formData.cuatrimestre}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-[#8BD9CA] bg-white"
+            >
+              <option value={1}>1º cuatrimestre</option>
+              <option value={2}>2º cuatrimestre</option>
+            </select>
+          </div>
+        )}
         {/* BOTONES INLINE */}
         {isInline && (
           <div className="col-span-1 flex items-center justify-end gap-2">

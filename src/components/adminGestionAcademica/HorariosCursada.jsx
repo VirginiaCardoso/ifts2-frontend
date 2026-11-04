@@ -10,6 +10,7 @@ import HorarioForm from './HorarioForm';
 import DeleteConfirmationModal from '../DeleteConfirmationModal';
 import { MesaLapiz, MesaTacho } from '../../assets/icons';
 import { notifyActionError } from '../../utils/userRoles';
+const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
 export default function HorariosCursada({ user }) {
   const [horarios, setHorarios] = useState([]);
@@ -21,6 +22,9 @@ export default function HorariosCursada({ user }) {
   const [editingId, setEditingId] = useState(null);
   const [horarioToDelete, setHorarioToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [cuatrimestre, setCuatrimestre] = useState(() => (new Date().getMonth() >= 7 ? 2 : 1));
+  const [anioCarrera, setAnioCarrera] = useState(1);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,43 +48,41 @@ export default function HorariosCursada({ user }) {
   }, []);
 
   const handleSave = async (payload) => {
-    try {
-      const materiaNombre =
-        materias.find((m) => m.id === payload.materia_id)?.nombre || '';
-      const profesorNombre =
-        profesores.find((p) => p.id === payload.profesor_id)?.nombre_completo ||
-        null;
+  try {
+    const materia = materias.find((m) => m.id === payload.materia_id);
+    const profesorNombre =
+      profesores.find((p) => p.id === payload.profesor_id)?.nombre_completo ||
+      null;
+    const datosVista = {
+      materia_nombre: materia?.nombre || '',
+      anio_carrera: materia?.anio_carrera,
+      profesor_nombre: profesorNombre,
+    };
 
-      if (editingId) {
-        await updateHorario(editingId, payload);
-        setHorarios(
-          horarios.map((h) =>
-            h.id === editingId
-              ? {
-                  ...h,
-                  ...payload,
-                  materia_nombre: materiaNombre,
-                  profesor_nombre: profesorNombre,
-                }
-              : h
-          )
-        );
-        setEditingId(null);
-      } else {
-        const created = await createHorario(payload);
-        const newHorario = {
-          ...payload,
-          id: created.horarioId || 'temp-id',
-          materia_nombre: materiaNombre,
-          profesor_nombre: profesorNombre,
-        };
-        setHorarios([newHorario, ...horarios]);
-        setIsCreating(false);
-      }
-    } catch (err) {
-      notifyActionError(err, 'Error al guardar el horario', user);
+    if (editingId) {
+      await updateHorario(editingId, payload);
+      setHorarios(
+        horarios.map((h) =>
+          h.id === editingId ? { ...h, ...payload, ...datosVista } : h
+        )
+      );
+      setEditingId(null);
+    } else {
+      const created = await createHorario(payload);
+      setHorarios([
+        { ...payload, ...datosVista, id: created.horarioId || 'temp-id' },
+        ...horarios,
+      ]);
+      setIsCreating(false);
     }
-  };
+
+    setCuatrimestre(payload.cuatrimestre);
+    if (materia) setAnioCarrera(Number(materia.anio_carrera));
+  } catch (err) {
+    notifyActionError(err, 'Error al guardar el horario', user);
+  }
+};
+
 
   const handleDelete = async (id) => {
     try {
@@ -97,6 +99,17 @@ export default function HorariosCursada({ user }) {
     }
   };
 
+  const horariosVisibles = horarios
+  .filter(
+    (h) => h.cuatrimestre === cuatrimestre && Number(h.anio_carrera) === anioCarrera
+  )
+  .sort(
+    (a, b) =>
+      DIAS.indexOf(a.dia_semana) - DIAS.indexOf(b.dia_semana) ||
+      a.hora_inicio.localeCompare(b.hora_inicio)
+  );
+
+
   if (loading)
     return <div className="p-8 text-gray-500">Cargando horarios...</div>;
 
@@ -105,7 +118,7 @@ export default function HorariosCursada({ user }) {
       {/* Cabecera */}
       <div className="flex justify-between items-end mb-6">
         <h2 className="text-[#143340] font-bold text-xs uppercase tracking-widest">
-          Horarios de Cursada · Primer Cuatrimestre 2026
+          Horarios de Cursada · {anioCarrera}º año · {cuatrimestre}º cuatrimestre
         </h2>
         {!isCreating && (
           <button
@@ -116,6 +129,24 @@ export default function HorariosCursada({ user }) {
           </button>
         )}
       </div>
+        <div className="flex flex-wrap gap-3 mb-6">
+          <select
+            aria-label="Año de la carrera"
+            value={anioCarrera}
+            onChange={(e) => setAnioCarrera(Number(e.target.value))}
+            className="border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white"
+          >
+            {[1, 2, 3].map((n) => <option key={n} value={n}>{n}º año</option>)}
+          </select>
+          <select
+            aria-label="Cuatrimestre"
+            value={cuatrimestre}
+            onChange={(e) => setCuatrimestre(Number(e.target.value))}
+            className="border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white"
+          >
+            {[1, 2].map((n) => <option key={n} value={n}>{n}º cuatrimestre</option>)}
+          </select>
+        </div>
 
       {/* Formulario*/}
       {isCreating && (
@@ -138,7 +169,7 @@ export default function HorariosCursada({ user }) {
         </div>
 
         <div className="divide-y divide-gray-100">
-          {horarios.map((horario) => (
+          {horariosVisibles.map((horario) => (
             <div key={horario.id}>
               {editingId === horario.id ? (
                 <div className="p-2">
@@ -170,9 +201,7 @@ export default function HorariosCursada({ user }) {
                   </div>
                   {/* Profesor */}
                   <div className="col-span-3 text-gray-500 truncate">
-                    {horario.profesor_nombre
-                      ? `Prof. ${horario.profesor_nombre}`
-                      : 'Sin asignar'}
+                    {horario.profesor_nombre || 'Sin asignar'}
                   </div>
                   {/* Botones de Acción */}
                   <div className="col-span-1 flex items-center justify-end gap-2">
@@ -194,9 +223,9 @@ export default function HorariosCursada({ user }) {
             </div>
           ))}
 
-          {horarios.length === 0 && !loading && (
+          {horariosVisibles.length === 0 && !loading && (
             <div className="p-8 text-center text-gray-500">
-              No hay horarios registrados.
+              No hay horarios cargados para este año y cuatrimestre.
             </div>
           )}
         </div>

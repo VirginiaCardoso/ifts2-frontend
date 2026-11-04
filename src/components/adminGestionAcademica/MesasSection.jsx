@@ -23,6 +23,7 @@ export default function MesasSection({ user }) {
   const [editingId, setEditingId] = useState(null);
   const [mesaToDelete, setMesaToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
 
   // ── CARGA INICIAL DE DATOS ──
   useEffect(() => {
@@ -85,6 +86,7 @@ export default function MesasSection({ user }) {
         setMesas([newMesa, ...mesas]);
         setIsCreating(false);
       }
+      setFechaSeleccionada(payload.fecha?.split('T')[0]);
     } catch (err) {
       notifyActionError(err, 'Error al guardar la mesa', user);
     }
@@ -111,6 +113,15 @@ export default function MesasSection({ user }) {
     profesores
       .filter((p) => ids.includes(p.id))
       .map((p) => ({ id: p.id, nombre_completo: p.nombre_completo }));
+  const fechaDe = (mesa) => mesa.fecha?.split('T')[0];
+  const fechas = [...new Set(mesas.map(fechaDe).filter(Boolean))].sort();
+  const fechaActiva = fechas.includes(fechaSeleccionada) ? fechaSeleccionada : fechas[0];
+  const mesasDelDia = mesas.filter((mesa) => fechaDe(mesa) === fechaActiva);
+
+  const formatearDia = (fecha) =>
+    new Date(`${fecha}T00:00:00`)
+      .toLocaleDateString('es-AR', { weekday: 'short', day: 'numeric', month: 'short' })
+      .replace(',', '');
 
   if (loading)
     return (
@@ -156,9 +167,29 @@ export default function MesasSection({ user }) {
         />
       )}
 
+      {/* Días con mesas */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        {fechas.map((fecha) => (
+          <button
+            key={fecha}
+            type="button"
+            aria-pressed={fecha === fechaActiva}
+            onClick={() => setFechaSeleccionada(fecha)}
+            className={`px-3 py-2 rounded-lg text-sm font-bold capitalize border transition-colors cursor-pointer ${
+              fecha === fechaActiva
+                ? 'bg-[#143340] text-white border-[#143340]'
+                : 'bg-white text-[#143340] border-gray-200 hover:bg-[#C2F2E9]/50'
+            }`}
+          >
+            {formatearDia(fecha)} ({mesas.filter((mesa) => fechaDe(mesa) === fecha).length})
+          </button>
+        ))}
+      </div>
+
+
       {/* Grilla de Tarjetas */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {mesas.map((mesa) => (
+        {mesasDelDia.map((mesa) => (
           <div key={mesa.id}>
             {editingId === mesa.id ? (
               // Formulario Inline (Editar)

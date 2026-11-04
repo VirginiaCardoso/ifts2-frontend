@@ -2,11 +2,15 @@ import { useState, useEffect } from 'react';
 import MesaExamenCard from './MesaExamenCard';
 import { getMesas } from '../services/mesasService';
 import { formatearFecha } from '../utils/dateUtils';
+const normalizar = (texto = '') =>
+  texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 
 export default function MesaExamenSection() {
   const [mesas, setMesas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [busqueda, setBusqueda] = useState('');
+  const [anioCarrera, setAnioCarrera] = useState('');
 
   useEffect(() => {
     const fetchMesas = async () => {
@@ -22,6 +26,13 @@ export default function MesaExamenSection() {
     };
     fetchMesas();
   }, []);
+  
+  const mesasFiltradas = mesas.filter(
+  (mesa) =>
+    normalizar(mesa.materia_nombre).includes(normalizar(busqueda)) &&
+    (!anioCarrera || Number(mesa.anio_carrera) === Number(anioCarrera))
+  );
+
 
   const formatearHora = (horaString) => {
     if (!horaString) return '';
@@ -48,8 +59,31 @@ export default function MesaExamenSection() {
         ) : error ? (
           <div className="py-12 text-center text-red-600">Error: {error}</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-8 w-full">
-            {mesas.map((mesa) => {
+          <>
+   {mesas.length > 0 && (
+     <div className="flex flex-col sm:flex-row gap-3 mt-6">
+       <input
+         type="search"
+         aria-label="Buscar materia"
+         placeholder="Buscar materia..."
+         value={busqueda}
+         onChange={(e) => setBusqueda(e.target.value)}
+         className="w-full sm:max-w-sm border border-petrol-100 rounded-lg px-3 py-2 text-sm bg-white"
+       />
+       <select
+         aria-label="Año de la carrera"
+         value={anioCarrera}
+         onChange={(e) => setAnioCarrera(e.target.value)}
+         className="border border-petrol-100 rounded-lg px-3 py-2 text-sm bg-white"
+       >
+         <option value="">Todos los años</option>
+         {[1, 2, 3].map((n) => <option key={n} value={n}>{n}º año</option>)}
+       </select>
+     </div>
+   )}
+
+ <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-8 w-full">
+   {mesasFiltradas.map((mesa) => {
               const anioStr = String(mesa.anio_vigencia || '');
               const periodoStr = String(mesa.periodo || '');
               const anioAMostrar = periodoStr.includes(anioStr) ? '' : anioStr;
@@ -69,6 +103,14 @@ export default function MesaExamenSection() {
               );
             })}
           </div>
+          
+            {mesas.length > 0 && mesasFiltradas.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                No encontramos mesas con esos filtros.
+              </div>
+            )}
+          </>
+
         )}
 
         {mesas.length === 0 && !loading && !error && (

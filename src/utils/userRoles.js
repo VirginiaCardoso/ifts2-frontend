@@ -8,8 +8,8 @@ function normalizeRole(role) {
 
 export function isGestionAcademicaRole(user) {
   const roles = [
-    user?.rol_institucional,
-    user?.rolInstitucional,
+   // user?.rol_institucional,
+    //user?.rolInstitucional,
     user?.nivel_de_acceso,
     user?.nivelAcceso,
     user?.rol,
