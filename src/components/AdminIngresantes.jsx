@@ -426,11 +426,16 @@ export default function Ingresantes() {
 
                     <div className="pt-3.5 space-y-2">
                       <div className="flex items-center gap-1.5 text-xs font-semibold text-petrol-900">
-                        {etapa.fecha_inicio || etapa.fecha_inicio ? (
+                         {etapa.fecha_inicio || etapa.fecha_fin ? (
                           <>
                             <FooterIcon2 className="w-3.5 h-3.5" />
                             <span>{formatearFecha(etapa.fecha_inicio)}</span>
-                            <span>- {formatearFecha(etapa.fecha_fin)}</span>
+                                                        <span>
+                              {formatearFecha(etapa.fecha_inicio)}
+                              {etapa.fecha_inicio && etapa.fecha_fin && ' - '}
+                              {formatearFecha(etapa.fecha_fin)}
+                            </span>
+
                           </>
                         ) : (
                           <></>

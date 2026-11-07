@@ -114,7 +114,7 @@ export default function HorariosCursada({ user }) {
     return <div className="p-8 text-gray-500">Cargando horarios...</div>;
 
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in mt-12">
       {/* Cabecera */}
       <div className="flex justify-between items-end mb-6">
         <h2 className="text-[#143340] font-bold text-xs uppercase tracking-widest">
