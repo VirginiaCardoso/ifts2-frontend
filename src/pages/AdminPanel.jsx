@@ -13,11 +13,27 @@ import { isGestionAcademicaRole } from '../utils/userRoles';
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState('novedades');
+  const [currentUser, setCurrentUser] = useState(() =>
+    JSON.parse(localStorage.getItem('ifts2_user') || '{}')
+  );
   const navigate = useNavigate();
 
-  // Datos del usuario logueado en la sesión
-  const currentUser = JSON.parse(localStorage.getItem('ifts2_user') || '{}');
   const isGestionAcademica = isGestionAcademicaRole(currentUser);
+
+  const handleCurrentUserUpdate = (updates) => {
+    setCurrentUser((user) => {
+      const updatedUser = {
+        ...user,
+        ...updates,
+        nombre: updates.nombre_completo,
+        iniciales:
+          updates.nombre_completo?.substring(0, 2).toUpperCase() ??
+          user.iniciales,
+      };
+      localStorage.setItem('ifts2_user', JSON.stringify(updatedUser));
+      return updatedUser;
+    });
+  };
 
   const handleSelectTab = (tab) => {
     if (tab === 'config' && isGestionAcademica) return;
@@ -45,7 +61,12 @@ export default function AdminPanel() {
       {activeTab === 'ingresantes' && <AdminIngresantes />}
       {activeTab === 'tramites' && <AdminTramitesView />}
       {/* Resto de módulos */}
-      {activeTab === 'config' && !isGestionAcademica && <AdminConfiguracion />}
+      {activeTab === 'config' && !isGestionAcademica && (
+        <AdminConfiguracion
+          currentUser={currentUser}
+          onCurrentUserUpdate={handleCurrentUserUpdate}
+        />
+      )}
     </AdminLayout>
   );
 }

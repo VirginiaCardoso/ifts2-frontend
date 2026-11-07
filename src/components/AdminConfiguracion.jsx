@@ -12,11 +12,15 @@ import {
 } from '../assets/icons';
 
 
-export default function AdminConfiguracion(){
+export default function AdminConfiguracion({
+    currentUser,
+    onCurrentUserUpdate,
+}){
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [actionError, setActionError] = useState('');
+    const [actionErrorModal, setActionErrorModal] = useState('');
     const [deleteError, setDeleteError] = useState('');
     //para mostrar u ocultar el formulario
     const [showForm, setShowForm] = useState(false);
@@ -103,12 +107,37 @@ export default function AdminConfiguracion(){
             if (!response.ok){
                 throw createHttpError(response, await response.json().catch(() => ({})), 'No se pudo actualizar el usuario');
             }
+            const isCurrentUser =
+                currentUser?.id != null && id != null
+                    ? String(currentUser.id) === String(id)
+                    : Boolean(
+                        currentUser?.correo &&
+                        editForm.correo &&
+                        currentUser.correo.trim().toLowerCase() ===
+                            editForm.correo.trim().toLowerCase()
+                    );
+            if (isCurrentUser) {
+                onCurrentUserUpdate?.({
+                    nombre_completo: editForm.nombre_completo,
+                    rol_institucional: editForm.rol_institucional,
+                });
+            }
             // Salimos del modo edición y recargamos la tabla
             setEditingId(null);
             cargarUsuarios();
         } catch (error) {
             console.error('Error al actualizar usuario:', error);
-            setActionError(error.message || 'No se pudo actualizar el usuario');
+            const message = error.message || 'No se pudo actualizar el usuario';
+            const normalizedMessage = message
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase();
+
+            if (normalizedMessage.includes('no podes cambiar tu propio nivel de acceso')) {
+                setActionErrorModal(message);
+            } else {
+                setActionError(message);
+            }
         }
     };
 
@@ -176,6 +205,12 @@ export default function AdminConfiguracion(){
           <ActionErrorModal
             message={deleteError}
             onClose={() => setDeleteError('')}
+          />
+        )}
+        {actionErrorModal && (
+          <ActionErrorModal
+            message={actionErrorModal}
+            onClose={() => setActionErrorModal('')}
           />
         )}
         {actionError && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{actionError}</p>}

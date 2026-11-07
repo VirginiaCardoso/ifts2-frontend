@@ -65,7 +65,7 @@ export default function UserForm({ onCancel, onSubmitSuccess }) {
     };
     return (
         <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
-            <h3 className="font-bold text-slate-800 text-base">Nuevo administrador</h3>
+            <h3 className="font-bold text-slate-800 text-base">Nuevo usuario</h3>
             {error && (
                 <div role="alert" className="p-3 bg-red-50 text-red-600 rounded-xl text-xs border border-red-100">
                     {error}
