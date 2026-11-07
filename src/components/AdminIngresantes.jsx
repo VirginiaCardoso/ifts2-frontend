@@ -429,8 +429,7 @@ export default function Ingresantes() {
                          {etapa.fecha_inicio || etapa.fecha_fin ? (
                           <>
                             <FooterIcon2 className="w-3.5 h-3.5" />
-                            <span>{formatearFecha(etapa.fecha_inicio)}</span>
-                                                        <span>
+                            <span>
                               {formatearFecha(etapa.fecha_inicio)}
                               {etapa.fecha_inicio && etapa.fecha_fin && ' - '}
                               {formatearFecha(etapa.fecha_fin)}
